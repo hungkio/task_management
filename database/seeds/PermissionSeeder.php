@@ -19,46 +19,6 @@ class PermissionSeeder extends Seeder
 
         $permissions = [
             [
-                'name' => 'taxonomies.view',
-                'en' => ['display_name' => 'View Taxonomy'],
-                'vi' => ['display_name' => 'Xem loại danh mục'],
-            ],
-            [
-                'name' => 'taxonomies.create',
-                'en' => ['display_name' => 'Create Taxonomy'],
-                'vi' => ['display_name' => 'Thêm loại danh mục'],
-            ],
-            [
-                'name' => 'taxonomies.update',
-                'en' => ['display_name' => 'Update Taxonomy'],
-                'vi' => ['display_name' => 'Cập nhật loại danh mục'],
-            ],
-            [
-                'name' => 'taxonomies.delete',
-                'en' => ['display_name' => 'Delete Taxonomy'],
-                'vi' => ['display_name' => 'Xóa loại danh mục'],
-            ],
-            [
-                'name' => 'taxons.view',
-                'en' => ['display_name' => 'View Taxon'],
-                'vi' => ['display_name' => 'Xem danh mục'],
-            ],
-            [
-                'name' => 'taxons.create',
-                'en' => ['display_name' => 'Create Taxon'],
-                'vi' => ['display_name' => 'Thêm danh mục'],
-            ],
-            [
-                'name' => 'taxons.update',
-                'en' => ['display_name' => 'Update Taxon'],
-                'vi' => ['display_name' => 'Cập nhật danh mục'],
-            ],
-            [
-                'name' => 'taxons.delete',
-                'en' => ['display_name' => 'Delete Taxon'],
-                'vi' => ['display_name' => 'Xóa danh mục'],
-            ],
-            [
                 'name' => 'option-types.view',
                 'en' => ['display_name' => 'View Option'],
                 'vi' => ['display_name' => 'Xem tùy chọn'],
