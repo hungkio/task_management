@@ -8,7 +8,7 @@ use DaveJamesMiller\Breadcrumbs\Facades\Breadcrumbs;
 
 // Home
 Breadcrumbs::for('admin.designs.index', function (BreadcrumbsGenerator $trail) {
-    $trail->push(__('Trang chủ'), route('admin.designs.index'), ['icon' => 'fal fa-home']);
+    $trail->push(__('Dashboard'), route('admin.designs.index'), ['icon' => 'fal fa-home']);
 });
 
 // Home > \App\Designs > Create
