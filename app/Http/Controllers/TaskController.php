@@ -3,15 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\BrandDataTable;
-use App\Http\Requests\Admin\PostBulkDeleteRequest;
 use App\Http\Requests\Admin\BrandRequest;
 use App\Brands;
+use App\Tasks;
+use Carbon\Carbon;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\View\View;
 
-class BrandController
+class TaskController
 {
     use AuthorizesRequests;
 
@@ -19,13 +20,13 @@ class BrandController
     {
         $this->authorize('view', Brands::class);
 
-        return $dataTable->render('admin.brands.index');
+        return $dataTable->render('admin.tasks.index');
     }
 
     public function create(): View
     {
         $this->authorize('create', Brands::class);
-        return view('admin.brands.create');
+        return view('admin.tasks.create');
     }
 
     public function store(BrandRequest $request)
@@ -36,14 +37,14 @@ class BrandController
 
         flash()->success(__('Xưởng ":model" đã được tạo thành công !', ['model' => $brand->title]));
 
-        return intended($request, route('admin.brands.index'));
+        return intended($request, route('admin.tasks.index'));
     }
 
     public function edit(Brands $brand): View
     {
         $this->authorize('update', $brand);
 
-        return view('admin.brands.edit', compact('brand'));
+        return view('admin.tasks.edit', compact('brand'));
     }
 
     public function update(Brands $brand, BrandRequest $request)
@@ -55,7 +56,7 @@ class BrandController
         flash()->success(__('Xưởng ":model" đã được cập nhật !', ['model' => $brand->name]));
 
 
-        return intended($request, route('admin.brands.index'));
+        return intended($request, route('admin.tasks.index'));
     }
 
     public function destroy(Brands $brand)
@@ -104,8 +105,7 @@ class BrandController
     public function bulkStatus(Request $request)
     {
         $total = Brands::whereIn('id', $request->id)->get();
-        foreach ($total as $brand)
-        {
+        foreach ($total as $brand) {
             $brand->update(['status' => $request->status]);
             logActivity($brand, 'update'); // log activity
         }
@@ -141,5 +141,49 @@ class BrandController
             'file' => $file,
             'status' => true,
         ]);
+    }
+
+    public function cron()
+    {
+        $client = getDropboxClient();
+        $parentPath = '1.Working';
+        $currentMonthText = Carbon::now()->format('F');
+        $currentMonthNumber = Carbon::now()->format('m');
+        $currentDay = Carbon::now()->format('d');
+
+        $currentMonthText = 'July';
+        $currentMonthNumber = '07';
+        $currentDay = '21';
+
+        $list = @$client->listFolder($parentPath)['entries'];
+        foreach ($list as $sub1) {
+            try {
+                $customer = $sub1['name']; //
+                $tasks = $client->listFolder("$parentPath/$customer/NEW JOB/$currentMonthText/$currentMonthNumber $currentDay")['entries'];
+                foreach ($tasks as $task) {
+                    $taskName = $task['name'];
+                    $taskPath = $task['path_display'];
+                    $taskRecord = $client->listFolder("$parentPath/$customer/NEW JOB/$currentMonthText/$currentMonthNumber $currentDay/$taskName")['entries'];
+
+                    $caseName = "$customer/$currentMonthNumber $currentDay/$taskName";
+                    $casePath = 'https://www.dropbox.com/home'.str_replace(' ', '%20', $taskPath);
+                    $countRecord = count($taskRecord);
+                    Tasks::updateOrCreate([
+                        'name' => $caseName,
+                    ], [
+                        'path' => $casePath,
+                        'countRecord' => $countRecord,
+                        'date' => "$currentMonthNumber $currentDay",
+                        'month' => $currentMonthText,
+                        'case' => $taskName,
+                        'customer' => $customer,
+                    ]);
+                }
+            } catch (\Exception $exception) {
+                dump($exception->getMessage());
+                continue;
+            }
+        }
+
     }
 }

@@ -62,12 +62,7 @@ return [
             'region' => env('AWS_DEFAULT_REGION'),
             'bucket' => env('AWS_BUCKET'),
             'endpoint' => env('AWS_URL'),
-        ],
-        'dropbox' => [
-            'driver' => 'dropbox',
-            'client_id' => env('DROPBOX_CLIENT_ID'),
-            'secret_id' => env('DROPBOX_SECRET_ID'),
-        ],
+        ]
 
     ],
 

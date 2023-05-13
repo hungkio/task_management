@@ -25,7 +25,7 @@ class BrandExportHandler implements ShouldAutoSize, FromView
 
     public function view(): View
     {
-        return view('admin.brands.export', [
+        return view('admin.tasks.export', [
             'data' => $this->collection
         ]);
     }

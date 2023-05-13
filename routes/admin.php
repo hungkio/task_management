@@ -13,7 +13,7 @@
 
 use App\Http\Controllers\DesignController;
 use App\Http\Controllers\ProductController;
-use App\Http\Controllers\BrandController;
+use App\Http\Controllers\TaskController;
 use App\Http\Controllers\ProduceController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\Auth\ConfirmPasswordController;
@@ -76,8 +76,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
 //
 //                curl_close($curl);
 //                dd($response);
-                $client = getDropboxClient();
-                dd($client->listFolder('1.Working'));
+
             });
 
             Route::get('test_list_folder', function () {
@@ -142,14 +141,15 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::post('/{design}/status', [DesignController::class, 'changeStatus'])->name('designs.change.status');
             Route::post('/bulk-status', [DesignController::class, 'bulkStatus'])->name('designs.bulk.status');
 
-            //brand
-            Route::post('brands/bulk-delete', [BrandController::class, 'bulkDelete'])->name('brands.bulk-delete');
-            Route::get('brands', [BrandController::class, 'index'])->name('brands.index');
-            Route::get('brands/create', [BrandController::class, 'create'])->name('brands.create');
-            Route::post('brands', [BrandController::class, 'store'])->name('brands.store');
-            Route::get('brands/{brand}/edit', [BrandController::class, 'edit'])->name('brands.edit');
-            Route::delete('brands/{brand}', [BrandController::class, 'destroy'])->name('brands.destroy');
-            Route::put('brands/{brand}', [BrandController::class, 'update'])->name('brands.update');
+            //task
+            Route::post('tasks/bulk-delete', [TaskController::class, 'bulkDelete'])->name('tasks.bulk-delete');
+            Route::get('tasks', [TaskController::class, 'index'])->name('tasks.index');
+            Route::get('tasks/create', [TaskController::class, 'create'])->name('tasks.create');
+            Route::post('tasks', [TaskController::class, 'store'])->name('tasks.store');
+            Route::get('tasks/{brand}/edit', [TaskController::class, 'edit'])->name('tasks.edit');
+            Route::delete('tasks/{brand}', [TaskController::class, 'destroy'])->name('tasks.destroy');
+            Route::put('tasks/{brand}', [TaskController::class, 'update'])->name('tasks.update');
+            Route::get('tasks/cron', [TaskController::class, 'cron'])->name('tasks.cron');
 
             //produce
             Route::post('produces/bulk-delete', [ProduceController::class, 'bulkDelete'])->name('produces.bulk-delete');

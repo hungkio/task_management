@@ -91,13 +91,13 @@
                     </li>
                 @endcan
 
-                @can('brands.view')
+                @can('tasks.view')
                     <li class="nav-item">
-                        <a href="{{ route('admin.brands.index') }}"
-                           class="nav-link {{ request()->routeIs('admin.brands*') ? 'active' : null }}">
+                        <a href="{{ route('admin.tasks.index') }}"
+                           class="nav-link {{ request()->routeIs('admin.tasks*') ? 'active' : null }}">
                             <i class="fal fa-copyright"></i>
                             <span>
-                            {{ __("Xưởng") }}
+                            {{ __("Danh sách case") }}
                         </span>
                         </a>
                     </li>

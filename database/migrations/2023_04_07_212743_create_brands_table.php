@@ -8,7 +8,7 @@ class CreateBrandsTable extends Migration
 {
     public function up()
     {
-        Schema::create('brands', function (Blueprint $table) {
+        Schema::create('tasks', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('phone')->nullable();
@@ -19,6 +19,6 @@ class CreateBrandsTable extends Migration
 
     public function down()
     {
-         Schema::dropIfExists('brands');
+         Schema::dropIfExists('tasks');
     }
 }

@@ -12,7 +12,7 @@
         'url' =>  route('admin.products.store'),
         'product' => new \App\Products,
         'designs' => $designs,
-        'brands' => $brands,
+        'tasks' => $brands,
     ])
 @stop
 @push('css')
