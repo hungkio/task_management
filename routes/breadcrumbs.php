@@ -31,27 +31,6 @@ Breadcrumbs::for('admin.designs.edit', function (BreadcrumbsGenerator $trail, \A
 |--------------------------------------------------------------------------
 */
 
-
-// Home > Products
-Breadcrumbs::for('admin.products.index', function (BreadcrumbsGenerator $trail) {
-    $trail->parent('admin.designs.index');
-    $trail->push(__('Sản phẩm'), route('admin.products.index'), ['icon' => 'fal fa-tshirt']);
-});
-
-// Home > Products > Create
-
-Breadcrumbs::for('admin.products.create', function (BreadcrumbsGenerator $trail) {
-    $trail->parent('admin.products.index');
-    $trail->push(__('Tạo'), route('admin.products.create'));
-});
-
-// Home > Products > [admin] > Edit
-Breadcrumbs::for('admin.products.edit', function (BreadcrumbsGenerator $trail, \App\Products $product) {
-    $trail->parent('admin.products.index');
-    $trail->push($product->name, '#');
-    $trail->push(__('Chỉnh sửa'), route('admin.products.edit', $product));
-});
-
 // Home > Brands
 Breadcrumbs::for('admin.tasks.index', function (BreadcrumbsGenerator $trail) {
     $trail->parent('admin.designs.index');
@@ -72,25 +51,6 @@ Breadcrumbs::for('admin.tasks.edit', function (BreadcrumbsGenerator $trail, \App
     $trail->push(__('Chỉnh sửa'), route('admin.tasks.edit', $brand));
 });
 
-// Home > \App\Produces
-Breadcrumbs::for('admin.produces.index', function (BreadcrumbsGenerator $trail) {
-    $trail->parent('admin.designs.index');
-    $trail->push(__('Nguyên liệu'), route('admin.produces.index'), ['icon' => 'fal fa-conveyor-belt']);
-});
-
-// Home > \App\Produces > Create
-
-Breadcrumbs::for('admin.produces.create', function (BreadcrumbsGenerator $trail) {
-    $trail->parent('admin.produces.index');
-    $trail->push(__('Tạo'), route('admin.produces.create'));
-});
-
-// Home > \App\Produces > [admin] > Edit
-Breadcrumbs::for('admin.produces.edit', function (BreadcrumbsGenerator $trail, \App\Produces $produce) {
-    $trail->parent('admin.produces.index');
-    $trail->push($produce->name, '#');
-    $trail->push(__('Chỉnh sửa'), route('admin.produces.edit', $produce));
-});
 
 /*
 |--------------------------------------------------------------------------

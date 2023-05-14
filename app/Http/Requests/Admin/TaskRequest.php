@@ -6,7 +6,7 @@ namespace App\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class BrandRequest extends FormRequest
+class TaskRequest extends FormRequest
 {
     public function rules(): array
     {

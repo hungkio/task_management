@@ -19,6 +19,6 @@
         $('.form-check-input-styled').uniform();
     </script>
     <script src="{{ asset('backend/js/editor-admin.js') }}"></script>
-    {!! JsValidator::formRequest('App\Http\Requests\Admin\BrandRequest', '#post-form'); !!}
+    {!! JsValidator::formRequest('App\Http\Requests\Admin\TaskRequest', '#post-form'); !!}
 @endpush
 

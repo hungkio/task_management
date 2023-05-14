@@ -3,12 +3,12 @@
 namespace App\DataTables;
 
 use App\DataTables\Core\BaseDatable;
-use App\DataTables\Export\BrandExportHandler;
+use App\DataTables\Export\TaskExportHandler;
 use App\Tasks;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 
-class BrandDataTable extends BaseDatable
+class TaskDataTable extends BaseDatable
 {
     /**
      * Build DataTable class.
@@ -99,7 +99,7 @@ class BrandDataTable extends BaseDatable
         $source = app()->call([$this, 'query']);
         $source = $this->applyScopes($source);
 
-        return new BrandExportHandler($source->get());
+        return new TaskExportHandler($source->get());
     }
 
     public function printPreview()

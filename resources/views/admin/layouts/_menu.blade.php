@@ -66,31 +66,6 @@
                     </a>
                 </li>
 
-
-                @can('products.view')
-                    <li class="nav-item">
-                        <a href="{{ route('admin.products.index') }}"
-                           class="nav-link {{ request()->routeIs('admin.products*') ? 'active' : null }}">
-                            <i class="fal fa-tshirt"></i>
-                            <span>
-                            {{ __("Sản phẩm") }}
-                        </span>
-                        </a>
-                    </li>
-                @endcan
-
-                @can('produces.view')
-                    <li class="nav-item">
-                        <a href="{{ route('admin.produces.index') }}"
-                           class="nav-link {{ request()->routeIs('admin.produces*') ? 'active' : null }}">
-                            <i class="fal fa-conveyor-belt"></i>
-                            <span>
-                            {{ __("Sản xuất") }}
-                        </span>
-                        </a>
-                    </li>
-                @endcan
-
                 @can('tasks.view')
                     <li class="nav-item">
                         <a href="{{ route('admin.tasks.index') }}"
