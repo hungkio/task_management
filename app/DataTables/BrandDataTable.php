@@ -4,7 +4,7 @@ namespace App\DataTables;
 
 use App\DataTables\Core\BaseDatable;
 use App\DataTables\Export\BrandExportHandler;
-use App\Brands;
+use App\Tasks;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 
@@ -21,12 +21,13 @@ class BrandDataTable extends BaseDatable
         return datatables()
             ->eloquent($query)
             ->addIndexColumn()
-            ->editColumn('name', fn (brands $staff) => $staff->name)
-            ->editColumn('phone', fn (brands $staff) => $staff->phone)
-            ->editColumn('address', fn (brands $staff) => $staff->address)
-            ->editColumn('created_at', fn (brands $staff) => formatDate($staff->created_at))
-            ->editColumn('updated_at', fn (brands $staff) => formatDate($staff->updated_at))
-            ->addColumn('action', 'admin.brands._tableAction')
+            ->editColumn('name', fn (Tasks $staff) => $staff->name)
+            ->editColumn('date', fn (Tasks $staff) => $staff->date)
+            ->editColumn('month', fn (Tasks $staff) => $staff->month)
+            ->editColumn('customer', fn (Tasks $staff) => $staff->customer)
+            ->editColumn('status', fn (Tasks $staff) => Tasks::STATUS[$staff->status])
+            ->editColumn('created_at', fn (Tasks $staff) => formatDate($staff->created_at))
+            ->addColumn('action', 'admin.tasks._tableAction')
             ->filterColumn('name', function($query, $keyword) {
                 $query->where('name', 'like', "%{$keyword}%");
             })
@@ -37,10 +38,10 @@ class BrandDataTable extends BaseDatable
     /**
      * Get query source of dataTable.
      *
-     * @param \App\Brands $model
+     * @param \App\Tasks $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(Brands $model)
+    public function query(Tasks $model)
     {
         return $model->newQuery();
     }
@@ -50,9 +51,11 @@ class BrandDataTable extends BaseDatable
         return [
             Column::checkbox(''),
             Column::make('id')->title(__('STT'))->data('DT_RowIndex')->searchable(false),
-            Column::make('name')->title(__('Tên'))->width('20%'),
-            Column::make('phone')->title(__('Số ĐT'))->width('20%'),
-            Column::make('address')->title(__('Địa chỉ'))->width('20%'),
+            Column::make('name')->title(__('Tên case'))->width('20%'),
+            Column::make('date')->title(__('Ngày tháng'))->width('20%'),
+            Column::make('month')->title(__('Tháng'))->width('20%'),
+            Column::make('customer')->title(__('Khách hàng'))->width('20%'),
+            Column::make('status')->title(__('Trạng thái'))->width('20%'),
             Column::make('created_at')->title(__('Thời gian tạo'))->searchable(false),
             Column::computed('action')
                 ->title(__('Tác vụ'))
@@ -105,6 +108,6 @@ class BrandDataTable extends BaseDatable
         $source = app()->call([$this, 'query']);
         $source = $this->applyScopes($source);
         $data = $source->get();
-        return view('admin.brands.print', compact('data'));
+        return view('admin.tasks.print', compact('data'));
     }
 }

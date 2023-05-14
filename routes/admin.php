@@ -13,7 +13,7 @@
 
 use App\Http\Controllers\DesignController;
 use App\Http\Controllers\ProductController;
-use App\Http\Controllers\BrandController;
+use App\Http\Controllers\TaskController;
 use App\Http\Controllers\ProduceController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\Auth\ConfirmPasswordController;
@@ -23,6 +23,7 @@ use App\Http\Controllers\Admin\Auth\RegisterController;
 use App\Http\Controllers\Admin\Auth\ResetPasswordController;
 use App\Http\Controllers\Admin\Auth\VerificationController;
 use App\Http\Controllers\Admin\UploadTinymceController;
+use Illuminate\Support\Facades\Storage;
 
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
@@ -50,6 +51,84 @@ Route::prefix('admin')->name('admin.')->group(function () {
     // Route Dashboards
     Route::middleware('auth')
         ->group(function () {
+            Route::get('test_auth_dropbox', function () {
+//                $refreshToken = config('dropbox.refreshToken');
+//                $clientId = config('dropbox.clientId');
+//                $clientSecret = config('dropbox.clientSecret');
+//                $curl = curl_init();
+//
+//                curl_setopt_array($curl, array(
+//                    CURLOPT_URL => 'https://api.dropbox.com/oauth2/token',
+//                    CURLOPT_RETURNTRANSFER => true,
+//                    CURLOPT_ENCODING => '',
+//                    CURLOPT_MAXREDIRS => 10,
+//                    CURLOPT_TIMEOUT => 0,
+//                    CURLOPT_FOLLOWLOCATION => true,
+//                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+//                    CURLOPT_CUSTOMREQUEST => 'POST',
+//                    CURLOPT_POSTFIELDS => "refresh_token=$refreshToken&grant_type=refresh_token&client_id=$clientId&client_secret=$clientSecret",
+//                    CURLOPT_HTTPHEADER => array(
+//                        'Content-Type: application/x-www-form-urlencoded',
+//                    ),
+//                ));
+//
+//                $response = curl_exec($curl);
+//
+//                curl_close($curl);
+//                dd($response);
+
+            });
+
+            Route::get('test_list_folder', function () {
+//                $ch = \curl_init();
+//                $payload = '{
+//                "include_deleted": false,
+//                "include_has_explicit_shared_members": false,
+//                "include_media_info": false,
+//                "include_mounted_folders": true,
+//                "include_non_downloadable_files": true,
+//                "path": "/1.Working",
+//                "recursive": false
+//                }';
+//                curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+//                curl_setopt($ch, CURLOPT_HTTPHEADER, [
+//                    'Authorization: Bearer sl.BePhjgDVVrIGH2vuCYT9R09UxsIXgZLFdi7UWBX2Fx-fSpBK5JG1EzQ0JzxKtV_d4iNB-9sQSes2p9T75yDVfv-fuB9sMqBccdHcLk8Dj11cdEiG3DbWBmJb6ESAH7eO1F6dXK6A',
+//                    'Content-Type: application/json'
+//                ]);
+//                curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+//                curl_setopt($ch, CURLOPT_URL, 'https://api.dropboxapi.com/2/files/list_folder');
+//
+//                $result = curl_exec($ch);
+//                $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+//
+//                curl_close($ch);
+//                dd($result, $httpcode);
+
+                $accessToken = 'sl.BeNdhnLOZXbdjDnY85WEwjJkOyWyydoLqXd5vUezwCTarpY7Z1UtyeetnSMBITPwOzdqzLuRna275sDUcIKb_Gvth-VMxTYZIsvQF7p4fFnBgb3sKEdBhGKHqw7aF4nTEm3oXXqU';
+                $client = new Spatie\Dropbox\Client($accessToken);
+                dd($client->listFolder('1.Working'));
+            });
+
+            Route::get('test_upload', function () {
+                $content = file_get_contents(storage_path('app/settings.json'));
+
+                $ch = \curl_init();
+                $fileName = date('Y-m-d') . "-settings.json";
+                curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+                curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                    'Authorization: Bearer sl.BeIdp8ZC6Y6HYP8ash_WQ-U9JIm98gmClqYho4WV4xXI14Lgneksr7DEL9hZv6wksx_x2IZcK_UUAVtj_lHeIY9IdocLvgfCR8i7PAG9jWGD-0JVMMveFNMNmbOBPrqAlNRiSKLA',
+                    'Content-Type: application/octet-stream',
+                    "Dropbox-API-Arg: {\"path\": \"/$fileName\",\"mode\": \"overwrite\",\"autorename\": false,\"mute\": false,\"strict_conflict\": false}"
+                ]);
+                curl_setopt($ch, CURLOPT_POSTFIELDS, $content);
+                curl_setopt($ch, CURLOPT_URL, 'https://content.dropboxapi.com/2/files/upload');
+
+                $result = curl_exec($ch);
+                $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+                curl_close($ch);
+                dd($result);
+            });
             // design
             Route::get('/', [DesignController::class, 'index'])->name('designs.index');
             Route::post('/bulk-delete', [DesignController::class, 'bulkDelete'])->name('designs.bulk-delete');
@@ -62,14 +141,15 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::post('/{design}/status', [DesignController::class, 'changeStatus'])->name('designs.change.status');
             Route::post('/bulk-status', [DesignController::class, 'bulkStatus'])->name('designs.bulk.status');
 
-            //brand
-            Route::post('brands/bulk-delete', [BrandController::class, 'bulkDelete'])->name('brands.bulk-delete');
-            Route::get('brands', [BrandController::class, 'index'])->name('brands.index');
-            Route::get('brands/create', [BrandController::class, 'create'])->name('brands.create');
-            Route::post('brands', [BrandController::class, 'store'])->name('brands.store');
-            Route::get('brands/{brand}/edit', [BrandController::class, 'edit'])->name('brands.edit');
-            Route::delete('brands/{brand}', [BrandController::class, 'destroy'])->name('brands.destroy');
-            Route::put('brands/{brand}', [BrandController::class, 'update'])->name('brands.update');
+            //task
+            Route::post('tasks/bulk-delete', [TaskController::class, 'bulkDelete'])->name('tasks.bulk-delete');
+            Route::get('tasks', [TaskController::class, 'index'])->name('tasks.index');
+            Route::get('tasks/create', [TaskController::class, 'create'])->name('tasks.create');
+            Route::post('tasks', [TaskController::class, 'store'])->name('tasks.store');
+            Route::get('tasks/{brand}/edit', [TaskController::class, 'edit'])->name('tasks.edit');
+            Route::delete('tasks/{brand}', [TaskController::class, 'destroy'])->name('tasks.destroy');
+            Route::put('tasks/{brand}', [TaskController::class, 'update'])->name('tasks.update');
+            Route::get('tasks/cron', [TaskController::class, 'cron'])->name('tasks.cron');
 
             //produce
             Route::post('produces/bulk-delete', [ProduceController::class, 'bulkDelete'])->name('produces.bulk-delete');

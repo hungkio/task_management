@@ -8,7 +8,7 @@
         @yield('title')
     </title>
     <meta name="csrf-token" content="{{ csrf_token() }}" id="csrf_token">
-    <link rel="icon" href="{{ setting('store_favicon') ? \Storage::url(setting('store_favicon')) : '' }}" type="image/gif" sizes="16x16">
+    <link rel="icon" href="{{ setting('store_favicon') ? \Storage::disk('local')->url(setting('store_favicon')) : '' }}" type="image/gif" sizes="16x16">
 
     <!-- Global stylesheets -->
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,100,500,700,900" rel="stylesheet" type="text/css">

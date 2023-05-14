@@ -8,8 +8,8 @@
 @stop
 
 @section('page-content')
-    @include('admin.brands._form', [
-        'url' =>  route('admin.brands.store'),
+    @include('admin.tasks._form', [
+        'url' =>  route('admin.tasks.store'),
         'brand' => new \App\Brands,
     ])
 @stop
