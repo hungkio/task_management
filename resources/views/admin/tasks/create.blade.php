@@ -10,7 +10,7 @@
 @section('page-content')
     @include('admin.tasks._form', [
         'url' =>  route('admin.tasks.store'),
-        'brand' => new \App\Brands,
+        'task' => new \App\Tasks,
     ])
 @stop
 @push('css')

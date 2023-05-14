@@ -31,24 +31,24 @@ Breadcrumbs::for('admin.designs.edit', function (BreadcrumbsGenerator $trail, \A
 |--------------------------------------------------------------------------
 */
 
-// Home > Brands
+// Home > Tasks
 Breadcrumbs::for('admin.tasks.index', function (BreadcrumbsGenerator $trail) {
     $trail->parent('admin.designs.index');
     $trail->push(__('Danh sách task'), route('admin.tasks.index'), ['icon' => 'fal fa-copyright']);
 });
 
-// Home > Brands > Create
+// Home > Tasks > Create
 
 Breadcrumbs::for('admin.tasks.create', function (BreadcrumbsGenerator $trail) {
     $trail->parent('admin.tasks.index');
     $trail->push(__('Tạo'), route('admin.tasks.create'));
 });
 
-// Home > Brands > [admin] > Edit
-Breadcrumbs::for('admin.tasks.edit', function (BreadcrumbsGenerator $trail, \App\Brands $brand) {
+// Home > Tasks > [admin] > Edit
+Breadcrumbs::for('admin.tasks.edit', function (BreadcrumbsGenerator $trail, \App\Tasks $task) {
     $trail->parent('admin.tasks.index');
-    $trail->push($brand->name, '#');
-    $trail->push(__('Chỉnh sửa'), route('admin.tasks.edit', $brand));
+    $trail->push($task->name, '#');
+    $trail->push(__('Chỉnh sửa'), route('admin.tasks.edit', $task));
 });
 
 

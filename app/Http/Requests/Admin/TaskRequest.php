@@ -13,14 +13,22 @@ class TaskRequest extends FormRequest
         if ($this->method() == "POST") {
             return [
                 'name' => ['unique:tasks','required', 'string', 'max:255', 'regex:/^[0-9 a-zA-Z_ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼẾỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệếỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳýỵỷỹ,;.]+$/'],
-                'phone' => ['string', 'max:255'],
-                'address' => ['required'],
+                'path' => ['string', 'max:255'],
+                'date' => ['string', 'max:255'],
+                'month' => ['string', 'max:255'],
+                'case' => ['string', 'max:255'],
+                'customer' => ['string', 'max:255'],
+                'countRecord' => ['numeric'],
             ];
         } else {
             return [
                 'name' => ['required', 'string', 'max:255', 'regex:/^[0-9 a-zA-Z_ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼẾỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệếỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳýỵỷỹ,;.]+$/'],
-                'phone' => ['string', 'max:255'],
-                'address' => ['required'],
+                'path' => ['string', 'max:255'],
+                'date' => ['string', 'max:255'],
+                'month' => ['string', 'max:255'],
+                'case' => ['string', 'max:255'],
+                'customer' => ['string', 'max:255'],
+                'countRecord' => ['numeric'],
             ];
         }
 

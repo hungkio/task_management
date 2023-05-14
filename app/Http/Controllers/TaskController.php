@@ -32,40 +32,40 @@ class TaskController
     {
         $this->authorize('create', Tasks::class);
         $data = $request->all();
-        $brand = Tasks::create($data);
+        $task = Tasks::create($data);
 
-        flash()->success(__('Xưởng ":model" đã được tạo thành công !', ['model' => $brand->title]));
-
-        return intended($request, route('admin.tasks.index'));
-    }
-
-    public function edit(Tasks $brand): View
-    {
-        $this->authorize('update', $brand);
-
-        return view('admin.tasks.edit', compact('brand'));
-    }
-
-    public function update(Tasks $brand, TaskRequest $request)
-    {
-        $this->authorize('update', $brand);
-
-        $brand->update($request->all());
-
-        flash()->success(__('Xưởng ":model" đã được cập nhật !', ['model' => $brand->name]));
+        flash()->success(__('Case ":model" đã được tạo thành công !', ['model' => $task->title]));
 
         return intended($request, route('admin.tasks.index'));
     }
 
-    public function destroy(Tasks $brand)
+    public function edit(Tasks $task): View
     {
-        $this->authorize('delete', $brand);
+        $this->authorize('update', $task);
 
-        $brand->delete();
+        return view('admin.tasks.edit', compact('task'));
+    }
+
+    public function update(Tasks $task, TaskRequest $request)
+    {
+        $this->authorize('update', $task);
+
+        $task->update($request->all());
+
+        flash()->success(__('Case ":model" đã được cập nhật !', ['model' => $task->name]));
+
+        return intended($request, route('admin.tasks.index'));
+    }
+
+    public function destroy(Tasks $task)
+    {
+        $this->authorize('delete', $task);
+
+        $task->delete();
 
         return response()->json([
             'status' => true,
-            'message' => __('Xưởng đã xóa thành công !'),
+            'message' => __('Case đã xóa thành công !'),
         ]);
     }
 

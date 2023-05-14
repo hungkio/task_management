@@ -68,9 +68,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('tasks', [TaskController::class, 'index'])->name('tasks.index');
             Route::get('tasks/create', [TaskController::class, 'create'])->name('tasks.create');
             Route::post('tasks', [TaskController::class, 'store'])->name('tasks.store');
-            Route::get('tasks/{brand}/edit', [TaskController::class, 'edit'])->name('tasks.edit');
-            Route::delete('tasks/{brand}', [TaskController::class, 'destroy'])->name('tasks.destroy');
-            Route::put('tasks/{brand}', [TaskController::class, 'update'])->name('tasks.update');
+            Route::get('tasks/{task}/edit', [TaskController::class, 'edit'])->name('tasks.edit');
+            Route::delete('tasks/{task}', [TaskController::class, 'destroy'])->name('tasks.destroy');
+            Route::put('tasks/{task}', [TaskController::class, 'update'])->name('tasks.update');
             Route::get('tasks/cron', [TaskController::class, 'cron'])->name('tasks.cron');
 
             //Upload Tinymce
