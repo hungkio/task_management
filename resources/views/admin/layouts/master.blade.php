@@ -36,7 +36,7 @@
 
 
             <!-- Content area -->
-            <div class="content content-boxed pt-0">
+            <div class="content pt-0">
 
                 @include('admin.layouts._alert')
 
