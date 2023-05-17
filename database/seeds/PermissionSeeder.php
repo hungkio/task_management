@@ -18,27 +18,6 @@ class PermissionSeeder extends Seeder
         app()[PermissionRegistrar::class]->forgetCachedPermissions();
 
         $permissions = [
-            [
-                'name' => 'option-types.view',
-                'en' => ['display_name' => 'View Option'],
-                'vi' => ['display_name' => 'Xem tùy chọn'],
-            ],
-            [
-                'name' => 'option-types.create',
-                'en' => ['display_name' => 'Create Option'],
-                'vi' => ['display_name' => 'Thêm tùy chọn'],
-            ],
-            [
-                'name' => 'option-types.update',
-                'en' => ['display_name' => 'Update Option'],
-                'vi' => ['display_name' => 'Cập nhật tùy chọn'],
-            ],
-            [
-                'name' => 'option-types.delete',
-                'en' => ['display_name' => 'Delete Option'],
-                'vi' => ['display_name' => 'Xóa tùy chọn'],
-            ],
-
            [
                'name' => 'admins.view',
                'en' => ['display_name' => 'View Admin'],
@@ -80,6 +59,27 @@ class PermissionSeeder extends Seeder
                 'en' => ['display_name' => 'Delete Role'],
                 'vi' => ['display_name' => 'Xóa vai trò'],
             ],
+
+            [
+                'name' => 'tasks.view',
+                'en' => ['display_name' => 'View Task'],
+                'vi' => ['display_name' => 'Xem case'],
+            ],
+            [
+                'name' => 'tasks.create',
+                'en' => ['display_name' => 'Create Task'],
+                'vi' => ['display_name' => 'Thêm case'],
+            ],
+            [
+                'name' => 'tasks.update',
+                'en' => ['display_name' => 'Update Task'],
+                'vi' => ['display_name' => 'Cập nhật case'],
+            ],
+            [
+                'name' => 'tasks.delete',
+                'en' => ['display_name' => 'Delete Task'],
+                'vi' => ['display_name' => 'Xóa case'],
+            ],
         ];
 
         foreach ($permissions as $permission) {
@@ -91,6 +91,16 @@ class PermissionSeeder extends Seeder
                 'name' => 'admin',
                 'en' => ['display_name' => 'Manager'],
                 'vi' => ['display_name' => 'Quản trị viên'],
+            ],
+            [
+                'name' => 'editor',
+                'en' => ['display_name' => 'Editor'],
+                'vi' => ['display_name' => 'Editor'],
+            ],
+            [
+                'name' => 'QA',
+                'en' => ['display_name' => 'QA'],
+                'vi' => ['display_name' => 'QA'],
             ],
         ];
         foreach ($roles as $role) {

@@ -3,12 +3,12 @@
 namespace App\DataTables;
 
 use App\DataTables\Core\BaseDatable;
-use App\DataTables\Export\DesignExportHandler;
+use App\DataTables\Export\DashboardExportHandler;
 use App\Designs;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 
-class DesignDataTable extends BaseDatable
+class DashboardDataTable extends BaseDatable
 {
     /**
      * Build DataTable class.
@@ -21,14 +21,14 @@ class DesignDataTable extends BaseDatable
         return datatables()
             ->eloquent($query)
             ->addIndexColumn()
-            ->addColumn('name', fn (Designs $design) => view('admin.designs._tableTitle', compact('design')))
+            ->addColumn('name', fn (Designs $design) => view('admin.dashboards._tableTitle', compact('design')))
             ->editColumn('staff_id', fn (Designs $design) => (($design->user->first_name ?? '') . ' ' . ($design->user->last_name ?? '')))
             ->editColumn('progress',fn (Designs $design) => Designs::PROGRESS[$design->progress])
             ->editColumn('status',fn (Designs $design) => Designs::STATUS[$design->status])
             ->editColumn('duration',fn (Designs $design) => $design->duration)
             ->editColumn('created_at', fn (Designs $design) => formatDate($design->created_at))
             ->editColumn('updated_at', fn (Designs $design) => formatDate($design->updated_at))
-            ->addColumn('action', fn (Designs $design) => view('admin.designs._tableAction', compact('design')))
+            ->addColumn('action', fn (Designs $design) => view('admin.dashboards._tableAction', compact('design')))
             ->filterColumn('title', function($query, $keyword) {
                 $query->where('title', 'like', "%{$keyword}%");
             })
@@ -101,7 +101,7 @@ class DesignDataTable extends BaseDatable
         $source = app()->call([$this, 'query']);
         $source = $this->applyScopes($source);
 
-        return new DesignExportHandler($source->get());
+        return new DashboardExportHandler($source->get());
     }
 
     public function printPreview()
@@ -110,6 +110,6 @@ class DesignDataTable extends BaseDatable
         $source = app()->call([$this, 'query']);
         $source = $this->applyScopes($source);
         $data = $source->get();
-        return view('admin.designs.print', compact('data'));
+        return view('admin.dashboards.print', compact('data'));
     }
 }

@@ -82,6 +82,24 @@
                                     required
                                 >
                                 </x-text-field>
+
+                                <x-text-field
+                                    name="estimate"
+                                    :placeholder="__('Số tiếng làm dự kiến')"
+                                    :label="__('Thời gian làm dự kiến')"
+                                    :value="$task->estimate"
+                                    type="number"
+                                >
+                                </x-text-field>
+
+                                <x-text-field
+                                    name="level"
+                                    :placeholder="__('Level độ khó case')"
+                                    :label="__('Level case')"
+                                    :value="$task->level"
+                                    type="number"
+                                >
+                                </x-text-field>
                             </div>
 
                         </fieldset>

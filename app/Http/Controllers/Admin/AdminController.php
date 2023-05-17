@@ -48,8 +48,6 @@ class AdminController
 
         flash()->success(__('Tài khoản quản trị ":model" đã được tạo thành công !', ['model' => $admin->email]));
 
-        logActivity($admin, 'create'); // log activity
-
         return intended($request, route('admin.admins.index'));
     }
 
@@ -72,16 +70,12 @@ class AdminController
 
         flash()->success(__('Lưu thông tin thành công'));
 
-        logActivity($admin, 'update'); // log activity
-
         return redirect()->route('admin.admins.index');
     }
 
     public function destroy(Admin $admin): JsonResponse
     {
         $this->authorize('delete', $admin);
-
-        logActivity($admin, 'delete'); // log activity
 
         $admin->delete();
 

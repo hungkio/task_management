@@ -2,13 +2,13 @@
 
     <div class="navbar-header navbar-white bg-white d-none d-md-flex align-items-md-center">
         <div class="navbar-brand navbar-brand-md">
-            <a href="{{ route('admin.designs.index') }}" class="d-inline-block">
+            <a href="{{ route('admin.dashboards') }}" class="d-inline-block">
                     <span>{{ setting('store_name') }}</span>
             </a>
         </div>
 
         <div class="navbar-brand navbar-brand-xs pl-1">
-            <a href="{{ route('admin.designs.index') }}" class="d-inline-block">
+            <a href="{{ route('admin.dashboards') }}" class="d-inline-block">
                 <img src="{{ setting('store_favicon') ? \Storage::url(setting('store_favicon')) : '' }}" alt="">
             </a>
         </div>
@@ -16,7 +16,7 @@
 
     <div class="d-flex flex-1 d-md-none">
         <div class="navbar-brand mr-auto">
-            <a href="{{ route('admin.designs.index') }}" class="d-inline-block">
+            <a href="{{ route('admin.dashboards') }}" class="d-inline-block">
                 <img src="{{ setting('store_favicon') ? \Storage::url(setting('store_favicon')) : '' }}" alt="">
             </a>
         </div>
@@ -34,7 +34,7 @@
     <div class="collapse navbar-collapse" id="navbar-mobile">
         <ul class="navbar-nav mr-md-auto">
             <li class="nav-item">
-                <a href="{{ route('admin.designs.index') }}" class="navbar-nav-link sidebar-control sidebar-main-toggle d-none d-md-block header-nav">
+                <a href="{{ route('admin.dashboards') }}" class="navbar-nav-link sidebar-control sidebar-main-toggle d-none d-md-block header-nav">
                     <i class="fal fa-bars"></i>
                 </a>
             </li>

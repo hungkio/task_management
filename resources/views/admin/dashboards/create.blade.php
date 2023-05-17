@@ -1,6 +1,6 @@
 @extends('admin.layouts.master')
 
-@section('title', __('Chỉnh sửa :model', ['model' => $design->title]))
+@section('title', __('Tạo thiết kế'))
 @section('page-header')
     <x-page-header>
         {{ Breadcrumbs::render() }}
@@ -8,17 +8,27 @@
 @stop
 
 @section('page-content')
-    @include('admin.designs._form', [
-        'url' =>  route('admin.designs.update', $design),
-        'design' => $design ?? new \App\Designs,
+    @include('admin.dashboards._form', [
+        'url' =>  route('admin.dashboards.store'),
+        'design' => new \App\Designs,
         'progresses' => $progresses,
         'users' => $users,
-        'method' => 'PUT'
     ])
 @stop
 @push('css')
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.2/dropzone.css" integrity="sha512-CmjeEOiBCtxpzzfuT2remy8NP++fmHRxR3LnsdQhVXzA3QqRMaJ3heF9zOB+c1lCWSwZkzSOWfTn1CdqgkW3EQ==" crossorigin="anonymous" />
     <style>
+
+        #select2{
+            position: relative;
+            margin-bottom: 0.7rem;
+        }
+
+        #select2 .invalid-feedback{
+            position: absolute;
+            bottom: -20px;
+        }
+
         .dropzone .dz-preview .dz-image{
             width: 140px;
             height: 86px;
@@ -73,27 +83,13 @@
                         myDropzone.removeFile(file);
                     });
                 });
-                    @if($design->getMedia()->isNotEmpty())
-                    @foreach($design->getMedia() as $key => $image)
-                        let mockFile_{{$key}} = { name: '{{ $image->file_name }}', size: '{{ $image->size }}', id: '{{ $image->id }}'};
-                        myDropzone.emit("addedfile", mockFile_{{$key}});
-                        myDropzone.emit("thumbnail", mockFile_{{$key}}, '{{ $image->getFullUrl() }}');
-                        myDropzone.emit("complete", mockFile_{{$key}});
-                        $('#post-form').append('<input type="hidden" name="images[]" value="{{ $image->id }}">');
-                    @endforeach
-                    @endif
-                let fileCountOnServer = '{{ $design->getMedia()->count() }}';
-                myDropzone.options.maxFiles = myDropzone.options.maxFiles - fileCountOnServer;
-
                 myDropzone.on("maxfilesexceeded", function(file) {
                     this.removeFile(file);
                     console.log('{{ __("Đã đạt đến tệp tối đa") }}');
                 });
             }
         }
-
-
     </script>
-    {!! JsValidator::formRequest('App\Http\Requests\Admin\DesignRequest', '#post-form'); !!}
+    {!! JsValidator::formRequest('App\Http\Requests\Admin\DashboardRequest', '#post-form'); !!}
 @endpush
 

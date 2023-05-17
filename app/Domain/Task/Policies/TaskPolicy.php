@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Domain\Post\Policies;
+namespace App\Domain\Task\Policies;
 
-use App\Domain\Post\Models\Post;
 use App\Domain\Admin\Models\Admin;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use App\Tasks;
+use App\Domain\Acl\Models\Role;
 
-class PostPolicy
+class TaskPolicy
 {
     use HandlesAuthorization;
 
@@ -29,7 +30,7 @@ class PostPolicy
      */
     public function view(Admin $user)
     {
-        return $user->hasPermissionTo('products.view');
+        return $user->hasPermissionTo('tasks.view');
     }
 
     /**
@@ -40,7 +41,7 @@ class PostPolicy
      */
     public function create(Admin $user)
     {
-        return $user->hasPermissionTo('products.create');
+        return $user->hasPermissionTo('tasks.create');
     }
 
     /**
@@ -50,9 +51,9 @@ class PostPolicy
      * @param Role $role
      * @return mixed
      */
-    public function update(Admin $user, Post $post)
+    public function update(Admin $user, Tasks $task)
     {
-        return $user->hasPermissionTo('products.update');
+        return $user->hasPermissionTo('tasks.update');
     }
 
     /**
@@ -62,9 +63,9 @@ class PostPolicy
      * @param Role $role
      * @return mixed
      */
-    public function delete(Admin $user, Post $post)
+    public function delete(Admin $user, Tasks $task)
     {
-        return $user->hasPermissionTo('products.delete');
+        return $user->hasPermissionTo('tasks.delete');
     }
 
     /**

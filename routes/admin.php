@@ -11,10 +11,8 @@
 |
 */
 
-use App\Http\Controllers\DesignController;
-use App\Http\Controllers\ProductController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\TaskController;
-use App\Http\Controllers\ProduceController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\Auth\ConfirmPasswordController;
 use App\Http\Controllers\Admin\Auth\ForgotPasswordController;
@@ -23,7 +21,7 @@ use App\Http\Controllers\Admin\Auth\RegisterController;
 use App\Http\Controllers\Admin\Auth\ResetPasswordController;
 use App\Http\Controllers\Admin\Auth\VerificationController;
 use App\Http\Controllers\Admin\UploadTinymceController;
-use Illuminate\Support\Facades\Storage;
+use App\Http\Controllers\Admin\RoleController;
 
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
@@ -51,18 +49,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
     // Route Dashboards
     Route::middleware('auth')
         ->group(function () {
-
-            // design
-            Route::get('/', [DesignController::class, 'index'])->name('designs.index');
-            Route::post('/bulk-delete', [DesignController::class, 'bulkDelete'])->name('designs.bulk-delete');
-            Route::get('/create', [DesignController::class, 'create'])->name('designs.create');
-            Route::post('/', [DesignController::class, 'store'])->name('designs.store');
-            Route::get('/{design}/edit', [DesignController::class, 'edit'])->name('designs.edit');
-            Route::put('/{design}/updateStatus', [DesignController::class, 'updateStatus'])->name('designs.updateStatus');
-            Route::delete('/{design}', [DesignController::class, 'destroy'])->name('designs.destroy');
-            Route::put('/{design}', [DesignController::class, 'update'])->name('designs.update');
-            Route::post('/{design}/status', [DesignController::class, 'changeStatus'])->name('designs.change.status');
-            Route::post('/bulk-status', [DesignController::class, 'bulkStatus'])->name('designs.bulk.status');
+            // dashboard
+            Route::get('/', [DashboardController::class, 'index'])->name('dashboards');
 
             //task
             Route::get('tasks', [TaskController::class, 'index'])->name('tasks.index');
@@ -85,6 +73,14 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::delete('/admins/{admin}', [AdminController::class, 'destroy'])->name('admins.destroy');
             Route::put('/admins/{admin}', [AdminController::class, 'update'])->name('admins.update');
 
+            //roles
+            Route::post('/roles/bulk-delete', [RoleController::class, 'bulkDelete'])->name('roles.bulk-delete');
+            Route::get('/roles', [RoleController::class, 'index'])->name('roles.index');
+            Route::get('/roles/create', [RoleController::class, 'create'])->name('roles.create');
+            Route::post('/roles', [RoleController::class, 'store'])->name('roles.store');
+            Route::get('/roles/{role}/edit', [RoleController::class, 'edit'])->name('roles.edit');
+            Route::delete('/roles/{role}', [RoleController::class, 'destroy'])->name('roles.destroy');
+            Route::put('/roles/{role}', [RoleController::class, 'update'])->name('roles.update');
         });
     Route::get('test_auth_dropbox', function () {
 //                $refreshToken = config('dropbox.refreshToken');

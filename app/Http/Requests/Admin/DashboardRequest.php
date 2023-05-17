@@ -6,7 +6,7 @@ namespace App\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class DesignRequest extends FormRequest
+class DashboardRequest extends FormRequest
 {
     public function rules(): array
     {

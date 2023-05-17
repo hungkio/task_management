@@ -21,7 +21,7 @@ class RedirectIfAuthenticated
         if (Auth::guard($guard)->check()) {
             switch ($guard) {
                 case 'admins':
-                    return redirect()->route('admin.designs.index');
+                    return redirect()->route('admin.dashboards');
 
                 default:
                     return redirect(RouteServiceProvider::HOME);

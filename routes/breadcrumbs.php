@@ -5,24 +5,25 @@ declare(strict_types=1);
 use App\Domain\Admin\Models\Admin;
 use DaveJamesMiller\Breadcrumbs\BreadcrumbsGenerator;
 use DaveJamesMiller\Breadcrumbs\Facades\Breadcrumbs;
+use App\Domain\Acl\Models\Role;
 
 // Home
-Breadcrumbs::for('admin.designs.index', function (BreadcrumbsGenerator $trail) {
-    $trail->push(__('Dashboard'), route('admin.designs.index'), ['icon' => 'fal fa-home']);
+Breadcrumbs::for('admin.dashboards', function (BreadcrumbsGenerator $trail) {
+    $trail->push(__('dashboards'), route('admin.dashboards'), ['icon' => 'fal fa-home']);
 });
 
 // Home > \App\Designs > Create
 
-Breadcrumbs::for('admin.designs.create', function (BreadcrumbsGenerator $trail) {
-    $trail->parent('admin.designs.index');
-    $trail->push(__('Tạo'), route('admin.designs.create'));
+Breadcrumbs::for('admin.dashboards.create', function (BreadcrumbsGenerator $trail) {
+    $trail->parent('admin.dashboards');
+    $trail->push(__('Tạo'), route('admin.dashboards.create'));
 });
 
 // Home > \App\Designs > [admin] > Edit
-Breadcrumbs::for('admin.designs.edit', function (BreadcrumbsGenerator $trail, \App\Designs $design) {
-    $trail->parent('admin.designs.index');
+Breadcrumbs::for('admin.dashboards.edit', function (BreadcrumbsGenerator $trail, \App\Designs $design) {
+    $trail->parent('admin.dashboards');
     $trail->push($design->name, '#');
-    $trail->push(__('Chỉnh sửa'), route('admin.designs.edit', $design));
+    $trail->push(__('Chỉnh sửa'), route('admin.dashboards.edit', $design));
 });
 
 /*
@@ -33,7 +34,7 @@ Breadcrumbs::for('admin.designs.edit', function (BreadcrumbsGenerator $trail, \A
 
 // Home > Tasks
 Breadcrumbs::for('admin.tasks.index', function (BreadcrumbsGenerator $trail) {
-    $trail->parent('admin.designs.index');
+    $trail->parent('admin.dashboards');
     $trail->push(__('Danh sách task'), route('admin.tasks.index'), ['icon' => 'fal fa-copyright']);
 });
 
@@ -60,7 +61,7 @@ Breadcrumbs::for('admin.tasks.edit', function (BreadcrumbsGenerator $trail, \App
 
 // Home > Admins
 Breadcrumbs::for('admin.admins.index', function (BreadcrumbsGenerator $trail) {
-    $trail->parent('admin.designs.index');
+    $trail->parent('admin.dashboards');
     $trail->push(__('Tài khoản'), route('admin.admins.index'), ['icon' => 'fal fa-user']);
 });
 
@@ -76,4 +77,24 @@ Breadcrumbs::for('admin.admins.edit', function (BreadcrumbsGenerator $trail, Adm
     $trail->parent('admin.admins.index');
     $trail->push($admin->email, '#');
     $trail->push(__('Chỉnh sửa'), route('admin.admins.edit', $admin));
+});
+
+// Home > Roles
+Breadcrumbs::for('admin.roles.index', function (BreadcrumbsGenerator $trail) {
+    $trail->parent('admin.dashboards');
+    $trail->push(__('Vai trò'), route('admin.roles.index'), ['icon' => 'fal fa-project-diagram']);
+});
+
+// Home > Roles > Create
+
+Breadcrumbs::for('admin.roles.create', function (BreadcrumbsGenerator $trail) {
+    $trail->parent('admin.roles.index');
+    $trail->push(__('Tạo'), route('admin.roles.create'));
+});
+
+// Home > Roles > [role] > Edit
+Breadcrumbs::for('admin.roles.edit', function (BreadcrumbsGenerator $trail, Role $role) {
+    $trail->parent('admin.roles.index');
+    $trail->push($role->display_name, '#');
+    $trail->push(__('Chỉnh sửa'), route('admin.roles.edit', $role));
 });

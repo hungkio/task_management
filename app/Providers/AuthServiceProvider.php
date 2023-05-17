@@ -6,11 +6,10 @@ use App\Domain\Acl\Models\Role;
 use App\Domain\Admin\Models\Admin;
 use App\Domain\Admin\Policies\AdminPolicy;
 use App\Domain\Acl\Policies\RolePolicy;
-use App\Domain\Post\Models\Post;
-use App\Domain\Post\Policies\PostPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
-use Spatie\Activitylog\Models\Activity;
+use App\Domain\Task\Policies\TaskPolicy;
+use App\Tasks;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -22,7 +21,7 @@ class AuthServiceProvider extends ServiceProvider
     protected $policies = [
         Role::class => RolePolicy::class,
         Admin::class => AdminPolicy::class,
-        Post::class => PostPolicy::class,
+        Tasks::class => TaskPolicy::class,
         // 'App\Model' => 'App\Policies\ModelPolicy',
     ];
 

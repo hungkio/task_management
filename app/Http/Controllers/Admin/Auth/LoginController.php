@@ -42,7 +42,7 @@ class LoginController extends Controller
 
     public function redirectTo(): string
     {
-        return route('admin.designs.index');
+        return route('admin.dashboards');
     }
 
     public function logout(Request $request)
