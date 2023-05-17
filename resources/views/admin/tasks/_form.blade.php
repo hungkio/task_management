@@ -12,37 +12,92 @@
                         <fieldset>
                             <legend class="font-weight-semibold text-uppercase font-size-sm">
                                 {{ __('Chung') }}
-                                @if($brand->id)
+                                @if($task->id)
                                     | <a href="" class="text-primary font-weight-semibold"
-                                         target="_blank">{{ Str::limit($brand->name, 20) }}</a>
+                                         target="_blank">{{ Str::limit($task->name, 20) }}</a>
                                 @endif
                             </legend>
                             <div class="collapse show" id="general">
                                 <x-text-field
                                     name="name"
-                                    :placeholder="__('Tên xưởng')"
-                                    :label="__('Tên xưởng')"
-                                    :value="$brand->name"
+                                    :placeholder="__('Tên case')"
+                                    :label="__('Tên case')"
+                                    :value="$task->name"
                                     required
                                 >
                                 </x-text-field>
 
                                 <x-text-field
-                                    name="phone"
-                                    :placeholder="__('Số ĐT')"
-                                    :label="__('Số ĐT')"
-                                    :value="$brand->phone"
+                                    name="path"
+                                    :placeholder="__('Đường dẫn dropbox')"
+                                    :label="__('Đường dẫn dropbox')"
+                                    :value="$task->path"
                                     required
                                 >
-                                    {!! $brand->phone ?? null !!}
+                                    {!! $task->phone ?? null !!}
                                 </x-text-field>
 
                                 <x-text-field
-                                    name="address"
-                                    :placeholder="__('Địa chỉ')"
-                                    :label="__('Địa chỉ')"
-                                    :value="$brand->address"
+                                    name="countRecord"
+                                    :placeholder="__('Số lượng ảnh')"
+                                    :label="__('Số lượng ảnh')"
+                                    :value="$task->countRecord"
+                                    type="number"
                                     required
+                                >
+                                </x-text-field>
+
+                                <x-text-field
+                                    name="date"
+                                    :placeholder="__('31 12')"
+                                    :label="__('Ngày tháng')"
+                                    :value="$task->date"
+                                    required
+                                >
+                                </x-text-field>
+
+                                <x-text-field
+                                    name="month"
+                                    :placeholder="__('January, February, ...')"
+                                    :label="__('Tháng')"
+                                    :value="$task->month"
+                                    required
+                                >
+                                </x-text-field>
+
+                                <x-text-field
+                                    name="case"
+                                    :placeholder="__('Tên thư mục case')"
+                                    :label="__('Tên thư mục case')"
+                                    :value="$task->case"
+                                    required
+                                >
+                                </x-text-field>
+
+                                <x-text-field
+                                    name="customer"
+                                    :placeholder="__('Tên thư mục khách hàng')"
+                                    :label="__('Tên thư mục khách hàng')"
+                                    :value="$task->customer"
+                                    required
+                                >
+                                </x-text-field>
+
+                                <x-text-field
+                                    name="estimate"
+                                    :placeholder="__('Số tiếng làm dự kiến')"
+                                    :label="__('Thời gian làm dự kiến')"
+                                    :value="$task->estimate"
+                                    type="number"
+                                >
+                                </x-text-field>
+
+                                <x-text-field
+                                    name="level"
+                                    :placeholder="__('Level độ khó case')"
+                                    :label="__('Level case')"
+                                    :value="$task->level"
+                                    type="number"
                                 >
                                 </x-text-field>
                             </div>

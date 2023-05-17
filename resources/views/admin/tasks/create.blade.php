@@ -10,7 +10,7 @@
 @section('page-content')
     @include('admin.tasks._form', [
         'url' =>  route('admin.tasks.store'),
-        'brand' => new \App\Brands,
+        'task' => new \App\Tasks,
     ])
 @stop
 @push('css')
@@ -51,6 +51,6 @@
     <script src="{{ asset('backend/js/editor-admin.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.2/min/dropzone.min.js" integrity="sha512-9WciDs0XP20sojTJ9E7mChDXy6pcO0qHpwbEJID1YVavz2H6QBz5eLoDD8lseZOb2yGT8xDNIV7HIe1ZbuiDWg==" crossorigin="anonymous"></script>
 
-    {!! JsValidator::formRequest('App\Http\Requests\Admin\BrandRequest', '#post-form'); !!}
+    {!! JsValidator::formRequest('App\Http\Requests\Admin\TaskRequest', '#post-form'); !!}
 @endpush
 

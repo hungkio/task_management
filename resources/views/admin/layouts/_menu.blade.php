@@ -51,45 +51,20 @@
                 <li class="nav-item-header">
                     <div class="text-uppercase font-size-xs line-height-xs">
                         {{ __('Menu') }}
-                        <a href="{{ route('admin.designs.index') }}" class="navbar-nav-link sidebar-control sidebar-main-toggle d-none d-md-block menu-nav">
+                        <a href="{{ route('admin.dashboards') }}" class="navbar-nav-link sidebar-control sidebar-main-toggle d-none d-md-block menu-nav">
                             <i class="fal fa-bars"></i>
                         </a>
                     </div>
                     <i class="fal fa-bars navbar-nav-link sidebar-control sidebar-main-toggle" title="{{ __('Menu') }}"></i>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('admin.designs.index') }}" class="nav-link {{ request()->routeIs('admin.designs*') ? 'active' : null }}">
+                    <a href="{{ route('admin.dashboards') }}" class="nav-link {{ request()->routeIs('admin.dashboards*') ? 'active' : null }}">
                         <i class="fal fa-home"></i>
                         <span>
-                            {{ __('My Cases') }}
+                            {{ __('Dashboard') }}
                         </span>
                     </a>
                 </li>
-
-
-                @can('products.view')
-                    <li class="nav-item">
-                        <a href="{{ route('admin.products.index') }}"
-                           class="nav-link {{ request()->routeIs('admin.products*') ? 'active' : null }}">
-                            <i class="fal fa-tshirt"></i>
-                            <span>
-                            {{ __("Sản phẩm") }}
-                        </span>
-                        </a>
-                    </li>
-                @endcan
-
-                @can('produces.view')
-                    <li class="nav-item">
-                        <a href="{{ route('admin.produces.index') }}"
-                           class="nav-link {{ request()->routeIs('admin.produces*') ? 'active' : null }}">
-                            <i class="fal fa-conveyor-belt"></i>
-                            <span>
-                            {{ __("Sản xuất") }}
-                        </span>
-                        </a>
-                    </li>
-                @endcan
 
                 @can('tasks.view')
                     <li class="nav-item">
@@ -115,7 +90,12 @@
                         <ul class="nav nav-group-sub" data-submenu-title="{{ __('Tài khoản') }}">
                             @can('admins.view')
                                 <li class="nav-item"><a href="{{ route('admin.admins.index') }}"
-                                                        class="nav-link @if(request()->routeIs('admin.admins*'))active @endif">{{ __('Tài khoản') }}</a>
+                                    class="nav-link @if(request()->routeIs('admin.admins*'))active @endif">{{ __('Tài khoản') }}</a>
+                                </li>
+                            @endcan
+                            @can('roles.view')
+                                <li class="nav-item"><a href="{{ route('admin.roles.index') }}"
+                                    class="nav-link @if(request()->routeIs('admin.roles*'))active @endif">{{ __('Vai trò') }}</a>
                                 </li>
                             @endcan
                         </ul>

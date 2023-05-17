@@ -1,6 +1,6 @@
 @extends('admin.layouts.master')
 
-@section('title', __('Chỉnh sửa :model', ['model' => $brand->name]))
+@section('title', __('Chỉnh sửa :model', ['model' => $task->name]))
 @section('page-header')
     <x-page-header>
         {{ Breadcrumbs::render() }}
@@ -9,8 +9,8 @@
 
 @section('page-content')
     @include('admin.tasks._form', [
-        'url' =>  route('admin.tasks.update', $brand),
-        'staff' => $brand ?? new \App\Brands,
+        'url' =>  route('admin.tasks.update', $task),
+        'task' => $task ?? new \App\Tasks,
         'method' => 'PUT'
     ])
 @stop
@@ -19,6 +19,6 @@
         $('.form-check-input-styled').uniform();
     </script>
     <script src="{{ asset('backend/js/editor-admin.js') }}"></script>
-    {!! JsValidator::formRequest('App\Http\Requests\Admin\BrandRequest', '#post-form'); !!}
+    {!! JsValidator::formRequest('App\Http\Requests\Admin\TaskRequest', '#post-form'); !!}
 @endpush
 

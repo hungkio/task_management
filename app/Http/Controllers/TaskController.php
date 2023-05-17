@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\DataTables\BrandDataTable;
-use App\Http\Requests\Admin\BrandRequest;
-use App\Brands;
+use App\DataTables\TaskDataTable;
+use App\Http\Requests\Admin\TaskRequest;
 use App\Tasks;
 use Carbon\Carbon;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -16,132 +15,60 @@ class TaskController
 {
     use AuthorizesRequests;
 
-    public function index(BrandDataTable $dataTable)
+    public function index(TaskDataTable $dataTable)
     {
-        $this->authorize('view', Brands::class);
+        $this->authorize('view', Tasks::class);
 
         return $dataTable->render('admin.tasks.index');
     }
 
     public function create(): View
     {
-        $this->authorize('create', Brands::class);
+        $this->authorize('create', Tasks::class);
         return view('admin.tasks.create');
     }
 
-    public function store(BrandRequest $request)
+    public function store(TaskRequest $request)
     {
-        $this->authorize('create', Brands::class);
+        $this->authorize('create', Tasks::class);
         $data = $request->all();
-        $brand = Brands::create($data);
+        $task = Tasks::create($data);
 
-        flash()->success(__('Xưởng ":model" đã được tạo thành công !', ['model' => $brand->title]));
-
-        return intended($request, route('admin.tasks.index'));
-    }
-
-    public function edit(Brands $brand): View
-    {
-        $this->authorize('update', $brand);
-
-        return view('admin.tasks.edit', compact('brand'));
-    }
-
-    public function update(Brands $brand, BrandRequest $request)
-    {
-        $this->authorize('update', $brand);
-
-        $brand->update($request->all());
-
-        flash()->success(__('Xưởng ":model" đã được cập nhật !', ['model' => $brand->name]));
-
+        flash()->success(__('Case ":model" đã được tạo thành công !', ['model' => $task->title]));
 
         return intended($request, route('admin.tasks.index'));
     }
 
-    public function destroy(Brands $brand)
+    public function edit(Tasks $task): View
     {
-        $this->authorize('delete', $brand);
+        $this->authorize('update', $task);
 
-        $brand->delete();
+        return view('admin.tasks.edit', compact('task'));
+    }
+
+    public function update(Tasks $task, TaskRequest $request)
+    {
+        $this->authorize('update', $task);
+
+        $task->update($request->all());
+
+        flash()->success(__('Case ":model" đã được cập nhật !', ['model' => $task->name]));
+
+        return intended($request, route('admin.tasks.index'));
+    }
+
+    public function destroy(Tasks $task)
+    {
+        $this->authorize('delete', $task);
+
+        $task->delete();
 
         return response()->json([
             'status' => true,
-            'message' => __('Xưởng đã xóa thành công !'),
+            'message' => __('Case đã xóa thành công !'),
         ]);
     }
 
-    public function bulkDelete(PostBulkDeleteRequest $request)
-    {
-        $count_deleted = 0;
-        $deletedRecord = Brands::whereIn('id', $request->input('id'))->get();
-        foreach ($deletedRecord as $brand) {
-            $brand->delete();
-            $count_deleted++;
-        }
-        return response()->json([
-            'status' => true,
-            'message' => __('Đã xóa ":count" xưởng thành công ',
-                [
-                    'count' => $count_deleted,
-                ]),
-        ]);
-    }
-
-    public function changeStatus(Post $brand, Request $request)
-    {
-        $this->authorize('update', $brand);
-
-        $brand->update(['status' => $request->status]);
-
-        logActivity($brand, 'update'); // log activity
-
-        return response()->json([
-            'status' => true,
-            'message' => __('Xưởng đã được cập nhật trạng thái thành công !'),
-        ]);
-    }
-
-    public function bulkStatus(Request $request)
-    {
-        $total = Brands::whereIn('id', $request->id)->get();
-        foreach ($total as $brand) {
-            $brand->update(['status' => $request->status]);
-            logActivity($brand, 'update'); // log activity
-        }
-
-        return response()->json([
-            'status' => true,
-            'message' => __(':count sản phẩm đã được cập nhật trạng thái thành công !', ['count' => $total->count()]),
-        ]);
-    }
-
-    public function upLoadFileImage(Request $request)
-    {
-        $validator = Validator::make(
-            $request->all(),
-            [
-                'file' => ['mimes:jpeg,jpg,png', 'required', 'max:2048'],
-            ],
-            [
-                'file.mimes' => __('Tệp tải lên không hợp lệ'),
-                'file.max' => __('Tệp quá lớn'),
-            ]
-        );
-
-        if ($validator->fails()) {
-            return response()->json([
-                'error' => $validator->errors()->first('file'),
-            ], \Illuminate\Http\Response::HTTP_UNPROCESSABLE_ENTITY);
-        }
-
-        $file = $request->file('file')->storePublicly('tmp/uploads');
-
-        return response()->json([
-            'file' => $file,
-            'status' => true,
-        ]);
-    }
 
     public function cron()
     {
