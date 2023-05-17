@@ -61,7 +61,7 @@
                     <a href="{{ route('admin.designs.index') }}" class="nav-link {{ request()->routeIs('admin.designs*') ? 'active' : null }}">
                         <i class="fal fa-home"></i>
                         <span>
-                            {{ __('Thiết kế') }}
+                            {{ __('My Cases') }}
                         </span>
                     </a>
                 </li>

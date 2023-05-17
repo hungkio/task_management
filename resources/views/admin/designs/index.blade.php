@@ -44,32 +44,18 @@
                     </h5>
                     <div class="d-flex flex-column align-items-center justify-content-center mt-3">
                         <!-- card -->
-                        <div id="todotarget1" ondragstart="dragStart(event)" draggable="true"
-                            class="card rounded-0 w-100 mb-3 border-0 border-start border-primary border-3 shadow-sm">
-                            <div class="card-body px-3 py-3">
-                                <div class="card-text mb-2">Details of Task</div>
-                                <div class="bg-primary d-inline p-1 fw-semibold small text-white project-name">
-                                    Project Name</div>
+                        @foreach ($tasks as $task)
+                            
+                            <div id="todotarget1" ondragstart="dragStart(event)" draggable="true"
+                                class="card rounded-0 w-100 mb-3 border-0 border-start border-primary border-3 shadow-sm">
+                                <div class="card-body px-3 py-3">
+                                    <div class="card-text mb-2">{{$task->name}}</div>
+                                    <div class="bg-primary d-inline p-1 fw-semibold small text-white project-name">
+                                        Project Name</div>
+                                </div>
                             </div>
-                        </div>
-                        <!-- card -->
-                        <div id="todotarget2" ondragstart="dragStart(event)" draggable="true"
-                            class="card rounded-0 w-100 mb-3 border-0 border-start border-primary border-3 shadow-sm">
-                            <div class="card-body px-3 py-3">
-                                <div class="card-text mb-2">Details of Task</div>
-                                <div class="bg-primary d-inline p-1 fw-semibold small text-white project-name">
-                                    Project Name</div>
-                            </div>
-                        </div>
-                        <!-- card -->
-                        <div id="todotarget3" ondragstart="dragStart(event)" draggable="true"
-                            class="card rounded-0 w-100 mb-3 border-0 border-start border-primary border-3 shadow-sm">
-                            <div class="card-body px-3 py-3">
-                                <div class="card-text mb-2">Details of Task</div>
-                                <div class="bg-primary d-inline p-1 fw-semibold small text-white project-name">
-                                    Project Name</div>
-                            </div>
-                        </div>
+                        @endforeach
+                        
                     </div>
                 </div>
                 <!-- To do tasks -->
@@ -79,24 +65,7 @@
                         Test
                     </h5>
                     <div class="d-flex flex-column align-items-center justify-content-center mt-3">
-                        <!-- card -->
-                        <div id="inprogresstarget1" ondragstart="dragStart(event)" draggable="true"
-                            class="card rounded-0 w-100 mb-3 border-0 border-start border-warning border-3 shadow-sm">
-                            <div class="card-body px-3 py-3">
-                                <div class="card-text mb-2">Details of Task</div>
-                                <div class="bg-warning d-inline p-1 fw-semibold small text-white project-name">
-                                    Project Name</div>
-                            </div>
-                        </div>
-                        <!-- card -->
-                        <div id="inprogresstarget2" ondragstart="dragStart(event)" draggable="true"
-                            class="card rounded-0 w-100 mb-3 border-0 border-start border-warning border-3 shadow-sm">
-                            <div class="card-body px-3 py-3">
-                                <div class="card-text mb-2">Details of Task</div>
-                                <div class="bg-warning d-inline p-1 fw-semibold small text-white project-name">
-                                    Project Name</div>
-                            </div>
-                        </div>
+                        
                     </div>
                 </div>
                 <!-- tasks completed -->
@@ -106,15 +75,7 @@
                         Done
                     </h5>
                     <div class="d-flex flex-column align-items-center justify-content-center mt-3">
-                        <!-- card -->
-                        <div id="completedtarget1" ondragstart="dragStart(event)" draggable="true"
-                            class="card rounded-0 w-100 mb-3 border-0 border-start border-success border-3 shadow-sm">
-                            <div class="card-body px-3 py-3">
-                                <div class="card-text mb-2">Details of Task</div>
-                                <div class="bg-success d-inline p-1 fw-semibold small text-white project-name">
-                                    Project Name</div>
-                            </div>
-                        </div>
+                        
                     </div>
                 </div>
             </div>
@@ -124,76 +85,7 @@
 @stop
 
 @push('js')
-    {{$dataTable->scripts()}}
     <script>
-        $(document).on('change','#select_status', function () {
-            var status = $(this).val();
-            var url = $(this).attr('data-url');
-            confirmAction('Bạn có muốn thay đổi trạng thái ?', function (result) {
-                if (result) {
-                    $.ajax({
-                        url: url,
-                        data: {
-                            'status': status
-                        },
-                        type: 'POST',
-                        dataType: 'json',
-                        success: function(res) {
-                            if(res.status == true){
-                                showMessage('success', res.message);
-                            }else{
-                                showMessage('error', res.message);
-                            }
-                            window.LaravelDataTables['{{ $dataTable->getTableAttribute('id') }}'].ajax.reload();
-                        },
-                    });
-                }else{
-                    window.LaravelDataTables['{{ $dataTable->getTableAttribute('id') }}'].ajax.reload();
-                }
-            });
-        });
-
-        $(document).on('click', '.updateStatus', function () {
-            var updateUrl = $(this).data('url');
-
-            confirmAction("Bạn có chắc muốn duyệt mẫu thiết kế này?", function (result) {
-                if (result) {
-                    $.ajax({
-                        type: 'PUT',
-                        url: updateUrl,
-                        data: {
-                            _method: "PUT",
-                            status: 2
-                        },
-                        success: function (res) {
-                            if (res.status == 'error') {
-                                showMessage('error', res.message);
-                            } else {
-                                showMessage('success', res.message);
-                            }
-                            Object.keys(window.LaravelDataTables).forEach(function (table) {
-                                window.LaravelDataTables[table].ajax.reload()
-                            })
-                        }
-                    })
-                }
-            })
-        })
-        @can('products.create')
-        $('.buttons-create').removeClass('d-none')
-        @endcan
-        @can('products.delete')
-        $('.btn-danger').removeClass('d-none')
-        @endcan
-        @can('products.update')
-        $('.btn-warning').removeClass('d-none')
-        @endcan
-
-        $(function () {
-            $('[data-toggle="tooltip"]').tooltip()
-        })
-
-        //pike
         function dragStart(event) {
             event.dataTransfer.setData("Text", event.target.id);
         }
