@@ -50,6 +50,7 @@
     }
 </script>
 <script src="{{ asset('/backend/global_assets/js/main/jquery.min.js') }}"></script>
+<script src="{{ asset('/backend/global_assets/js/main/jquery-ui.min.js') }}"></script>
 <script src="{{ asset('/backend/global_assets/js/main/bootstrap.bundle.min.js') }}"></script>
 <script src="{{ asset('/backend/global_assets/js/plugins/loaders/blockui.min.js') }}"></script>
 <script src="{{ asset('/backend/global_assets/js/plugins/forms/styling/uniform.min.js') }}"></script>
