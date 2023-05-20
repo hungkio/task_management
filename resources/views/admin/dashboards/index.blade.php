@@ -12,6 +12,27 @@
         .task-column{
             width: 30%
         }
+        .task-placeholder {
+          background-color: #eee;
+          border: 2px dashed #999;
+          height: 100px;
+          width: 100%;
+        }
+        .task{
+          animation: all 0.5s;
+        }
+        .in-progress{
+          background-color: #1890ff;
+        }
+        .testing{
+          background-color: #FFD700;
+        }
+        .bug{
+          background-color: #BB0000;
+        }
+        .done{
+          background-color: #458B00;
+        }
         @media (max-width: 1024px){
             .dashboard{
                 width: 1024px;
@@ -36,62 +57,72 @@
 <section class="">
   <div class="position-relative">
     <div class="">
-      <div class="dashboard d-flex justify-content-between vh-100">
+      <div class="dashboard d-flex justify-content-between">
         <!-- To do tasks -->
-        <div class="taskList task-column shadow-sm mx-2 bg-light p-2" id="todo">
+        <div class="taskList task-column shadow-sm mx-2 bg-light p-2">
           <h5>
-              To do
+              In Progress
           </h5>
-          <div class="d-flex flex-column justify-content-center mt-3 ">
+          <div id="in-progress" class="sortable h-100 d-flex flex-column">
               <!-- card -->
               @foreach ($tasks_editing as $task)
-                  
-                  <div id={{$task->id}} class="task"
-                      class="card rounded-0 w-100 mb-3 border-0 border-start border-primary border-3 shadow-sm">
-                      <div class="card-body px-3 py-3">
-                          <div class="card-text mb-2">{{$task->name}}</div>
-                          <div class="bg-primary d-inline p-1 fw-semibold small text-white project-name">
-                            In progress
-                          </div>
-                      </div>
-                  </div>
+                <div id={{$task->id}}
+                    class="card rounded-0 mb-3 border-0 border-start border-primary border-3 shadow-sm">
+                    <div class="card-body px-3 py-3">
+                        <div class="card-text mb-2">{{$task->name}}</div>
+                        <div class="status in-progress d-inline p-1 fw-semibold small text-white project-name">
+                          In progress
+                        </div>
+                    </div>
+                </div>
               @endforeach
-              
+              @foreach ($tasks_rejected as $task)
+                <div id={{$task->id}}
+                    class="card rounded-0 mb-3 border-0 border-start border-primary border-3 shadow-sm">
+                    <div class="card-body px-3 py-3">
+                        <div class="card-text mb-2">{{$task->name}}</div>
+                        <div class="status bug d-inline p-1 fw-semibold small text-white project-name">
+                          Bug
+                        </div>
+                    </div>
+                </div>
+              @endforeach
           </div>
         </div>
         <!-- To do tasks -->
-        <div class="taskList task-column shadow-sm mx-2 bg-light p-2" id="progress">
+        <div class="taskList task-column shadow-sm mx-2 bg-light p-2">
             <h5>
-                Test
+                Testing
             </h5>
-            <div class="d-flex flex-column justify-content-center mt-3">
+            <div id="testing" class="sortable d-flex flex-column h-100">
               <!-- card -->
               @foreach ($tasks_testing as $task)
-                <div id={{$task->id}} class="task"
-                    class="card rounded-0 w-100 mb-3 border-0 border-start border-primary border-3 shadow-sm">
+                <div id={{$task->id}}
+                    class="card rounded-0 mb-3 border-0 border-start border-primary border-3 shadow-sm">
                     <div class="card-body px-3 py-3">
                         <div class="card-text mb-2">{{$task->name}}</div>
-                        <div class="bg-primary d-inline p-1 fw-semibold small text-white project-name">
+                        <div class="status testing d-inline p-1 fw-semibold small text-white project-name">
                           Testing
                         </div>
                     </div>
                 </div>
               @endforeach
+              
             </div>
         </div>
         <!-- tasks completed -->
-        <div class="taskList task-column shadow-sm mx-2 bg-light p-2" id="completed">
+        <div class="taskList task-column shadow-sm mx-2 bg-light p-2">
             <h5>
                 Done
             </h5>
-            <div class="d-flex flex-column justify-content-center mt-3">
+            <div id="done" class="sortable d-flex flex-column h-100">
                 <!-- card -->
                 @foreach ($tasks_done as $task)
-                  <div id={{$task->id}} class="task"
-                      class="card rounded-0 w-100 mb-3 border-0 border-start border-primary border-3 shadow-sm">
+                  <div id={{$task->id}}
+                      class="card rounded-0 mb-3 border-0 border-start border-primary border-3 shadow-sm">
                       <div class="card-body px-3 py-3">
                           <div class="card-text mb-2">{{$task->name}}</div>
-                          <div class="bg-primary d-inline p-1 fw-semibold small text-white project-name">
+                          <div class="status done d-inline p-1 fw-semibold small text-white project-name">
                             Done
                           </div>
                       </div>
@@ -109,44 +140,47 @@
 @push('js')
   <script>
     $(document).ready(function () {
-
-      // Thiết lập các phần tử có thể kéo và thả (draggable)
-      $('.task').draggable({
-        revert: 'invalid', // Trả về vị trí ban đầu nếu không thả vào đúng phần tử
-        cursor: 'move',
-        start: function() {
-          var taskId = $(this).attr('id');
-          $(this).data('taskId', taskId);
-        }
-      });
-      // Thiết lập phần tử chấp nhận thả (droppable)
-      $('.taskList').droppable({
-        accept: '.task', // Chỉ chấp nhận các phần tử có lớp 'task'
-        drop: function() {
+      $('.sortable').sortable({
+        connectWith: ".sortable",
+        placeholder: "task-placeholder",
+        start: function(event, ui) {
+          ui.item.toggleClass("dragging");
+          taskId = ui.item.attr('id');
+        },
+        stop: function(event, ui) {
+          ui.item.toggleClass("dragging");
+        },
+        receive: function(event, ui) {
           let thisProcess = $(this).attr('id');
           switch (thisProcess) {
-            case 'todo':
-              processStatus = 1;
+            case 'in-progress':
+              processStatus = 4;
+              status = 'Bug';
+              ui.item.find('.status').css("background-color", "#BB0000")
               break;
-            case 'progress':
+            case 'testing':
+              status = 'Testing';
+              ui.item.find('.status').css("background-color", "#FFD700")
               processStatus = 2;
               break;
-            case 'completed':
+            case 'done':
+              status = 'Done';
+              ui.item.find('.status').css("background-color", "#458B00")
               processStatus = 3;
             default:
               break;
           }
-          let taskId = $('.task.ui-draggable-dragging').data('taskId');
           updateTaskStatus(taskId, processStatus);
+          ui.item.find('.status').text(status);
         }
       });
       
       function updateTaskStatus(taskId, processStatus) {
         $.ajax({
-          url: 'admin/tasks/' + taskId,
-          type: 'PUT',
+          url: "{{ route('admin.tasks.update-status')}}",
+          type: 'POST',
           dataType: 'json',
-          data: { status: processStatus },
+          data: { id: taskId, status: processStatus },
           success: function(response) {
             // Xử lý thành công
             console.log(response);
