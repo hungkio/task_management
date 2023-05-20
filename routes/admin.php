@@ -23,6 +23,7 @@ use App\Http\Controllers\Admin\Auth\VerificationController;
 use App\Http\Controllers\Admin\UploadTinymceController;
 use App\Http\Controllers\Admin\RoleController;
 
+
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
     Route::post('login', [LoginController::class, 'login']);
@@ -45,7 +46,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('email/verify', [VerificationController::class, 'show'])->name('verification.notice');
     Route::get('email/verify/{id}/{hash}', [VerificationController::class, 'verify'])->name('verification.verify');
     Route::post('email/resend', [VerificationController::class, 'resend'])->name('verification.resend');
-
+    Route::get('/croncase', function () {
+        \Illuminate\Support\Facades\Artisan::call('case:get');
+    });
     // Route Dashboards
     Route::middleware('auth')
         ->group(function () {
