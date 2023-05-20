@@ -62,6 +62,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('tasks/{task}/edit', [TaskController::class, 'edit'])->name('tasks.edit');
             Route::delete('tasks/{task}', [TaskController::class, 'destroy'])->name('tasks.destroy');
             Route::put('tasks/{task}', [TaskController::class, 'update'])->name('tasks.update');
+            Route::post('tasks/update-status', [TaskController::class, 'updateStatus'])->name('tasks.update-status');
             Route::get('tasks/cron', [TaskController::class, 'cron'])->name('tasks.cron');
 
             //Upload Tinymce

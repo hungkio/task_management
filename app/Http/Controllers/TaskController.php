@@ -58,6 +58,20 @@ class TaskController
         return intended($request, route('admin.tasks.index'));
     }
 
+
+    public function updateStatus(Request $request)
+    {
+        $taskId = $request->input('id');
+        $processStatus = $request->input('status');
+
+        $task = Tasks::findOrFail($taskId);
+        $task->status = $processStatus;
+        $task->save();
+
+        // Phản hồi JSON với thông tin cập nhật thành công
+        return response()->json(['message' => 'Cập nhật trạng thái thành công'], 200);
+    }
+
     public function destroy(Tasks $task)
     {
         $this->authorize('delete', $task);
