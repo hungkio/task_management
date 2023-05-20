@@ -27,11 +27,11 @@ class DashboardController
             $conditionAssigner = 'QA_id';
         }
 
-        $tasks_waiting = $tasks->whereDate('created_at', Carbon::today())->where('status', Tasks::WAITING);
+        $tasks_waiting = $tasks->whereDate('created_at', Carbon::today())->where('status', Tasks::WAITING)->get();
 
         //auto assign to editor when no bug
         $this->assignEditor();
-        $this->assignQA(10);
+//        $this->assignQA(10);
 
         if ($conditionAssigner) {
             $tasks_editing = $tasks->where($conditionAssigner, $user_id)->whereDate('created_at', Carbon::today())->where('status', Tasks::EDITING)->get();
@@ -46,7 +46,7 @@ class DashboardController
         }
 
         return view('admin.dashboards.index')->with([
-            'tasks_waiting' => $tasks_waiting->get(),
+            'tasks_waiting' => $tasks_waiting,
             'tasks_editing' => $tasks_editing,
             'tasks_testing' => $tasks_testing,
             'tasks_done' => $tasks_done,
