@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Domain\Admin\Models;
 
 use App\Domain\Admin\Presenters\AdminPresenter;
+use App\Tasks;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -53,5 +55,10 @@ class Admin extends Authenticatable implements HasMedia
             ->addMediaCollection('avatar')
             ->singleFile()
             ->useFallbackUrl('/backend/global_assets/images/placeholders/placeholder.jpg');
+    }
+
+    public function QATasks()
+    {
+        return $this->hasMany(Tasks::class, 'QA_id')->whereDate('created_at', Carbon::today());
     }
 }

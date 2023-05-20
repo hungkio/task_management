@@ -11,7 +11,7 @@ class AddQATimeAndLevelToTasksTable extends Migration
         Schema::table('tasks', function (Blueprint $table) {
             $table->string('QA_start')->nullable();
             $table->string('QA_end')->nullable();
-            $table->string('level')->nullable();
+            $table->string('level')->default(0);
         });
     }
 
