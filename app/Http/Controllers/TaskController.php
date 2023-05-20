@@ -8,6 +8,7 @@ use App\Tasks;
 use Carbon\Carbon;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\View\View;
 
@@ -121,10 +122,9 @@ class TaskController
                     ]);
                 }
             } catch (\Exception $exception) {
-                dump($exception->getMessage());
+                Log::notice($exception->getMessage());
                 continue;
             }
         }
-
     }
 }

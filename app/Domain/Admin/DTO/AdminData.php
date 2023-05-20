@@ -18,6 +18,7 @@ class AdminData extends DataTransferObject
     public ?string $password;
 
     public string $roles;
+    public string $level;
 
     public static function fromRequest(AdminRequest $request): AdminData
     {
@@ -27,6 +28,7 @@ class AdminData extends DataTransferObject
             'email' => $request->input('email'),
             'password' => $request->input('password'),
             'roles' => $request->input('roles'),
+            'level' => $request->input('level'),
         ]);
     }
 }

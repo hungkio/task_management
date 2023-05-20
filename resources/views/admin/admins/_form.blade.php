@@ -51,6 +51,16 @@
                                 >
 
                                 </x-select-field>
+
+                                <x-text-field
+                                    name="level"
+                                    :placeholder="__('Cấp độ')"
+                                    :label="__('Cấp độ')"
+                                    :value="$admin->level"
+                                    required
+                                    type="number"
+                                >
+                                </x-text-field>
                             </div>
                         </fieldset>
 
