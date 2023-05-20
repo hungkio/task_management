@@ -51,6 +51,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         ->group(function () {
             // dashboard
             Route::get('/', [DashboardController::class, 'index'])->name('dashboards');
+            Route::get('/popup/{id}', [DashboardController::class, 'showPopup'])->name('popup');
 
             //task
             Route::get('tasks', [TaskController::class, 'index'])->name('tasks.index');

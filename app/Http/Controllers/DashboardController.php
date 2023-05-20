@@ -27,4 +27,15 @@ class DashboardController
             'tasks_rejected' => $tasks_rejected,
         ]);
     }
+    
+    public function showPopup($id)
+    {
+        $task = Tasks::find($id);
+        $user = auth()->user();
+        $roleName = $user->getRoleNames()[0];
+        return view('admin.dashboards.popup')->with([
+            'task' => $task,
+            'roleName' => $roleName
+        ]);
+    }
 }
