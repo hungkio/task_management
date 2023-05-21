@@ -57,6 +57,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('/assign-editor', [DashboardController::class, 'assignEditor'])->name('assign-editor');
             Route::get('/assign-qa/{id}', [DashboardController::class, 'assignQA'])->name('assign-qa');
             Route::get('/popup/{id}', [DashboardController::class, 'showPopup'])->name('popup');
+            Route::post('/popup/{id}', [DashboardController::class, 'savePopup'])->name('popup.save');
 
             //task
             Route::get('tasks', [TaskController::class, 'index'])->name('tasks.index');
