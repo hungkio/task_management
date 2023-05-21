@@ -29,10 +29,7 @@ class DashboardController
 
         $tasks_waiting = $tasks->whereDate('created_at', Carbon::today())->where('status', Tasks::WAITING)->get();
 
-        //auto assign to editor when no bug
         $this->assignEditor();
-//        $this->assignQA(10);
-
         if ($conditionAssigner) {
             $tasks_editing = $tasks->where($conditionAssigner, $user_id)->whereDate('created_at', Carbon::today())->where('status', Tasks::EDITING)->get();
             $tasks_testing = $tasks->where($conditionAssigner, $user_id)->whereDate('created_at', Carbon::today())->where('status', Tasks::TESTING)->get();
@@ -66,15 +63,25 @@ class DashboardController
         $tasks_waiting = $tasks->whereDate('created_at', Carbon::today())->where('status', Tasks::WAITING);
 
         $today = Carbon::today()->format("Y-m-d");
-        $from = strtotime($today . ' 08:00:00');
+        $from = strtotime($today . ' 00:00:00');
         $to = strtotime($today . ' 23:59:00');
-
         if(time() >= $from && time() <= $to) { // in working time
             if ($roleName == 'editor' && $tasks_editing->isEmpty() && $tasks_rejected->isEmpty()) {
                 $level = $user->level ?? 0;
-
-                $tasks_editing = $tasks_waiting->where('level', '<=', $level)->whereNotNull('estimate')->first();
-                if ($tasks_editing) {
+                $tasks_editing = $tasks_waiting->where('level', '<=', $level)->whereNotNull('estimate')->get();
+                foreach ($tasks_editing as $key => $value) {
+                    if ($value->redo) {
+                        # code...
+                        $black_list = json_decode($value->redo);
+                        if (in_array($user_id, $black_list)) {
+                            $tasks_editing->forget($key);
+                        }
+                    }else {
+                        break;
+                    }
+                }
+                if (!$tasks_editing->isEmpty()) {
+                    $tasks_editing = $tasks_editing[0];
                     $tasks_editing->update([
                         'editor_id' => $user_id,
                         'status' => Tasks::EDITING,
@@ -92,11 +99,14 @@ class DashboardController
     public function assignQA($taskId)
     {
         $task = Tasks::findOrFail($taskId);
-
-        // have lowest number of task
-        $QA = Admin::with(['roles'])->withCount('QATasks')->whereHas('roles', function (Builder $subQuery) {
-            $subQuery->where(config('permission.table_names.roles').'.name', 'QA');
-        })->orderBy('q_a_tasks_count')->first();
+        if ($task->QA_id) {
+            $QA = Admin::findOrFail($task->QA_id);
+        }else {
+            // have lowest number of task
+            $QA = Admin::with(['roles'])->withCount('QATasks')->whereHas('roles', function (Builder $subQuery) {
+                $subQuery->where(config('permission.table_names.roles').'.name', 'QA');
+            })->orderBy('q_a_tasks_count')->first();
+        }
 
         if ($QA) {
             $task->update([
@@ -130,6 +140,20 @@ class DashboardController
     {
         $task = Tasks::find($id);
         $inputData = $request->all();
+        if ($inputData['redo'] == 'on') {
+            if ($task->redo) {
+                $black_list = json_decode($task->redo);
+                $black_list = array_merge($black_list, [$task->editor_id]);
+            }else {
+                $black_list = [$task->editor_id];
+            }
+            $task->update([
+                'editor_id' => null,
+                'status' => Tasks::WAITING,
+                'redo' => json_encode($black_list)
+            ]);
+            unset($inputData['redo']);
+        }
         $task->update($inputData);
         return redirect()->route('admin.dashboards');
     }
