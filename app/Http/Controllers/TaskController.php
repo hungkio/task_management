@@ -66,6 +66,13 @@ class TaskController
 
         $task = Tasks::findOrFail($taskId);
         $task->status = $processStatus;
+        if ($processStatus == Tasks::DONE) {
+            $endTime = date("Y-m-d H:i");
+            $task->update([
+                'end_at' => $endTime,
+                'QA_end' => $endTime
+            ]);
+        }
         $task->save();
 
         // Phản hồi JSON với thông tin cập nhật thành công

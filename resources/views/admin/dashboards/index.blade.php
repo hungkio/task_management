@@ -54,7 +54,7 @@
 
 @section('page-content')
 <div id="popupContainer"></div>
-<section class="">
+<section class="dashboard-case">
   <div class="position-relative">
     <div class="">
       <div class="dashboard d-flex justify-content-between">
@@ -85,12 +85,12 @@
                         @endif
                         <div class="qa-details">
                           @if (@$qa)
-                            <div class="card-text mb-1">QA: {{ $qa->last_name }}</div>
                             <div class="card-text mb-1">
                               <span>QA: {{ $qa->last_name }}</span>
                               -
-                              <span>Start: {{$task->QA_start}}</span>
+                              <span>Start: {{ date('d/m/Y H:i', strtotime($task->QA_start)) }}</span>
                             </div>
+                            <div class="card-text mb-1">QA checked: {{$task->QA_check_num}}</div>
                           @endif
                         </div>
                         <div class="status in-progress d-inline p-1 fw-semibold small text-white project-name">
@@ -122,7 +122,7 @@
                             <div class="card-text mb-1">
                               <span>QA: {{ $qa->last_name }}</span>
                               -
-                              <span>Start: {{$task->QA_start}}</span>
+                              <span>Start: {{ date('d/m/Y H:i', strtotime($task->QA_start)) }}</span>
                             </div>
                             <div class="card-text mb-1">QA checked: {{$task->QA_check_num}}</div>
                           @endif
@@ -165,7 +165,7 @@
                             <div class="card-text mb-1">
                               <span>QA: {{ $qa->last_name }}</span>
                               -
-                              <span>Start: {{$task->QA_start}}</span>
+                              <span>Start: {{ date('d/m/Y H:i', strtotime($task->QA_start)) }}</span>
                             </div>
                             <div class="card-text mb-1">QA checked: {{$task->QA_check_num}}</div>
                           @endif
@@ -209,7 +209,7 @@
                               <div class="card-text mb-1">
                                 <span>QA: {{ $qa->last_name }}</span>
                                 -
-                                <span>Start: {{$task->QA_start}}</span>
+                              <span>Start: {{ date('d/m/Y H:i', strtotime($task->QA_start)) }}</span>
                               </div>
                               <div class="card-text mb-1">QA checked: {{$task->QA_check_num}}</div>
                             @endif
@@ -226,7 +226,6 @@
     </div>
   </div>
 </section>
-
 @stop
 
 @push('js')
@@ -322,7 +321,7 @@
             addNewTask();
 
             //chỉ trường hợp task in-progress mới append html qaDetails
-            if (ui.item.has(".in-progress").length) {
+            if (ui.item.has(".in-progress").length && ui.item.find(".qa-details").find('div').length == 0) {
               assignQA(taskId);
             }
           }
@@ -347,7 +346,7 @@
       }
 
       // when click on task, show popup
-      $(document).on('click', '.card', function() {
+      $(document).on('click', '.dashboard-case .card', function() {
         var popupUrl = $(this).data('url');
 
         $.ajax({
