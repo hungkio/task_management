@@ -65,18 +65,26 @@ class DashboardController
         $tasks_editing = $tasks->where('editor_id', $user_id)->whereDate('created_at', Carbon::today())->where('status', Tasks::EDITING)->get();
         $tasks_waiting = $tasks->whereDate('created_at', Carbon::today())->where('status', Tasks::WAITING);
 
-        if ($roleName == 'editor' && $tasks_editing->isEmpty() && $tasks_rejected->isEmpty()) {
-            $level = $user->level ?? 0;
+        $today = Carbon::today()->format("Y-m-d");
+        $from = strtotime($today . ' 08:00:00');
+        $to = strtotime($today . ' 23:59:00');
 
-            $tasks_editing = $tasks_waiting->where('level', '<=', $level)->first();
-            if ($tasks_editing) {
-                $tasks_editing->update([
-                    'editor_id' => $user_id,
-                    'status' => Tasks::EDITING,
-                    'start_at' => date("Y-m-d H:i")
-                ]);
+        if(time() >= $from && time() <= $to) { // in working time
+            if ($roleName == 'editor' && $tasks_editing->isEmpty() && $tasks_rejected->isEmpty()) {
+                $level = $user->level ?? 0;
+
+                $tasks_editing = $tasks_waiting->where('level', '<=', $level)->whereNotNull('estimate')->first();
+                if ($tasks_editing) {
+                    $tasks_editing->update([
+                        'editor_id' => $user_id,
+                        'status' => Tasks::EDITING,
+                        'start_at' => date("Y-m-d H:i")
+                    ]);
+                }
             }
         }
+
+
 
         return $tasks_editing;
     }
@@ -102,7 +110,7 @@ class DashboardController
             'QA' => $QA
         ];
     }
-    
+
     public function showPopup($id)
     {
         $task = Tasks::find($id);

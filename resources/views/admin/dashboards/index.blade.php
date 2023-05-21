@@ -36,7 +36,7 @@
         @media (max-width: 1024px){
             .dashboard{
                 width: 1024px;
-                overflow-x: auto; 
+                overflow-x: auto;
             }
         }
         @media (max-width: 767.98px) {
@@ -72,11 +72,11 @@
                 @endphp
                 <div id={{$task->id}}
                   data-toggle="modal"
-                  data-url="{{ route('admin.popup', $task->id) }}"  
+                  data-url="{{ route('admin.popup', $task->id) }}"
                   class="card rounded-0 mb-3 border-0 border-start border-primary border-3 shadow-sm">
                     <div class="card-body px-3 py-3">
                         <div class="card-text mb-1">{{$task->name}}</div>
-                        @if ($editor)
+                        @if (@$editor)
                           <div class="card-text mb-1">
                             <span>Editor: {{$editor->last_name}}</span>
                             -
@@ -84,7 +84,7 @@
                           </div>
                         @endif
                         <div class="qa-details">
-                          @if ($qa)
+                          @if (@$qa)
                             <div class="card-text mb-1">QA: {{ $qa->last_name }}</div>
                             <div class="card-text mb-1">
                               <span>QA: {{ $qa->last_name }}</span>
@@ -106,11 +106,11 @@
                 @endphp
                 <div id={{$task->id}}
                   data-toggle="modal"
-                  data-url="{{ route('admin.popup', $task->id) }}"  
+                  data-url="{{ route('admin.popup', $task->id) }}"
                   class="card rounded-0 mb-3 border-0 border-start border-primary border-3 shadow-sm">
                     <div class="card-body px-3 py-3">
                         <div class="card-text mb-1">{{$task->name}}</div>
-                        @if ($editor)
+                        @if (@$editor)
                           <div class="card-text mb-1">
                             <span>Editor: {{$editor->last_name}}</span>
                             -
@@ -118,7 +118,7 @@
                           </div>
                         @endif
                         <div class="qa-details">
-                          @if ($qa)
+                          @if (@$qa)
                             <div class="card-text mb-1">
                               <span>QA: {{ $qa->last_name }}</span>
                               -
@@ -149,11 +149,11 @@
                 @endphp
                 <div id={{$task->id}}
                   data-toggle="modal"
-                  data-url="{{ route('admin.popup', $task->id) }}"  
+                  data-url="{{ route('admin.popup', $task->id) }}"
                   class="card rounded-0 mb-3 border-0 border-start border-primary border-3 shadow-sm">
                     <div class="card-body px-3 py-3">
                         <div class="card-text mb-1">{{$task->name}}</div>
-                        @if ($editor)
+                        @if (@$editor)
                           <div class="card-text mb-1">
                             <span>Editor: {{$editor->last_name}}</span>
                             -
@@ -161,7 +161,7 @@
                           </div>
                         @endif
                         <div class="qa-details">
-                          @if ($qa)
+                          @if (@$qa)
                             <div class="card-text mb-1">
                               <span>QA: {{ $qa->last_name }}</span>
                               -
@@ -176,7 +176,7 @@
                     </div>
                 </div>
               @endforeach
-              
+
             </div>
         </div>
         <!-- tasks completed -->
@@ -197,7 +197,7 @@
                     class="card rounded-0 mb-3 border-0 border-start border-primary border-3 shadow-sm">
                       <div class="card-body px-3 py-3">
                           <div class="card-text mb-1">{{$task->name}}</div>
-                          @if ($editor)
+                          @if (@$editor)
                             <div class="card-text mb-1">
                               <span>Editor: {{$editor->last_name}}</span>
                               -
@@ -205,7 +205,7 @@
                             </div>
                           @endif
                           <div class="qa-details">
-                            @if ($qa)
+                            @if (@$qa)
                               <div class="card-text mb-1">
                                 <span>QA: {{ $qa->last_name }}</span>
                                 -
@@ -244,7 +244,7 @@
                           "<div class='card-body px-3 py-3'>"+
                             "<div class='card-text mb-1'>"+response.name+"</div>"+
                             "<div class='card-text mb-1'>"+
-                              "<span>Editor: {{$editor->last_name}}</span>"+
+                              "<span>Editor: {{@$editor->last_name}}</span>"+
                               " - "+
                               "<span>Start: "+formattedStartAt+"</span>"+
                             "</div>"+
@@ -328,7 +328,7 @@
           }
         }
       });
-      
+
       function updateTaskStatus(taskId, processStatus) {
         $.ajax({
           url: "{{ route('admin.tasks.update-status')}}",
