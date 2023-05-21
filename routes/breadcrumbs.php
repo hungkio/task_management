@@ -6,12 +6,16 @@ use App\Domain\Admin\Models\Admin;
 use DaveJamesMiller\Breadcrumbs\BreadcrumbsGenerator;
 use DaveJamesMiller\Breadcrumbs\Facades\Breadcrumbs;
 use App\Domain\Acl\Models\Role;
+use App\Tasks;
 
 // Home
 Breadcrumbs::for('admin.dashboards', function (BreadcrumbsGenerator $trail) {
     $trail->push(__('dashboards'), route('admin.dashboards'), ['icon' => 'fal fa-home']);
 });
 
+Breadcrumbs::for('admin.popup.save', function (BreadcrumbsGenerator $trail, $id) {
+    $trail->push(__('Save Changes'), route('admin.popup.save', $id));
+});
 // Home > \App\Designs > Create
 
 Breadcrumbs::for('admin.dashboards.create', function (BreadcrumbsGenerator $trail) {

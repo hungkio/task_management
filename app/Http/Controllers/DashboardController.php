@@ -118,6 +118,13 @@ class DashboardController
         ]);
     }
 
+    public function savePopup(Request $request ,$id)
+    {
+        $task = Tasks::find($id);
+        $inputData = $request->all();
+        $task->update($inputData);
+        return redirect()->route('admin.dashboards');
+    }
     public function getUser($id)
     {
         $user = Admin::find($id);
