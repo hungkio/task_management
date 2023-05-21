@@ -69,11 +69,11 @@ class DashboardController
             $level = $user->level ?? 0;
 
             $tasks_editing = $tasks_waiting->where('level', '<=', $level)->first();
-
             if ($tasks_editing) {
                 $tasks_editing->update([
                     'editor_id' => $user_id,
-                    'status' => Tasks::EDITING
+                    'status' => Tasks::EDITING,
+                    'start_at' => date("Y-m-d H:i")
                 ]);
             }
         }
@@ -94,9 +94,34 @@ class DashboardController
             $task->update([
                 'QA_id' => $QA->id,
                 'status' => Tasks::TESTING,
+                'QA_start' => date("Y-m-d H:i")
             ]);
         }
+        return [
+            'task' => $task,
+            'QA' => $QA
+        ];
+    }
+    
+    public function showPopup($id)
+    {
+        $task = Tasks::find($id);
+        $user = auth()->user();
+        $roleName = $user->getRoleNames()[0];
+        $editor = $this->getUser($task->editor_id);
+        $QA = $this->getUser($task->QA_id);
+        return view('admin.dashboards.popup')->with([
+            'task' => $task,
+            'roleName' => $roleName,
+            'editor' => $editor,
+            'QA' => $QA,
+        ]);
+    }
 
-        return $task;
+    public function getUser($id)
+    {
+        $user = Admin::find($id);
+
+        return $user;
     }
 }
