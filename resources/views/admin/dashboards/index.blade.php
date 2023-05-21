@@ -15,7 +15,7 @@
         .task-placeholder {
           background-color: #eee;
           border: 2px dashed #999;
-          height: 100px;
+          height: 150px;
           width: 100%;
         }
         .task{
@@ -53,23 +53,41 @@
 @endpush
 
 @section('page-content')
-   
+<div id="popupContainer"></div>
 <section class="">
   <div class="position-relative">
     <div class="">
       <div class="dashboard d-flex justify-content-between">
         <!-- To do tasks -->
-        <div class="taskList task-column shadow-sm mx-2 bg-light p-2">
+        <div class="taskList w-100 task-column shadow-sm mx-2 bg-light p-2">
           <h5>
               In Progress
           </h5>
           <div id="in-progress" class="sortable h-100 d-flex flex-column">
               <!-- card -->
               @foreach ($tasks_editing as $task)
+                @php
+                    $editor = App\Domain\Admin\Models\Admin::find($task->editor_id);
+                    $qa = App\Domain\Admin\Models\Admin::find($task->QA_id);
+                @endphp
                 <div id={{$task->id}}
-                    class="card rounded-0 mb-3 border-0 border-start border-primary border-3 shadow-sm">
+                  data-toggle="modal"
+                  data-url="{{ route('admin.popup', $task->id) }}"  
+                  class="card rounded-0 mb-3 border-0 border-start border-primary border-3 shadow-sm">
                     <div class="card-body px-3 py-3">
-                        <div class="card-text mb-2">{{$task->name}}</div>
+                        <div class="card-text mb-1">{{$task->name}}</div>
+                        @if ($editor)
+                          <div class="card-text mb-1">
+                            <span>Editor: {{$editor->last_name}}</span>
+                            -
+                            <span>Start: {{ date('d/m/Y H:i', strtotime($task->start_at)) }}</span>
+                          </div>
+                        @endif
+                        @if ($qa)
+                          <div class="card-text mb-1">QA: {{ $qa->last_name }}</div>
+                          <div class="card-text mb-1">QA start: {{$task->QA_start}}</div>
+                          <div class="card-text mb-1">QA checked: {{$task->QA_check_num}}</div>
+                        @endif
                         <div class="status in-progress d-inline p-1 fw-semibold small text-white project-name">
                           In progress
                         </div>
@@ -77,10 +95,31 @@
                 </div>
               @endforeach
               @foreach ($tasks_rejected as $task)
+                @php
+                $editor = App\Domain\Admin\Models\Admin::find($task->editor_id);
+                $qa = App\Domain\Admin\Models\Admin::find($task->QA_id);
+                @endphp
                 <div id={{$task->id}}
-                    class="card rounded-0 mb-3 border-0 border-start border-primary border-3 shadow-sm">
+                  data-toggle="modal"
+                  data-url="{{ route('admin.popup', $task->id) }}"  
+                  class="card rounded-0 mb-3 border-0 border-start border-primary border-3 shadow-sm">
                     <div class="card-body px-3 py-3">
-                        <div class="card-text mb-2">{{$task->name}}</div>
+                        <div class="card-text mb-1">{{$task->name}}</div>
+                        @if ($editor)
+                          <div class="card-text mb-1">
+                            <span>Editor: {{$editor->last_name}}</span>
+                            -
+                            <span>Start: {{ date('d/m/Y H:i', strtotime($task->start_at)) }}</span>
+                          </div>
+                        @endif
+                        @if ($qa)
+                          <div class="card-text mb-1">QA: {{ $qa->last_name }}</div>
+                          <div class="card-text mb-1">
+                            <span>QA: {{ $qa->last_name }}</span>
+                            -
+                            <span>Start: {{$task->QA_start}}</span>
+                          </div>
+                        @endif
                         <div class="status bug d-inline p-1 fw-semibold small text-white project-name">
                           Bug
                         </div>
@@ -90,17 +129,38 @@
           </div>
         </div>
         <!-- To do tasks -->
-        <div class="taskList task-column shadow-sm mx-2 bg-light p-2">
+        <div class="taskList w-100 task-column shadow-sm mx-2 bg-light p-2">
             <h5>
                 Testing
             </h5>
             <div id="testing" class="sortable d-flex flex-column h-100">
               <!-- card -->
               @foreach ($tasks_testing as $task)
+                @php
+                  $editor = App\Domain\Admin\Models\Admin::find($task->editor_id);
+                  $qa = App\Domain\Admin\Models\Admin::find($task->QA_id);
+                @endphp
                 <div id={{$task->id}}
-                    class="card rounded-0 mb-3 border-0 border-start border-primary border-3 shadow-sm">
+                  data-toggle="modal"
+                  data-url="{{ route('admin.popup', $task->id) }}"  
+                  class="card rounded-0 mb-3 border-0 border-start border-primary border-3 shadow-sm">
                     <div class="card-body px-3 py-3">
-                        <div class="card-text mb-2">{{$task->name}}</div>
+                        <div class="card-text mb-1">{{$task->name}}</div>
+                        @if ($editor)
+                          <div class="card-text mb-1">
+                            <span>Editor: {{$editor->last_name}}</span>
+                            -
+                            <span>Start: {{ date('d/m/Y H:i', strtotime($task->start_at)) }}</span>
+                          </div>
+                        @endif
+                        @if ($qa)
+                          <div class="card-text mb-1">
+                            <span>QA: {{ $qa->last_name }}</span>
+                            -
+                            <span>Start: {{$task->QA_start}}</span>
+                          </div>
+                          <div class="card-text mb-1">QA checked: {{$task->QA_check_num}}</div>
+                        @endif
                         <div class="status testing d-inline p-1 fw-semibold small text-white project-name">
                           Testing
                         </div>
@@ -111,17 +171,38 @@
             </div>
         </div>
         <!-- tasks completed -->
-        <div class="taskList task-column shadow-sm mx-2 bg-light p-2">
+        <div class="taskList w-100 task-column shadow-sm mx-2 bg-light p-2">
             <h5>
                 Done
             </h5>
             <div id="done" class="sortable d-flex flex-column h-100">
                 <!-- card -->
                 @foreach ($tasks_done as $task)
+                  @php
+                    $editor = App\Domain\Admin\Models\Admin::find($task->editor_id);
+                    $qa = App\Domain\Admin\Models\Admin::find($task->QA_id);
+                  @endphp
                   <div id={{$task->id}}
-                      class="card rounded-0 mb-3 border-0 border-start border-primary border-3 shadow-sm">
+                    data-toggle="modal"
+                    data-url="{{ route('admin.popup', $task->id) }}"
+                    class="card rounded-0 mb-3 border-0 border-start border-primary border-3 shadow-sm">
                       <div class="card-body px-3 py-3">
-                          <div class="card-text mb-2">{{$task->name}}</div>
+                          <div class="card-text mb-1">{{$task->name}}</div>
+                          @if ($editor)
+                            <div class="card-text mb-1">
+                              <span>Editor: {{$editor->last_name}}</span>
+                              -
+                              <span>Start: {{ date('d/m/Y H:i', strtotime($task->start_at)) }}</span>
+                            </div>
+                          @endif
+                          @if ($qa)
+                            <div class="card-text mb-1">
+                              <span>QA: {{ $qa->last_name }}</span>
+                              -
+                              <span>Start: {{$task->QA_start}}</span>
+                            </div>
+                            <div class="card-text mb-1">QA checked: {{$task->QA_check_num}}</div>
+                          @endif
                           <div class="status done d-inline p-1 fw-semibold small text-white project-name">
                             Done
                           </div>
@@ -140,6 +221,51 @@
 @push('js')
   <script>
     $(document).ready(function () {
+      function addNewTask() {
+        $.ajax({
+          url: "{{ route('admin.assign-editor')}}",
+          type: 'GET',
+          dataType: 'json',
+          success: function(response) {
+            const startAt = new Date(response.start_at);
+            const formattedStartAt = `${startAt.getDate()}/${startAt.getMonth() + 1}/${startAt.getFullYear()} ${startAt.getHours()}:${startAt.getMinutes()}`;
+            const newTask = "<div id="+response.id+" data-toggle='modal' data-url='admin/popup/"+response.id+"' class='card rounded-0 mb-3 border-0 border-start border-primary border-3 shadow-sm'>"+
+                          "<div class='card-body px-3 py-3'>"+
+                            "<div class='card-text mb-1'>"+response.name+"</div>"+
+                            "<div class='card-text mb-1'>"+
+                              "<span>Editor: {{$editor->last_name}}</span>"+
+                              " - "+
+                              "<span>Start: "+formattedStartAt+"</span>"+
+                            "</div>"+
+                            "<div class='status in-progress d-inline p-1 fw-semibold small text-white project-name'>"+
+                              "In progress"+
+                            "</div>"+
+                          "</div>"+
+                        "</div>"
+              if (response.name) {
+                $('#in-progress').append(newTask);
+              }
+          },
+          error: function(xhr) {
+            console.log(xhr.responseText);
+          }
+        });
+      }
+
+      function assignQA(taskId) {
+        $.ajax({
+          url: "admin/assign-qa/"+taskId,
+          type: "GET",
+          dataType: 'json',
+          success: function(response) {
+            console.log('success');
+          },
+          error: function(xhr) {
+            console.log(xhr.responseText);
+          }
+        })
+      }
+
       $('.sortable').sortable({
         connectWith: ".sortable",
         placeholder: "task-placeholder",
@@ -172,6 +298,10 @@
           }
           updateTaskStatus(taskId, processStatus);
           ui.item.find('.status').text(status);
+          if (processStatus == 2) {
+            addNewTask();
+            assignQA(taskId);
+          }
         }
       });
       
@@ -191,6 +321,24 @@
           }
         });
       }
+
+      // when click on task, show popup
+      $(document).on('click', '.card', function() {
+        var popupUrl = $(this).data('url');
+
+        $.ajax({
+          type: 'Get',
+          url: popupUrl,
+          success: function(res) {
+            if (res.status == 'error') {
+              showMessage('error', res.message)
+            } else {
+              $('#popupContainer').html(res)
+              $('#popup').modal('show');
+            }
+          }
+        })
+      })
     })
   </script>
 @endpush
