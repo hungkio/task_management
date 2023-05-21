@@ -97,8 +97,10 @@ class DashboardController
                 'QA_start' => date("Y-m-d H:i")
             ]);
         }
-
-        return $task;
+        return [
+            'task' => $task,
+            'QA' => $QA
+        ];
     }
     
     public function showPopup($id)

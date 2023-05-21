@@ -83,11 +83,16 @@
                             <span>Start: {{ date('d/m/Y H:i', strtotime($task->start_at)) }}</span>
                           </div>
                         @endif
-                        @if ($qa)
-                          <div class="card-text mb-1">QA: {{ $qa->last_name }}</div>
-                          <div class="card-text mb-1">QA start: {{$task->QA_start}}</div>
-                          <div class="card-text mb-1">QA checked: {{$task->QA_check_num}}</div>
-                        @endif
+                        <div class="qa-details">
+                          @if ($qa)
+                            <div class="card-text mb-1">QA: {{ $qa->last_name }}</div>
+                            <div class="card-text mb-1">
+                              <span>QA: {{ $qa->last_name }}</span>
+                              -
+                              <span>Start: {{$task->QA_start}}</span>
+                            </div>
+                          @endif
+                        </div>
                         <div class="status in-progress d-inline p-1 fw-semibold small text-white project-name">
                           In progress
                         </div>
@@ -112,14 +117,16 @@
                             <span>Start: {{ date('d/m/Y H:i', strtotime($task->start_at)) }}</span>
                           </div>
                         @endif
-                        @if ($qa)
-                          <div class="card-text mb-1">QA: {{ $qa->last_name }}</div>
-                          <div class="card-text mb-1">
-                            <span>QA: {{ $qa->last_name }}</span>
-                            -
-                            <span>Start: {{$task->QA_start}}</span>
-                          </div>
-                        @endif
+                        <div class="qa-details">
+                          @if ($qa)
+                            <div class="card-text mb-1">
+                              <span>QA: {{ $qa->last_name }}</span>
+                              -
+                              <span>Start: {{$task->QA_start}}</span>
+                            </div>
+                            <div class="card-text mb-1">QA checked: {{$task->QA_check_num}}</div>
+                          @endif
+                        </div>
                         <div class="status bug d-inline p-1 fw-semibold small text-white project-name">
                           Bug
                         </div>
@@ -153,14 +160,16 @@
                             <span>Start: {{ date('d/m/Y H:i', strtotime($task->start_at)) }}</span>
                           </div>
                         @endif
-                        @if ($qa)
-                          <div class="card-text mb-1">
-                            <span>QA: {{ $qa->last_name }}</span>
-                            -
-                            <span>Start: {{$task->QA_start}}</span>
-                          </div>
-                          <div class="card-text mb-1">QA checked: {{$task->QA_check_num}}</div>
-                        @endif
+                        <div class="qa-details">
+                          @if ($qa)
+                            <div class="card-text mb-1">
+                              <span>QA: {{ $qa->last_name }}</span>
+                              -
+                              <span>Start: {{$task->QA_start}}</span>
+                            </div>
+                            <div class="card-text mb-1">QA checked: {{$task->QA_check_num}}</div>
+                          @endif
+                        </div>
                         <div class="status testing d-inline p-1 fw-semibold small text-white project-name">
                           Testing
                         </div>
@@ -195,14 +204,16 @@
                               <span>Start: {{ date('d/m/Y H:i', strtotime($task->start_at)) }}</span>
                             </div>
                           @endif
-                          @if ($qa)
-                            <div class="card-text mb-1">
-                              <span>QA: {{ $qa->last_name }}</span>
-                              -
-                              <span>Start: {{$task->QA_start}}</span>
-                            </div>
-                            <div class="card-text mb-1">QA checked: {{$task->QA_check_num}}</div>
-                          @endif
+                          <div class="qa-details">
+                            @if ($qa)
+                              <div class="card-text mb-1">
+                                <span>QA: {{ $qa->last_name }}</span>
+                                -
+                                <span>Start: {{$task->QA_start}}</span>
+                              </div>
+                              <div class="card-text mb-1">QA checked: {{$task->QA_check_num}}</div>
+                            @endif
+                          </div>
                           <div class="status done d-inline p-1 fw-semibold small text-white project-name">
                             Done
                           </div>
@@ -258,7 +269,15 @@
           type: "GET",
           dataType: 'json',
           success: function(response) {
-            console.log('success');
+            const qaStart = new Date(response.task.QA_start);
+            const formattedQaStart = `${qaStart.getDate()}/${qaStart.getMonth() + 1}/${qaStart.getFullYear()} ${qaStart.getHours()}:${qaStart.getMinutes()}`;
+            const qaDetails = "<div class='card-text mb-1'>"+
+                                "<span>QA: "+response.QA.last_name+"</span>"+
+                                " - "+
+                                "<span>Start: "+formattedQaStart+"</span>"+
+                              "</div>"+
+                              "<div class='card-text mb-1'>QA checked: "+(response.task.QA_check_num ? response.task.QA_check_num : '')+"</div>"
+            $('#'+taskId).find('.qa-details').append(qaDetails);
           },
           error: function(xhr) {
             console.log(xhr.responseText);
@@ -298,9 +317,14 @@
           }
           updateTaskStatus(taskId, processStatus);
           ui.item.find('.status').text(status);
+
           if (processStatus == 2) {
             addNewTask();
-            assignQA(taskId);
+
+            //chỉ trường hợp task in-progress mới append html qaDetails
+            if (ui.item.has(".in-progress").length) {
+              assignQA(taskId);
+            }
           }
         }
       });
