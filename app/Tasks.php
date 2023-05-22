@@ -15,12 +15,14 @@ class Tasks extends Model
     const TESTING = 2;
     const DONE = 3;
     const REJECTED = 4; // khi QA check và thấy chưa đạt sẽ kéo về editing
+    const TODO = 5; // khi Editor chưa sẵn sàng làm
     const STATUS = [
         self::WAITING => 'Chưa giao',
         self::EDITING => 'Đang edit',
         self::TESTING => 'Đang kiểm tra',
         self::DONE => 'Hoàn thành',
         self::REJECTED => 'Từ chối',
+        self::TODO => 'Sẵn sàng',
     ];
 
     public function QA()

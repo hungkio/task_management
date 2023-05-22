@@ -28,6 +28,7 @@ class DashboardController
         }
 
         $tasks_waiting = $tasks->whereDate('created_at', Carbon::today())->where('status', Tasks::WAITING)->get();
+        $tasks_todo = $tasks->whereDate('created_at', Carbon::today())->where('status', Tasks::TODO)->get();
 
         $this->assignEditor();
         if ($conditionAssigner) {
@@ -35,6 +36,7 @@ class DashboardController
             $tasks_testing = $tasks->where($conditionAssigner, $user_id)->whereDate('created_at', Carbon::today())->where('status', Tasks::TESTING)->get();
             $tasks_done = $tasks->where($conditionAssigner, $user_id)->whereDate('created_at', Carbon::today())->where('status', Tasks::DONE)->get();
             $tasks_rejected = $tasks->where($conditionAssigner, $user_id)->whereDate('created_at', Carbon::today())->where('status', Tasks::REJECTED)->get();
+            $tasks_todo = $tasks->where($conditionAssigner, $user_id)->whereDate('created_at', Carbon::today())->where('status', Tasks::TODO)->get();
         } else {
             $tasks_editing = $tasks->whereDate('created_at', Carbon::today())->where('status', Tasks::EDITING)->get();
             $tasks_testing = $tasks->whereDate('created_at', Carbon::today())->where('status', Tasks::TESTING)->get();
@@ -48,6 +50,7 @@ class DashboardController
             'tasks_testing' => $tasks_testing,
             'tasks_done' => $tasks_done,
             'tasks_rejected' => $tasks_rejected,
+            'tasks_todo' => $tasks_todo
         ]);
     }
 
@@ -59,14 +62,14 @@ class DashboardController
         $tasks = new Tasks;
 
         $tasks_rejected = $tasks->where('editor_id', $user_id)->whereDate('created_at', Carbon::today())->where('status', Tasks::REJECTED)->get();
-        $tasks_editing = $tasks->where('editor_id', $user_id)->whereDate('created_at', Carbon::today())->where('status', Tasks::EDITING)->get();
+        $tasks_ready = $tasks->where('editor_id', $user_id)->whereDate('created_at', Carbon::today())->whereIn('status', [Tasks::EDITING, Tasks::TODO])->get();
         $tasks_waiting = $tasks->whereDate('created_at', Carbon::today())->where('status', Tasks::WAITING);
 
         $today = Carbon::today()->format("Y-m-d");
         $from = strtotime($today . ' 08:00:00');
         $to = strtotime($today . ' 23:59:00');
         if(time() >= $from && time() <= $to) { // in working time
-            if ($roleName == 'editor' && $tasks_editing->isEmpty() && $tasks_rejected->isEmpty()) {
+            if ($roleName == 'editor' && $tasks_ready->isEmpty() && $tasks_rejected->isEmpty()) {
                 $level = $user->level ?? 0;
                 $tasks_editing = $tasks_waiting->where('level', '<=', $level)->whereNotNull('estimate')->get();
                 foreach ($tasks_editing as $key => $value) {
@@ -83,8 +86,7 @@ class DashboardController
                     $tasks_editing = $tasks_editing->first();
                     $tasks_editing->update([
                         'editor_id' => $user_id,
-                        'status' => Tasks::EDITING,
-                        'start_at' => date("Y-m-d H:i")
+                        'status' => Tasks::TODO,
                     ]);
                 }
             }
