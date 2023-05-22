@@ -141,7 +141,7 @@ class DashboardController
     {
         $task = Tasks::find($id);
         $inputData = $request->all();
-        if ($inputData['redo'] == 'on') {
+        if (isset($inputData['redo']) && $inputData['redo'] == 'on') {
             if ($task->redo) {
                 $black_list = json_decode($task->redo);
                 $black_list = array_merge($black_list, [$task->editor_id]);

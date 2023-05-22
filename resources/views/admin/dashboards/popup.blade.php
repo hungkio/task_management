@@ -37,7 +37,11 @@
           </div>
           <div class="form-group">
             <label for="">Path:</label>
-            <input class="form-control" type="text" value="{{$task->path}}" disabled />
+            <input class="form-control" type="text" value="{{$task->path}}" name="path" />
+          </div>
+          <div class="form-group">
+            <label for="">Finish path:</label>
+            <input class="form-control" type="text" value="{{$task->finish_path}}" name="finish_path" />
           </div>
           <div class="form-group">
             <label for="">Count Record:</label>
