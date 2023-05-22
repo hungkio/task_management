@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Admin\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Tasks;
+use Carbon\Carbon;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -47,6 +49,31 @@ class LoginController extends Controller
 
     public function logout(Request $request)
     {
+        $user = auth()->user();
+        $roleName = $user->getRoleNames()[0];
+
+        $tasks_doing = Tasks::where('editor_id', auth()->id())->whereDate('created_at', Carbon::today())->whereIn('status', [Tasks::EDITING, Tasks::REJECTED, Tasks::TESTING])->get();
+
+        if($roleName == 'editor') {
+            foreach ($tasks_doing as $task) {
+                $task->update([
+                    'editor_id' => null,
+                    'status' => Tasks::WAITING,
+                    'start_at' => null
+                ]);
+            }
+        } else if ($roleName == 'QA') {
+            foreach ($tasks_doing as $task) {
+                $task->update([
+                    'QA_id' => null,
+                    'status' => Tasks::WAITING,
+                    'QA_start' => null
+                ]);
+            }
+        }
+
+
+
         $this->guard()->logout();
 
         $request->session()->invalidate();

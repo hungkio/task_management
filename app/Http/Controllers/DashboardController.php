@@ -71,7 +71,6 @@ class DashboardController
                 $tasks_editing = $tasks_waiting->where('level', '<=', $level)->whereNotNull('estimate')->get();
                 foreach ($tasks_editing as $key => $value) {
                     if ($value->redo) {
-                        # code...
                         $black_list = json_decode($value->redo);
                         if (in_array($user_id, $black_list)) {
                             $tasks_editing->forget($key);

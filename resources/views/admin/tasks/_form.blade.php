@@ -100,6 +100,121 @@
                                     type="number"
                                 >
                                 </x-text-field>
+
+                                <x-text-field
+                                    name="finish_path"
+                                    :placeholder="__('Đường dẫn done')"
+                                    :label="__('Đường dẫn done')"
+                                    :value="$task->finish_path"
+                                >
+                                </x-text-field>
+
+                                <x-text-field
+                                    name="QA_check_num"
+                                    :placeholder="__('Số ảnh đã kiểm tra')"
+                                    :label="__('Số ảnh đã kiểm tra')"
+                                    :value="$task->QA_check_num"
+                                >
+                                </x-text-field>
+
+                                <x-text-field
+                                    name="QA_note"
+                                    :placeholder="__('QA ghi chú')"
+                                    :label="__('QA ghi chú')"
+                                    :value="$task->QA_note"
+                                >
+                                </x-text-field>
+
+                                <div class="form-group row">
+                                    <label class="col-lg-2 col-form-label text-lg-right" for="redo">
+                                        Redo:
+                                    </label>
+                                    <div class="col-lg-9">
+                                        <input autocomplete="new-password" type="checkbox" name="redo" id="redo" placeholder="Đường dẫn done" @if($task->redo) checked @endif>
+                                    </div>
+                                </div>
+
+                                <x-text-field
+                                    name="redo_note"
+                                    :placeholder="__('Ghi chú redo')"
+                                    :label="__('Ghi chú redo')"
+                                    :value="$task->redo_note"
+                                >
+                                </x-text-field>
+
+                                <div class="form-group row">
+                                    <label for="select-taxon" class="col-lg-2 text-lg-right col-form-label">
+                                        <span class="text-danger">*</span> {{ __('Trạng thái') }}
+                                    </label>
+                                    <div class="col-lg-9">
+                                        <select name="status" class="form-control" data-width="100%">
+                                            @foreach(\App\Tasks::STATUS as $key => $status)
+                                                <option value="{{ $key }}"
+                                                        @if($key == @$task->status) selected @endif>
+                                                    {{ $status }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        <div class="clearfix"></div>
+                                        @error('status')
+                                        <span class="form-text text-danger">
+                                                {{ $message }}
+                                            </span>
+                                        @enderror
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="select-taxon" class="col-lg-2 text-lg-right col-form-label">
+                                        <span class="text-danger">*</span> {{ __('Editor') }}
+                                    </label>
+                                    <div class="col-lg-9">
+                                        <select name="editor_id" class="form-control" data-width="100%">
+                                            <option value=""
+                                                    @if(!@$task->editor_id) selected @endif>
+                                                Chưa assign
+                                            </option>
+                                            @foreach($editors as $editor)
+                                                <option value="{{ $editor->id }}"
+                                                        @if($editor->id == @$task->editor_id) selected @endif>
+                                                    {{ $editor->fullName }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        <div class="clearfix"></div>
+                                        @error('editor_id')
+                                        <span class="form-text text-danger">
+                                                {{ $message }}
+                                            </span>
+                                        @enderror
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="select-taxon" class="col-lg-2 text-lg-right col-form-label">
+                                        <span class="text-danger">*</span> {{ __('QA') }}
+                                    </label>
+                                    <div class="col-lg-9">
+                                        <select name="QA_id" class="form-control" data-width="100%">
+                                            <option value=""
+                                                    @if(!@$task->QA_id) selected @endif>
+                                                Chưa assign
+                                            </option>
+                                            @foreach($QAs as $qa)
+                                                <option value="{{ $qa->id }}"
+                                                        @if($qa->id == @$task->QA_id) selected @endif>
+                                                    {{ $qa->fullName }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        <div class="clearfix"></div>
+                                        @error('QA_id')
+                                        <span class="form-text text-danger">
+                                                {{ $message }}
+                                            </span>
+                                        @enderror
+                                    </div>
+                                </div>
                             </div>
 
                         </fieldset>

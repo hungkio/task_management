@@ -27,7 +27,7 @@ class TaskDataTable extends BaseDatable
             ->editColumn('customer', fn (Tasks $task) => $task->customer)
             ->editColumn('status', fn (Tasks $task) => Tasks::STATUS[$task->status])
             ->editColumn('editor_id', fn (Tasks $task) => $task->editor->fullName ?? '')
-            ->editColumn('QA_id', fn (Tasks $task) => $task->editor->fullName ?? '')
+            ->editColumn('QA_id', fn (Tasks $task) => $task->QA->fullName ?? '')
             ->editColumn('created_at', fn (Tasks $task) => formatDate($task->created_at))
             ->addColumn('action', 'admin.tasks._tableAction')
             ->filterColumn('name', function($query, $keyword) {

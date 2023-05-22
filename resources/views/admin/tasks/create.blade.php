@@ -11,6 +11,8 @@
     @include('admin.tasks._form', [
         'url' =>  route('admin.tasks.store'),
         'task' => new \App\Tasks,
+        'QAs' => $QAs,
+        'editors' => $editors,
     ])
 @stop
 @push('css')

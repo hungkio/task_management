@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\TaskDataTable;
+use App\Domain\Admin\Models\Admin;
 use App\Http\Requests\Admin\TaskRequest;
 use App\Tasks;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -26,7 +28,14 @@ class TaskController
     public function create(): View
     {
         $this->authorize('create', Tasks::class);
-        return view('admin.tasks.create');
+        $QAs = Admin::whereHas('roles', function (Builder $subQuery) {
+            $subQuery->where(config('permission.table_names.roles').'.name', 'QA');
+        })->get();
+
+        $editors = Admin::whereHas('roles', function (Builder $subQuery) {
+            $subQuery->where(config('permission.table_names.roles').'.name', 'editor');
+        })->get();
+        return view('admin.tasks.create', compact('QAs', 'editors'));
     }
 
     public function store(TaskRequest $request)
@@ -43,15 +52,29 @@ class TaskController
     public function edit(Tasks $task): View
     {
         $this->authorize('update', $task);
+        $QAs = Admin::whereHas('roles', function (Builder $subQuery) {
+            $subQuery->where(config('permission.table_names.roles').'.name', 'QA');
+        })->get();
 
-        return view('admin.tasks.edit', compact('task'));
+        $editors = Admin::whereHas('roles', function (Builder $subQuery) {
+            $subQuery->where(config('permission.table_names.roles').'.name', 'editor');
+        })->get();
+        return view('admin.tasks.edit', compact('task', 'QAs', 'editors'));
     }
 
     public function update(Tasks $task, TaskRequest $request)
     {
         $this->authorize('update', $task);
 
-        $task->update($request->all());
+        $data = $request->all();
+
+        if (@$data['redo']) {
+            $data['redo'] = $task->redo ?? json_encode([]);
+        } else {
+            $data['redo'] = null;
+        }
+
+        $task->update($data);
 
         flash()->success(__('Case ":model" đã được cập nhật !', ['model' => $task->name]));
 
@@ -115,7 +138,7 @@ class TaskController
                     $taskRecord = $client->listFolder("$parentPath/$customer/NEW JOB/$currentMonthText/$currentMonthNumber $currentDay/$taskName")['entries'];
 
                     $caseName = "$customer/$currentMonthNumber $currentDay/$taskName";
-                    $casePath = 'https://www.dropbox.com/home'.str_replace(' ', '%20', $taskPath);
+                    $casePath = str_replace(' ', '%20', $taskPath);
                     $countRecord = count($taskRecord);
                     Tasks::updateOrCreate([
                         'name' => $caseName,

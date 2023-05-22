@@ -63,7 +63,7 @@ class GetCaseDaily extends Command
                     $taskRecord = $client->listFolder("$parentPath/$customer/NEW JOB/$currentMonthText/$currentMonthNumber $currentDay/$taskName")['entries'];
 
                     $caseName = "$customer/$currentMonthNumber $currentDay/$taskName";
-                    $casePath = 'https://www.dropbox.com/home'.str_replace(' ', '%20', $taskPath);
+                    $casePath = str_replace(' ', '%20', $taskPath);
                     $countRecord = count($taskRecord);
                     Tasks::updateOrCreate([
                         'name' => $caseName,

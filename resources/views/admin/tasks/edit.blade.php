@@ -11,6 +11,8 @@
     @include('admin.tasks._form', [
         'url' =>  route('admin.tasks.update', $task),
         'task' => $task ?? new \App\Tasks,
+        'QAs' => $QAs,
+        'editors' => $editors,
         'method' => 'PUT'
     ])
 @stop
