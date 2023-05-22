@@ -63,7 +63,7 @@ class DashboardController
         $tasks_waiting = $tasks->whereDate('created_at', Carbon::today())->where('status', Tasks::WAITING);
 
         $today = Carbon::today()->format("Y-m-d");
-        $from = strtotime($today . ' 00:00:00');
+        $from = strtotime($today . ' 08:00:00');
         $to = strtotime($today . ' 23:59:00');
         if(time() >= $from && time() <= $to) { // in working time
             if ($roleName == 'editor' && $tasks_editing->isEmpty() && $tasks_rejected->isEmpty()) {
@@ -81,7 +81,7 @@ class DashboardController
                     }
                 }
                 if (!$tasks_editing->isEmpty()) {
-                    $tasks_editing = $tasks_editing[0];
+                    $tasks_editing = $tasks_editing->first();
                     $tasks_editing->update([
                         'editor_id' => $user_id,
                         'status' => Tasks::EDITING,
