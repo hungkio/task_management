@@ -8,48 +8,51 @@
 @stop
 
 @push('css')
-    <style>
-        .task-column{
-            width: 30%
+  <style>
+    .task-column{
+        width: 30%
+    }
+    .task-placeholder {
+      background-color: #eee;
+      border: 2px dashed #999;
+      height: 150px;
+      width: 100%;
+    }
+    .task{
+      animation: all 0.5s;
+    }
+    .in-progress{
+      background-color: #1890ff;
+    }
+    .testing{
+      background-color: #FFD700;
+    }
+    .bug{
+      background-color: #BB0000;
+    }
+    .done{
+      background-color: #458B00;
+    }
+    .content-wrapper{
+      overflow: visible;
+    }
+    @media (max-width: 1024px){
+        .dashboard{
+            width: 1024px;
+            overflow-x: auto;
         }
-        .task-placeholder {
-          background-color: #eee;
-          border: 2px dashed #999;
-          height: 150px;
-          width: 100%;
+    }
+    @media (max-width: 767.98px) {
+        .btn-danger {
+            margin-left: 0!important;
         }
-        .task{
-          animation: all 0.5s;
+    }
+    @media (width: 320px) {
+        .btn-danger {
+            margin-left: .625rem!important;
         }
-        .in-progress{
-          background-color: #1890ff;
-        }
-        .testing{
-          background-color: #FFD700;
-        }
-        .bug{
-          background-color: #BB0000;
-        }
-        .done{
-          background-color: #458B00;
-        }
-        @media (max-width: 1024px){
-            .dashboard{
-                width: 1024px;
-                overflow-x: auto;
-            }
-        }
-        @media (max-width: 767.98px) {
-            .btn-danger {
-                margin-left: 0!important;
-            }
-        }
-        @media (width: 320px) {
-            .btn-danger {
-                margin-left: .625rem!important;
-            }
-        }
-    </style>
+    }
+  </style>
 @endpush
 
 @section('page-content')
@@ -284,18 +287,37 @@
         })
       }
 
+      function checkStatus(id) {
+        status = $('#'+id).find('.status').text();
+        return $.trim(status);
+      }
+
       $('.sortable').sortable({
         connectWith: ".sortable",
         placeholder: "task-placeholder",
         start: function(event, ui) {
           ui.item.toggleClass("dragging");
           taskId = ui.item.attr('id');
+          let hasSiblings = ui.item.siblings().length > 1;
+          let is_inProgress = checkStatus(taskId) == 'In progress';
+          ui.item.data('hasSiblings', hasSiblings);
+          ui.item.data('is_inProgress', is_inProgress);
+        },
+        beforeStop: function(event, ui) {
+          let hasSiblings = ui.item.data('hasSiblings');
+          let is_inProgress = ui.item.data('is_inProgress');
+          if(hasSiblings && is_inProgress){
+            $('#in-progress').sortable('cancel');
+            const message_drop = 'Bạn phải hoàn thành hết các case(s) bug trước.'
+            alert(message_drop);
+          }
         },
         stop: function(event, ui) {
           ui.item.toggleClass("dragging");
         },
         receive: function(event, ui) {
           let thisProcess = $(this).attr('id');
+          
           switch (thisProcess) {
             case 'in-progress':
               processStatus = 4;
