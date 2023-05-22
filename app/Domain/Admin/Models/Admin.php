@@ -61,4 +61,9 @@ class Admin extends Authenticatable implements HasMedia
     {
         return $this->hasMany(Tasks::class, 'QA_id')->whereDate('created_at', Carbon::today());
     }
+
+    public function getFullName()
+    {
+        return $this->first_name . " " . $this->last_name;
+    }
 }

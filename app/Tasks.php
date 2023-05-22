@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Domain\Admin\Models\Admin;
 use Illuminate\Database\Eloquent\Model;
 
 class Tasks extends Model
@@ -21,4 +22,14 @@ class Tasks extends Model
         self::DONE => 'Hoàn thành',
         self::REJECTED => 'Từ chối',
     ];
+
+    public function QA()
+    {
+        return $this->belongsTo(Admin::class, 'QA_id');
+    }
+
+    public function editor()
+    {
+        return $this->belongsTo(Admin::class, 'editor_id');
+    }
 }
