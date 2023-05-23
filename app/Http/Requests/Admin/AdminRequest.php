@@ -18,6 +18,7 @@ class AdminRequest extends FormRequest
             'email' => ['required', 'email', 'max:255', $this->emailUniqueRule(), 'regex:/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/'],
             'password' => $this->passwordRule(),
             'roles' => ['required', 'exists:roles,id'],
+            'level' => ['required'],
         ];
     }
 

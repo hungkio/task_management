@@ -17,6 +17,9 @@ class DashboardController
     public function index(Tasks $tasks)
     {
         $user = auth()->user();
+        $user->update([
+            'is_online' => 1
+        ]);
         $roleName = $user->getRoleNames()[0];
         $user_id = auth()->id();
         $conditionAssigner = "";
@@ -70,9 +73,14 @@ class DashboardController
         $to = strtotime($today . ' 23:59:00');
         if(time() >= $from && time() <= $to) { // in working time
             if ($roleName == 'editor' && $tasks_ready->isEmpty() && $tasks_rejected->isEmpty()) {
-                $level = $user->level ?? 0;
-                $tasks_editing = $tasks_waiting->where('level', '<=', $level)->whereNotNull('estimate')->get();
+                $tasks_editing = $tasks_waiting->whereNotNull('level')->whereNotNull('estimate')->get();
+                dd($tasks_editing);
                 foreach ($tasks_editing as $key => $value) {
+                    dump($user->level, $value->level);
+                    if (!str_contains($user->level, $value->level)) {
+                        $tasks_editing->forget($key);
+                        continue;
+                    }
                     if ($value->redo) {
                         $black_list = json_decode($value->redo);
                         if (in_array($user_id, $black_list)) {
@@ -88,25 +96,23 @@ class DashboardController
                         'editor_id' => $user_id,
                         'status' => Tasks::TODO,
                     ]);
+                    return $tasks_editing;
                 }
             }
         }
 
-
-
-        return $tasks_editing;
     }
 
     public function assignQA($taskId)
     {
         $task = Tasks::findOrFail($taskId);
         if ($task->QA_id) {
-            $QA = Admin::findOrFail($task->QA_id);
+            $QA = Admin::where('id', $task->QA_id)->where('is_online', 1)->first();
         }else {
             // have lowest number of task
             $QA = Admin::with(['roles'])->withCount('QATasks')->whereHas('roles', function (Builder $subQuery) {
                 $subQuery->where(config('permission.table_names.roles').'.name', 'QA');
-            })->orderBy('q_a_tasks_count')->first();
+            })->where('is_online', 1)->orderBy('q_a_tasks_count')->first();
         }
 
         if ($QA) {

@@ -42,6 +42,7 @@ class TaskController
     {
         $this->authorize('create', Tasks::class);
         $data = $request->all();
+        $data['estimate'] = Admin::ESTIMATE[$data['level']];
         $task = Tasks::create($data);
 
         flash()->success(__('Case ":model" đã được tạo thành công !', ['model' => $task->title]));
@@ -67,6 +68,7 @@ class TaskController
         $this->authorize('update', $task);
 
         $data = $request->all();
+        $data['estimate'] = Admin::ESTIMATE[$data['level']];
 
         if (@$data['redo']) {
             $data['redo'] = $task->redo ?? json_encode([]);

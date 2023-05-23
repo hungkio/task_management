@@ -83,23 +83,31 @@
                                 >
                                 </x-text-field>
 
-                                <x-text-field
-                                    name="estimate"
-                                    :placeholder="__('Số tiếng làm dự kiến')"
-                                    :label="__('Thời gian làm dự kiến')"
-                                    :value="$task->estimate"
-                                    type="number"
-                                >
-                                </x-text-field>
-
-                                <x-text-field
-                                    name="level"
-                                    :placeholder="__('Level độ khó case')"
-                                    :label="__('Level case')"
-                                    :value="$task->level"
-                                    type="number"
-                                >
-                                </x-text-field>
+                                <div class="form-group row">
+                                    <label for="select-taxon" class="col-lg-2 text-lg-right col-form-label">
+                                        <span class="text-danger">*</span> {{ __('Level khách hàng') }}
+                                    </label>
+                                    <div class="col-lg-9">
+                                        <select name="level" class="form-control" data-width="100%">
+                                            <option value=""
+                                                    @if(!@$task->level) selected @endif>
+                                                Chưa chọn level
+                                            </option>
+                                            @foreach(\App\Domain\Admin\Models\Admin::LEVEL as $level)
+                                                <option value="{{ $level }}"
+                                                        @if($level == @$task->level) selected @endif>
+                                                    {{ $level }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        <div class="clearfix"></div>
+                                        @error('level')
+                                        <span class="form-text text-danger">
+                                                {{ $message }}
+                                            </span>
+                                        @enderror
+                                    </div>
+                                </div>
 
                                 <x-text-field
                                     name="finish_path"

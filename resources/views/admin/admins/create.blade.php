@@ -23,6 +23,9 @@
                     $('#roles-error').text('')
                 }
             })
+            $('.select2').select2({
+                placeholder: "{{ __('-- Vui lòng chọn --') }}",
+            });
         })
     </script>
     {!! JsValidator::formRequest('App\Http\Requests\Admin\AdminRequest', 'form'); !!}

@@ -28,7 +28,7 @@ class AdminData extends DataTransferObject
             'email' => $request->input('email'),
             'password' => $request->input('password'),
             'roles' => $request->input('roles'),
-            'level' => $request->input('level'),
+            'level' => implode(',', $request->input('level')),
         ]);
     }
 }

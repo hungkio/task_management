@@ -52,15 +52,27 @@
 
                                 </x-select-field>
 
-                                <x-text-field
-                                    name="level"
-                                    :placeholder="__('Cấp độ')"
-                                    :label="__('Cấp độ')"
-                                    :value="$admin->level"
-                                    required
-                                    type="number"
-                                >
-                                </x-text-field>
+                                <div class="form-group row">
+                                    <label for="select-taxon" class="col-lg-2 text-lg-right col-form-label">
+                                        <span class="text-danger">*</span> {{ __('Cấp độ') }}
+                                    </label>
+                                    <div class="col-lg-9">
+                                        <select name="level[]" class="form-control select2" data-width="100%" multiple>
+                                            @foreach(\App\Domain\Admin\Models\Admin::LEVEL as $level)
+                                                <option value="{{ $level }}"
+                                                        @if(str_contains($admin->level, $level)) selected @endif>
+                                                    {{ $level }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        <div class="clearfix"></div>
+                                        @error('level')
+                                        <span class="form-text text-danger">
+                                                {{ $message }}
+                                            </span>
+                                        @enderror
+                                    </div>
+                                </div>
                             </div>
                         </fieldset>
 

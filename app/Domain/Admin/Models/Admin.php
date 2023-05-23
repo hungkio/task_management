@@ -28,7 +28,7 @@ class Admin extends Authenticatable implements HasMedia
      * @var array
      */
     protected $fillable = [
-        'first_name', 'last_name', 'email', 'password',
+        'first_name', 'last_name', 'email', 'password', 'is_online', 'level',
     ];
 
     /**
@@ -49,6 +49,36 @@ class Admin extends Authenticatable implements HasMedia
         'email_verified_at' => 'datetime',
     ];
 
+    const LEVEL = [
+        'SE_PR', 'Se_DE', 'SE', 'SE_DE', 'SE_FL', 'SE_TW', 'DTD', 'AV', 'DBAV', 'PRT', 'Basic_rt', 'FL', 'FLB', 'FLP',
+        'VT', 'VTP', 'VTP360', 'HEN', 'INV', 'Floor', 'EXT', 'PANO', 'HI_END'
+    ];
+
+    const ESTIMATE = [
+        'INV' => 1,
+        'SE' => 3,
+        'Se_DE' => 3,
+        'SE_DE' => 3,
+        'SE_PR' => 5,
+        'SE_FL' => 6,
+        'SE_TW' => 10,
+        'DTD' => 20,
+        'DBAV' => 60,
+        'AV' => 30,
+        'PRT' => 10,
+        'EXT' => 120,
+        'PANO' => 10,
+        'HEN' => 30,
+        'HI_END' => 15,
+        'VT' => 180,
+        'VTP' => 300,
+        'VTP360' => 300,
+        'FL' => 180,
+        'FLB' => 180,
+        'FLP' => 300,
+        'Floor' => 60,
+        'Basic_rt' => 10
+    ];
     public function registerMediaCollections(): void
     {
         $this
