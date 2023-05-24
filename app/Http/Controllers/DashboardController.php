@@ -66,14 +66,13 @@ class DashboardController
 
         $tasks_rejected = $tasks->where('editor_id', $user_id)->whereDate('created_at', Carbon::today())->where('status', Tasks::REJECTED)->get();
         $tasks_ready = $tasks->where('editor_id', $user_id)->whereDate('created_at', Carbon::today())->whereIn('status', [Tasks::EDITING, Tasks::TODO])->get();
-        $tasks_waiting = $tasks->whereDate('created_at', Carbon::today())->where('status', Tasks::WAITING);
+        $tasks_editing = $tasks->whereDate('created_at', Carbon::today())->where('status', Tasks::WAITING)->whereNotNull('level')->whereNotNull('estimate')->get();
 
         $today = Carbon::today()->format("Y-m-d");
         $from = strtotime($today . ' 08:00:00');
         $to = strtotime($today . ' 23:59:00');
         if(time() >= $from && time() <= $to) { // in working time
             if ($roleName == 'editor' && $tasks_ready->isEmpty() && $tasks_rejected->isEmpty()) {
-                $tasks_editing = $tasks_waiting->whereNotNull('level')->whereNotNull('estimate')->get();
                 foreach ($tasks_editing as $key => $value) {
                     if (!str_contains($user->level, $value->level)) {
                         $tasks_editing->forget($key);
