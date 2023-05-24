@@ -73,6 +73,15 @@
                                         @enderror
                                     </div>
                                 </div>
+
+                                <div class="form-group row">
+                                    <label class="col-lg-2 col-form-label text-lg-right" for="is_ctv">
+                                        Là CTV:
+                                    </label>
+                                    <div class="col-lg-9">
+                                        <input autocomplete="new-password" type="checkbox" name="is_ctv" id="is_ctv"  @if($admin->is_ctv) checked @endif>
+                                    </div>
+                                </div>
                             </div>
                         </fieldset>
 

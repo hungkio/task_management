@@ -28,7 +28,7 @@ class Admin extends Authenticatable implements HasMedia
      * @var array
      */
     protected $fillable = [
-        'first_name', 'last_name', 'email', 'password', 'is_online', 'level',
+        'first_name', 'last_name', 'email', 'password', 'is_online', 'level', 'is_ctv'
     ];
 
     /**
@@ -79,6 +79,22 @@ class Admin extends Authenticatable implements HasMedia
         'Floor' => 60,
         'Basic_rt' => 10
     ];
+
+    const BAD = [
+        'BAD_QUY TRÌNH','BAD_MÀU SẮC', 'BAD_ÁNH SÁNG','BAD_THÁI ĐỘ','BAD_KH','BAD_STYLES','BAD_SKY,TV','EXCELLENT!'
+    ];
+
+    const BAD_FEE = [
+        'BAD_QUY TRÌNH' => -50,
+        'BAD_MÀU SẮC' => -50,
+        'BAD_ÁNH SÁNG' => -50,
+        'BAD_THÁI ĐỘ' => -50,
+        'BAD_KH' => -100,
+        'BAD_STYLES' => -100,
+        'BAD_SKY,TV' => -100,
+        'EXCELLENT!' => 100
+    ];
+
     public function registerMediaCollections(): void
     {
         $this

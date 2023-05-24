@@ -39,8 +39,8 @@
 
                                 <x-text-field
                                     name="countRecord"
-                                    :placeholder="__('Số lượng ảnh')"
-                                    :label="__('Số lượng ảnh')"
+                                    :placeholder="__('Số lượng original')"
+                                    :label="__('Số lượng original')"
                                     :value="$task->countRecord"
                                     type="number"
                                     required
@@ -48,27 +48,9 @@
                                 </x-text-field>
 
                                 <x-text-field
-                                    name="date"
-                                    :placeholder="__('31 12')"
-                                    :label="__('Ngày tháng')"
-                                    :value="$task->date"
-                                    required
-                                >
-                                </x-text-field>
-
-                                <x-text-field
-                                    name="month"
-                                    :placeholder="__('January, February, ...')"
-                                    :label="__('Tháng')"
-                                    :value="$task->month"
-                                    required
-                                >
-                                </x-text-field>
-
-                                <x-text-field
                                     name="case"
-                                    :placeholder="__('Tên thư mục case')"
-                                    :label="__('Tên thư mục case')"
+                                    :placeholder="__('Các case tách phải giống nhau tên case')"
+                                    :label="__('Tên case tách')"
                                     :value="$task->case"
                                     required
                                 >
@@ -76,8 +58,8 @@
 
                                 <x-text-field
                                     name="customer"
-                                    :placeholder="__('Tên thư mục khách hàng')"
-                                    :label="__('Tên thư mục khách hàng')"
+                                    :placeholder="__('Mã khách')"
+                                    :label="__('Mã khách')"
                                     :value="$task->customer"
                                     required
                                 >
@@ -85,7 +67,7 @@
 
                                 <div class="form-group row">
                                     <label for="select-taxon" class="col-lg-2 text-lg-right col-form-label">
-                                        <span class="text-danger">*</span> {{ __('Level khách hàng') }}
+                                        <span class="text-danger">*</span> {{ __('Level khách') }}
                                     </label>
                                     <div class="col-lg-9">
                                         <select name="level" class="form-control" data-width="100%">
@@ -108,47 +90,6 @@
                                         @enderror
                                     </div>
                                 </div>
-
-                                <x-text-field
-                                    name="finish_path"
-                                    :placeholder="__('Đường dẫn done')"
-                                    :label="__('Đường dẫn done')"
-                                    :value="$task->finish_path"
-                                >
-                                </x-text-field>
-
-                                <x-text-field
-                                    name="QA_check_num"
-                                    :placeholder="__('Số ảnh đã kiểm tra')"
-                                    :label="__('Số ảnh đã kiểm tra')"
-                                    :value="$task->QA_check_num"
-                                >
-                                </x-text-field>
-
-                                <x-text-field
-                                    name="QA_note"
-                                    :placeholder="__('QA ghi chú')"
-                                    :label="__('QA ghi chú')"
-                                    :value="$task->QA_note"
-                                >
-                                </x-text-field>
-
-                                <div class="form-group row">
-                                    <label class="col-lg-2 col-form-label text-lg-right" for="redo">
-                                        Redo:
-                                    </label>
-                                    <div class="col-lg-9">
-                                        <input autocomplete="new-password" type="checkbox" name="redo" id="redo" placeholder="Đường dẫn done" @if($task->redo) checked @endif>
-                                    </div>
-                                </div>
-
-                                <x-text-field
-                                    name="redo_note"
-                                    :placeholder="__('Ghi chú redo')"
-                                    :label="__('Ghi chú redo')"
-                                    :value="$task->redo_note"
-                                >
-                                </x-text-field>
 
                                 <div class="form-group row">
                                     <label for="select-taxon" class="col-lg-2 text-lg-right col-form-label">
@@ -174,7 +115,7 @@
 
                                 <div class="form-group row">
                                     <label for="select-taxon" class="col-lg-2 text-lg-right col-form-label">
-                                        <span class="text-danger">*</span> {{ __('Editor') }}
+                                        {{ __('Editor') }}
                                     </label>
                                     <div class="col-lg-9">
                                         <select name="editor_id" class="form-control" data-width="100%">
@@ -200,7 +141,7 @@
 
                                 <div class="form-group row">
                                     <label for="select-taxon" class="col-lg-2 text-lg-right col-form-label">
-                                        <span class="text-danger">*</span> {{ __('QA') }}
+                                        {{ __('QA') }}
                                     </label>
                                     <div class="col-lg-9">
                                         <select name="QA_id" class="form-control" data-width="100%">
@@ -223,6 +164,68 @@
                                         @enderror
                                     </div>
                                 </div>
+
+                                <x-text-field
+                                    name="finish_path"
+                                    :placeholder="__('Đường dẫn done')"
+                                    :label="__('Đường dẫn done')"
+                                    :value="$task->finish_path"
+                                >
+                                </x-text-field>
+
+                                <x-text-field
+                                    name="QA_check_num"
+                                    :placeholder="__('Số ảnh done')"
+                                    :label="__('Số ảnh done')"
+                                    :value="$task->QA_check_num"
+                                    type="number"
+                                >
+                                </x-text-field>
+
+                                <div class="form-group row">
+                                    <label class="col-lg-2 col-form-label text-lg-right" for="redo">
+                                        Redo:
+                                    </label>
+                                    <div class="col-lg-9">
+                                        <input autocomplete="new-password" type="checkbox" name="redo" id="redo" @if($task->redo) checked @endif>
+                                    </div>
+                                </div>
+
+                                <x-text-field
+                                    name="QA_note"
+                                    :placeholder="__('QA ghi chú')"
+                                    :label="__('QA ghi chú')"
+                                    :value="$task->QA_note"
+                                >
+                                </x-text-field>
+
+                                <div class="form-group row">
+                                    <label for="select-taxon" class="col-lg-2 text-lg-right col-form-label">
+                                        {{ __('Bad') }}
+                                    </label>
+                                    <div class="col-lg-9">
+                                        <select name="redo_note" class="form-control" data-width="100%">
+                                            <option value=""
+                                                    @if(!@$task->redo_note) selected @endif>
+                                                Lựa chọn
+                                            </option>
+                                            @foreach(\App\Domain\Admin\Models\Admin::BAD as $bad)
+                                                <option value="{{ $bad }}"
+                                                        @if($bad == @$task->redo_note) selected @endif>
+                                                    {{ $bad }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        <div class="clearfix"></div>
+                                        @error('redo_note')
+                                        <span class="form-text text-danger">
+                                                {{ $message }}
+                                            </span>
+                                        @enderror
+                                    </div>
+                                </div>
+
+
                             </div>
 
                         </fieldset>

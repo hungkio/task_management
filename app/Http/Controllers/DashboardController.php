@@ -74,9 +74,7 @@ class DashboardController
         if(time() >= $from && time() <= $to) { // in working time
             if ($roleName == 'editor' && $tasks_ready->isEmpty() && $tasks_rejected->isEmpty()) {
                 $tasks_editing = $tasks_waiting->whereNotNull('level')->whereNotNull('estimate')->get();
-                dd($tasks_editing);
                 foreach ($tasks_editing as $key => $value) {
-                    dump($user->level, $value->level);
                     if (!str_contains($user->level, $value->level)) {
                         $tasks_editing->forget($key);
                         continue;

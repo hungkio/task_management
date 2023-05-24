@@ -18,6 +18,7 @@ class AdminUpdateAction
             $admin->last_name = $adminData->last_name;
             $admin->email = $adminData->email;
             $admin->level = $adminData->level;
+            $admin->is_ctv = $adminData->is_ctv;
             if (! empty($adminData->password)) {
                 $admin->password = Hash::make($adminData->password);
             }
