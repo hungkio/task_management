@@ -10,6 +10,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\View\View;
@@ -144,6 +145,7 @@ class TaskController
                     $countRecord = count($taskRecord);
                     Tasks::updateOrCreate([
                         'name' => $caseName,
+                        'created_at' => Tasks::whereDate('created_at', Carbon::today())->first()->created_at ?? null
                     ], [
                         'path' => $casePath,
                         'countRecord' => $countRecord,

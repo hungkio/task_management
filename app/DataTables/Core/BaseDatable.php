@@ -40,9 +40,9 @@ class BaseDatable extends DataTable
                             dropdownAutoWidth: true,
                             width: \'auto\'
                         });
-                        
+
                         $("#"+setting.sTableId).unbind(\'click\');
-                        
+
                         $("#"+setting.sTableId).on("click", "th.select-checkbox", function() {
                             if ($("th.select-checkbox").hasClass("selected")) {
                                 api.rows().deselect();

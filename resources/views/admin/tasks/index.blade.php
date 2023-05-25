@@ -11,12 +11,13 @@
     <style>
         @media (max-width: 767.98px) {
             .btn-danger {
-                margin-left: 0!important;
+                margin-left: 0 !important;
             }
         }
+
         @media (width: 320px) {
             .btn-danger {
-                margin-left: .625rem!important;
+                margin-left: .625rem !important;
             }
         }
     </style>
@@ -32,7 +33,7 @@
 @push('js')
     {{$dataTable->scripts()}}
     <script>
-        $(document).on('change','#select_status', function () {
+        $(document).on('change', '#select_status', function () {
             var status = $(this).val();
             var url = $(this).attr('data-url');
             confirmAction('Bạn có muốn thay đổi trạng thái ?', function (result) {
@@ -44,16 +45,16 @@
                         },
                         type: 'POST',
                         dataType: 'json',
-                        success: function(res) {
-                            if(res.status == true){
+                        success: function (res) {
+                            if (res.status == true) {
                                 showMessage('success', res.message);
-                            }else{
+                            } else {
                                 showMessage('error', res.message);
                             }
                             window.LaravelDataTables['{{ $dataTable->getTableAttribute('id') }}'].ajax.reload();
                         },
                     });
-                }else{
+                } else {
                     window.LaravelDataTables['{{ $dataTable->getTableAttribute('id') }}'].ajax.reload();
                 }
             });
@@ -70,6 +71,15 @@
 
         $(function () {
             $('[data-toggle="tooltip"]').tooltip()
+
+            $('#TaskDataTable thead ')
+                .append('<tr role="row" class="filters"><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr>');
+
+            // $('.datepicker').datepicker({
+            //     dateFormat: 'yy-mm-dd',
+            //     altFormat: 'dd.mm.yy',
+            //     altField: $(this)
+            // });
         })
     </script>
 @endpush
