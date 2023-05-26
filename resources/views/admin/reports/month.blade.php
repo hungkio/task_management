@@ -27,38 +27,35 @@
     <table class="full w-100" style="display: table;">
         <thead>
         <tr class="border">
-            <th class="border bg-blue">
+            <th class="border bg-blue text-center">
                 <div class="relative"><span class="colHeader">STT</span></div>
             </th>
-            <th class="border bg-blue">
+            <th class="border bg-blue text-center">
                 <div class="relative"><span class="colHeader">Tên NV</span></div>
             </th>
             <th class="border bg-blue text-center" colspan="{{ count(@reset($data)) ?? 0 }}">
                 <div class="relative"><span class="colHeader">Ngày</span></div>
             </th>
-            <th class="border bg-blue">
+            <th class="border bg-blue text-center">
                 <div class="relative"><span class="colHeader">Sum</span></div>
             </th>
         </tr>
         <tr class="border">
-            <th class="border bg-blue">
-                <div class="relative"></div>
-            </th>
-            <th class="border bg-blue">
-                <div class="relative"></div>
+            <th class="border bg-purple text-center" colspan="2">
+                <div class="relative">Kết quả</div>
             </th>
             @if(!empty($data))
                 @if(!empty(reset($data)))
                     @php($day = 1)
                     @foreach(reset($data) as $count)
-                        <th class="border bg-blue text-center" style="width: 40px">
+                        <th class="border bg-purple text-center" style="width: 40px">
                             <div class="relative"><span class="colHeader">{{ $day }}</span></div>
                         </th>
                         @php($day += 1)
                     @endforeach
                 @endif
             @endif
-            <th class="border bg-blue">
+            <th class="border bg-purple">
                 <div class="relative"></div>
             </th>
         </tr>
@@ -69,21 +66,108 @@
             @foreach($data as $key => $user)
                 @php($sum = 0)
                 <tr>
-                    <td class="border">{{ $row }}</td>
+                    <td class="border text-center">{{ $row }}</td>
                     <td class="border name">{{ $key }}</td>
                     @if(!empty($user))
                         @php($day = 1)
                         @foreach($user as $count)
-                            <td class="border text-center @if($count >= 25) bg-orange @endif">{{ $count }}</td>
+                            <td class="border text-center @if($count >= 600) bg-orange @endif">{{ $count }}</td>
                             @php($day += 1)
                             @php($sum += $count)
                         @endforeach
                     @endif
-                    <td class="border text-center sum">{{ $sum }}</td>
+                    <td class="border text-center sum">{{ formatNumber($sum) }}</td>
                 </tr>
                 @php($row += 1)
-
             @endforeach
+            <tr>
+                <td class="border"></td>
+                <td class="border">{{ formatNumber($sumTotal) }}</td>
+                @if(!empty($data))
+                    @if(!empty(reset($data)))
+                        @php($day = 0)
+                        @foreach(reset($data) as $count)
+                            <td class="border text-center">{{ $dataTotal[$day] }}</td>
+                            @php($day += 1)
+                        @endforeach
+                    @endif
+                @endif
+                <td class="border text-center">{{ formatNumber($sumTotal) }}</td>
+            </tr>
+        @endif
+        </tbody>
+    </table>
+
+    <table class="bonus w-100 mt-3" style="display: table;">
+        <thead>
+        <tr class="border">
+            <th class="border bg-blue text-center">
+                <div class="relative"><span class="colHeader">STT</span></div>
+            </th>
+            <th class="border bg-blue text-center">
+                <div class="relative"><span class="colHeader">Tên NV</span></div>
+            </th>
+            <th class="border bg-blue text-center" colspan="{{ count(@reset($data)) ?? 0 }}">
+                <div class="relative"><span class="colHeader">Ngày</span></div>
+            </th>
+            <th class="border bg-blue text-center">
+                <div class="relative"><span class="colHeader">Sum</span></div>
+            </th>
+        </tr>
+        <tr class="border">
+            <th class="border bg-purple text-center" colspan="2">
+                <div class="relative">Bonus</div>
+            </th>
+            @if(!empty($data))
+                @if(!empty(reset($data)))
+                    @php($day = 1)
+                    @foreach(reset($data) as $count)
+                        <th class="border bg-purple text-center" style="width: 40px">
+                            <div class="relative"><span class="colHeader">{{ $day }}</span></div>
+                        </th>
+                        @php($day += 1)
+                    @endforeach
+                @endif
+            @endif
+            <th class="border bg-purple">
+                <div class="relative"></div>
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        @if(!empty($data))
+            @php($row = 1)
+            @foreach($data as $key => $user)
+                @php($sum = 0)
+                <tr>
+                    <td class="border text-center">{{ $row }}</td>
+                    <td class="border name">{{ $key }}</td>
+                    @if(!empty($user))
+                        @php($day = 1)
+                        @foreach($user as $count)
+                            <td class="border text-center @if($count >= 600) bg-orange @endif">{{ ($count >= 600) ? formatNumber(100000) : 0 }}</td>
+                            @php($day += 1)
+                            @php($sum += (($count >= 600) ? 100000 : 0))
+                        @endforeach
+                    @endif
+                    <td class="border text-center sum">{{ formatNumber($sum) }}</td>
+                </tr>
+                @php($row += 1)
+            @endforeach
+            <tr>
+                <td class="border"></td>
+                <td class="border">{{ formatNumber($sumBonus) }}</td>
+                @if(!empty($data))
+                    @if(!empty(reset($data)))
+                        @php($day = 0)
+                        @foreach(reset($data) as $count)
+                            <td class="border text-center">{{ formatNumber($bonusTotal[$day]) }}</td>
+                            @php($day += 1)
+                        @endforeach
+                    @endif
+                @endif
+                <td class="border text-center">{{ formatNumber($sumBonus) }}</td>
+            </tr>
         @endif
         </tbody>
     </table>

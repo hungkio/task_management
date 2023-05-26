@@ -16,6 +16,8 @@ class ReportController
         $currentRoleName = $current_user->getRoleNames()[0];
         $user_id = auth()->id();
         $data = [];
+        $dataTotal = [];
+        $bonusTotal = [];
 
         if ($currentRoleName == 'editor' || $currentRoleName == 'QA') {
             $users = Admin::with(['QAMonthTasks', 'EditorMonthTasks'])->where('id', $user_id)->whereHas('roles', function (Builder $subQuery) {
@@ -48,14 +50,38 @@ class ReportController
                     DB::raw('sum(estimate) AS "count"'),
                 ]);
             $dataDate = [];
+            $dataBonus = [];
             foreach ($dates as $key => $date) {
                 $totalTime = $counts->where('date', $key)->first()->count ?? 0;
                 $dataDate[$key] = $totalTime;
+                $dataBonus[$key] = ($totalTime >= 600) ? 100000 :0;
             }
+
+            // full data
+            if (empty($dataTotal)) {
+                $dataTotal = $dataDate;
+            } else {
+                $dataTotal = array_map(function () {
+                    return array_sum(func_get_args());
+                }, $dataTotal, $dataDate);
+            }
+
+            //bonus
+            if (empty($dataTotal)) {
+                $bonusTotal = $dataBonus;
+            } else {
+                $bonusTotal = array_map(function () {
+                    return array_sum(func_get_args());
+                }, $bonusTotal, $dataBonus);
+            }
+
             $data[$user->fullName] = $dataDate;
         }
 
-        return view('admin.reports.month', compact('data'));
+        $sumTotal = array_sum($dataTotal);
+        $sumBonus = array_sum($bonusTotal);
+
+        return view('admin.reports.month', compact('data', 'dataTotal', 'sumTotal', 'sumBonus', 'bonusTotal'));
     }
 
     public function customer()
