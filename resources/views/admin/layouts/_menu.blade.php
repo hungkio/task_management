@@ -51,14 +51,17 @@
                 <li class="nav-item-header">
                     <div class="text-uppercase font-size-xs line-height-xs">
                         {{ __('Menu') }}
-                        <a href="{{ route('admin.dashboards') }}" class="navbar-nav-link sidebar-control sidebar-main-toggle d-none d-md-block menu-nav">
+                        <a href="{{ route('admin.dashboards') }}"
+                           class="navbar-nav-link sidebar-control sidebar-main-toggle d-none d-md-block menu-nav">
                             <i class="fal fa-bars"></i>
                         </a>
                     </div>
-                    <i class="fal fa-bars navbar-nav-link sidebar-control sidebar-main-toggle" title="{{ __('Menu') }}"></i>
+                    <i class="fal fa-bars navbar-nav-link sidebar-control sidebar-main-toggle"
+                       title="{{ __('Menu') }}"></i>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('admin.dashboards') }}" class="nav-link {{ request()->routeIs('admin.dashboards*') ? 'active' : null }}">
+                    <a href="{{ route('admin.dashboards') }}"
+                       class="nav-link {{ request()->routeIs('admin.dashboards*') ? 'active' : null }}">
                         <i class="fal fa-home"></i>
                         <span>
                             {{ __('Dashboard') }}
@@ -78,7 +81,36 @@
                     </li>
                 @endcan
 
-            <!-- System -->
+            <!-- Report -->
+                <li class="nav-item-header">
+                    <div class="text-uppercase font-size-xs line-height-xs">{{ __('Báo cáo') }}</div>
+                    <i class="fal fa-horizontal-rule" title="{{ __('Báo cáo') }}"></i>
+                </li>
+                <li class="nav-item nav-item-submenu {{ request()->routeIs('admin.reports*') ? 'nav-item-expanded nav-item-open' : null }}">
+                    <a href="#" class="nav-link"><i class="fal fa-user"></i> <span>{{ __('Báo cáo') }}</span></a>
+                    <ul class="nav nav-group-sub" data-submenu-title="{{ __('Báo cáo') }}">
+                        <li class="nav-item">
+                            <a href="{{ route('admin.reports.month') }}"
+                               class="nav-link @if(request()->routeIs('admin.reports.month'))active @endif">{{ __('Báo cáo tháng') }}</a>
+                        </li>
+                        @can('roles.view')
+                            <li class="nav-item">
+                                <a href="{{ route('admin.reports.customer') }}"
+                                   class="nav-link @if(request()->routeIs('admin.reports.customer'))active @endif">{{ __('Báo cáo khách hàng') }}</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('admin.reports.employee') }}"
+                                   class="nav-link @if(request()->routeIs('admin.reports.employee'))active @endif">{{ __('Báo cáo nhân viên') }}</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('admin.reports.salary') }}"
+                                   class="nav-link @if(request()->routeIs('admin.reports.salary'))active @endif">{{ __('Lương và năng lực') }}</a>
+                            </li>
+                        @endcan
+                    </ul>
+                </li>
+
+                <!-- System -->
                 @canany(['admins.view', 'menus.index', 'log-activities.index', 'admins.view'])
                     <li class="nav-item-header">
                         <div class="text-uppercase font-size-xs line-height-xs">{{ __('Hệ thống') }}</div>
@@ -90,12 +122,12 @@
                         <ul class="nav nav-group-sub" data-submenu-title="{{ __('Tài khoản') }}">
                             @can('admins.view')
                                 <li class="nav-item"><a href="{{ route('admin.admins.index') }}"
-                                    class="nav-link @if(request()->routeIs('admin.admins*'))active @endif">{{ __('Tài khoản') }}</a>
+                                                        class="nav-link @if(request()->routeIs('admin.admins*'))active @endif">{{ __('Tài khoản') }}</a>
                                 </li>
                             @endcan
                             @can('roles.view')
                                 <li class="nav-item"><a href="{{ route('admin.roles.index') }}"
-                                    class="nav-link @if(request()->routeIs('admin.roles*'))active @endif">{{ __('Vai trò') }}</a>
+                                                        class="nav-link @if(request()->routeIs('admin.roles*'))active @endif">{{ __('Vai trò') }}</a>
                                 </li>
                             @endcan
                         </ul>

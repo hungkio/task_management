@@ -22,6 +22,7 @@ use App\Http\Controllers\Admin\Auth\ResetPasswordController;
 use App\Http\Controllers\Admin\Auth\VerificationController;
 use App\Http\Controllers\Admin\UploadTinymceController;
 use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\ReportController;
 
 
 Route::prefix('admin')->name('admin.')->group(function () {
@@ -69,6 +70,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::post('tasks/update-status', [TaskController::class, 'updateStatus'])->name('tasks.update-status');
             Route::get('tasks/cron', [TaskController::class, 'cron'])->name('tasks.cron');
             Route::post('tasks/import', [TaskController::class, 'import'])->name('tasks.import');
+
+            //reports
+            Route::get('report/month', [ReportController::class, 'month'])->name('reports.month');
+            Route::get('report/customer', [ReportController::class, 'customer'])->name('reports.customer');
+            Route::get('report/employee', [ReportController::class, 'employee'])->name('reports.employee');
+            Route::get('report/salary', [ReportController::class, 'salary'])->name('reports.salary');
 
             //Upload Tinymce
             Route::post('uploads-tinymce', UploadTinymceController::class)->name('public.upload-tinymce');
