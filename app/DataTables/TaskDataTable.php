@@ -88,6 +88,9 @@ class TaskDataTable extends BaseDatable
             Button::make('create')->addClass('btn btn-success d-none')->text('<i class="fal fa-plus-circle mr-2"></i>'.__('Tạo mới')),
             Button::make('export')->addClass('btn btn-primary')->text('<i class="fal fa-download mr-2"></i>'.__('Xuất')),
             Button::make('print')->addClass('btn bg-primary')->text('<i class="fal fa-print mr-2"></i>'.__('In')),
+            Button::make('selected')->addClass('btn bg-teal-400 import')
+                ->text('<i class="icon-compose mr-2"></i>'.__('Import')
+                ),
         ];
     }
 
@@ -96,7 +99,7 @@ class TaskDataTable extends BaseDatable
         $input = "<input type=\"text\" placeholder=\"' + title + '\" />";
         $inputDate = "<input class=\"datepicker\" type=\"date\" placeholder=\"' + title + '\" />";
         return [
-            'order' => [5, 'desc'],
+            'order' => [8, 'desc'],
             "initComplete" => "function () {
                     var api = this.api();
 

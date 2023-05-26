@@ -68,6 +68,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::put('tasks/{task}', [TaskController::class, 'update'])->name('tasks.update');
             Route::post('tasks/update-status', [TaskController::class, 'updateStatus'])->name('tasks.update-status');
             Route::get('tasks/cron', [TaskController::class, 'cron'])->name('tasks.cron');
+            Route::post('tasks/import', [TaskController::class, 'import'])->name('tasks.import');
 
             //Upload Tinymce
             Route::post('uploads-tinymce', UploadTinymceController::class)->name('public.upload-tinymce');

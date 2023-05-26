@@ -21,6 +21,7 @@
         "laravel/framework": "^7.0",
         "laravel/tinker": "^2.0",
         "laravel/ui": "^2.0",
+        "maatwebsite/excel": "^3.1",
         "proengsoft/laravel-jsvalidation": "^4.4",
         "spatie/data-transfer-object": "^1.13",
         "spatie/dropbox-api": "^1.21",
