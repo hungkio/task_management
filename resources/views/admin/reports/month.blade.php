@@ -230,6 +230,7 @@
         @endif
         </tbody>
     </table>
+
     <div class="mt-3 border" id="chart-pie" style="width: 100%;height:500px;"></div>
 @stop
 
