@@ -30,11 +30,14 @@ class ReportController
         }
 
         foreach ($users as $user) {
+            //get dates
             $dates = collect();
             for ($i = 0; $i < Carbon::now()->daysInMonth; $i++) {
                 $date = Carbon::now()->startOfMonth()->addDays($i)->format('Y-m-d');
                 $dates->put($date, 0);
             }
+
+            // get condition each user
             $roleName = $user->getRoleNames()[0];
             $conditionAssigner = "";
             if ($roleName == 'editor') {
@@ -42,6 +45,8 @@ class ReportController
             } else if ($roleName == 'QA') {
                 $conditionAssigner = 'QA_id';
             }
+
+            // get counts
             $counts = Tasks::where($conditionAssigner, $user->id)->where([['created_at', '>=', $dates->keys()->first()]])
                 ->groupBy('date')
                 ->orderBy('date')
@@ -49,12 +54,14 @@ class ReportController
                     DB::raw('DATE( created_at ) as date'),
                     DB::raw('sum(estimate) AS "count"'),
                 ]);
+
+            // mapping data
             $dataDate = [];
             $dataBonus = [];
             foreach ($dates as $key => $date) {
                 $totalTime = $counts->where('date', $key)->first()->count ?? 0;
-                $dataDate[$key] = $totalTime;
-                $dataBonus[$key] = ($totalTime >= 600) ? 100000 :0;
+                $dataDate[] = $totalTime;
+                $dataBonus[] = ($totalTime >= 600) ? 100000 :0;
             }
 
             // full data

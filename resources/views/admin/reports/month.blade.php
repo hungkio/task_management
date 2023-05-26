@@ -24,6 +24,7 @@
 @endpush
 
 @section('page-content')
+    {{--Full--}}
     <table class="full w-100" style="display: table;">
         <thead>
         <tr class="border">
@@ -46,12 +47,10 @@
             </th>
             @if(!empty($data))
                 @if(!empty(reset($data)))
-                    @php($day = 1)
-                    @foreach(reset($data) as $count)
+                    @foreach(reset($data) as $key => $count)
                         <th class="border bg-purple text-center" style="width: 40px">
-                            <div class="relative"><span class="colHeader">{{ $day }}</span></div>
+                            <div class="relative"><span class="colHeader">{{ $key+1 }}</span></div>
                         </th>
-                        @php($day += 1)
                     @endforeach
                 @endif
             @endif
@@ -69,10 +68,8 @@
                     <td class="border text-center">{{ $row }}</td>
                     <td class="border name">{{ $key }}</td>
                     @if(!empty($user))
-                        @php($day = 1)
                         @foreach($user as $count)
                             <td class="border text-center @if($count >= 600) bg-orange @endif">{{ $count }}</td>
-                            @php($day += 1)
                             @php($sum += $count)
                         @endforeach
                     @endif
@@ -85,10 +82,8 @@
                 <td class="border">{{ formatNumber($sumTotal) }}</td>
                 @if(!empty($data))
                     @if(!empty(reset($data)))
-                        @php($day = 0)
-                        @foreach(reset($data) as $count)
-                            <td class="border text-center">{{ $dataTotal[$day] }}</td>
-                            @php($day += 1)
+                        @foreach(reset($data) as $key => $count)
+                            <td class="border text-center">{{ @$dataTotal[$key] }}</td>
                         @endforeach
                     @endif
                 @endif
@@ -98,6 +93,7 @@
         </tbody>
     </table>
 
+    {{--Bonus--}}
     <table class="bonus w-100 mt-3" style="display: table;">
         <thead>
         <tr class="border">
@@ -120,12 +116,10 @@
             </th>
             @if(!empty($data))
                 @if(!empty(reset($data)))
-                    @php($day = 1)
-                    @foreach(reset($data) as $count)
+                    @foreach(reset($data) as $key => $count)
                         <th class="border bg-purple text-center" style="width: 40px">
-                            <div class="relative"><span class="colHeader">{{ $day }}</span></div>
+                            <div class="relative"><span class="colHeader">{{ $key+1 }}</span></div>
                         </th>
-                        @php($day += 1)
                     @endforeach
                 @endif
             @endif
@@ -143,10 +137,8 @@
                     <td class="border text-center">{{ $row }}</td>
                     <td class="border name">{{ $key }}</td>
                     @if(!empty($user))
-                        @php($day = 1)
                         @foreach($user as $count)
                             <td class="border text-center @if($count >= 600) bg-orange @endif">{{ ($count >= 600) ? formatNumber(100000) : 0 }}</td>
-                            @php($day += 1)
                             @php($sum += (($count >= 600) ? 100000 : 0))
                         @endforeach
                     @endif
@@ -159,10 +151,8 @@
                 <td class="border">{{ formatNumber($sumBonus) }}</td>
                 @if(!empty($data))
                     @if(!empty(reset($data)))
-                        @php($day = 0)
-                        @foreach(reset($data) as $count)
-                            <td class="border text-center">{{ formatNumber($bonusTotal[$day]) }}</td>
-                            @php($day += 1)
+                        @foreach(reset($data) as $key => $count)
+                            <td class="border text-center">{{ formatNumber($bonusTotal[$key]) }}</td>
                         @endforeach
                     @endif
                 @endif
@@ -201,9 +191,9 @@
                     dataset: {
                         source: data
                     },
-                    xAxis: { type: 'category' },
-                    yAxis: { gridIndex: 0 },
-                    grid: { top: '30%' },
+                    xAxis: {type: 'category'},
+                    yAxis: {gridIndex: 0},
+                    grid: {top: '30%'},
                     series: [
                         {
                             type: 'pie',
