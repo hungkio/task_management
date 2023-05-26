@@ -25,6 +25,7 @@
         <th>Editor</th>
         <th>QA</th>
         <th>Số lượng original</th>
+        <th>Case path</th>
         <th>Thời gian tạo</th>
     </tr>
     </thead>
@@ -40,6 +41,7 @@
             <td>{{ $task->editor->fullName ?? '' }}</td>
             <td>{{ $task->QA->fullName ?? '' }}</td>
             <td>{{ $task->countRecord }}</td>
+            <td>{{ $task->path }}</td>
             <td>{{ formatDate($task->created_at) }}</td>
         </tr>
     @endforeach
