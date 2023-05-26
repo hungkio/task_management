@@ -18,6 +18,8 @@ class ReportController
         $data = [];
         $dataTotal = [];
         $bonusTotal = [];
+        $badTotal = [];
+        $dataBad = [];
 
         if ($currentRoleName == 'editor' || $currentRoleName == 'QA') {
             $users = Admin::with(['QAMonthTasks', 'EditorMonthTasks'])->where('id', $user_id)->whereHas('roles', function (Builder $subQuery) {
@@ -38,10 +40,21 @@ class ReportController
             }
 
             // get condition each user
+            $bad = $dates->toArray();
             $roleName = $user->getRoleNames()[0];
             $conditionAssigner = "";
             if ($roleName == 'editor') {
                 $conditionAssigner = "editor_id";
+
+                // get bad
+                $tasks = $user->EditorMonthTasks;
+                foreach ($tasks as $task) {
+                    if ($task->redo_note) {
+                        $date = Carbon::createFromFormat('Y-m-d H:i:s', $task->created_at)->format('Y-m-d');
+                        $badMoney = Admin::BAD_FEE[$task->redo_note];
+                        $bad[$date] = $bad[$date] + $badMoney;
+                    }
+                }
             } else if ($roleName == 'QA') {
                 $conditionAssigner = 'QA_id';
             }
@@ -82,13 +95,27 @@ class ReportController
                 }, $bonusTotal, $dataBonus);
             }
 
+            //bad
+            if (empty($dataTotal)) {
+                $badTotal = $bad;
+            } else {
+                $badTotal = array_map(function () {
+                    return array_sum(func_get_args());
+                }, $badTotal, $bad);
+            }
+
+            $bad = array_map(function () {
+                return array_sum(func_get_args());
+            }, $bad, []);
             $data[$user->fullName] = $dataDate;
+            $dataBad[$user->fullName] = $bad;
         }
 
         $sumTotal = array_sum($dataTotal);
         $sumBonus = array_sum($bonusTotal);
+        $sumBad = array_sum($badTotal);
 
-        return view('admin.reports.month', compact('data', 'dataTotal', 'sumTotal', 'sumBonus', 'bonusTotal'));
+        return view('admin.reports.month', compact('data', 'dataTotal', 'sumTotal', 'sumBonus', 'bonusTotal', 'dataBad', 'badTotal', 'sumBad'));
     }
 
     public function customer()
