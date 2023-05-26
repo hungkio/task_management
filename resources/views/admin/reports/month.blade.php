@@ -181,7 +181,7 @@
         </tr>
         <tr class="border">
             <th class="border bg-purple text-center" colspan="2">
-                <div class="relative">Bonus</div>
+                <div class="relative">Bad Editing</div>
             </th>
             @if(!empty($dataBad))
                 @if(!empty(reset($dataBad)))

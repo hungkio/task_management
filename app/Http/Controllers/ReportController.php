@@ -96,19 +96,21 @@ class ReportController
             }
 
             //bad
-            if (empty($dataTotal)) {
-                $badTotal = $bad;
-            } else {
-                $badTotal = array_map(function () {
+            if ($roleName == 'editor') {
+                if (empty($dataTotal)) {
+                    $badTotal = $bad;
+                } else {
+                    $badTotal = array_map(function () {
+                        return array_sum(func_get_args());
+                    }, $badTotal, $bad);
+                }
+                $bad = array_map(function () {
                     return array_sum(func_get_args());
-                }, $badTotal, $bad);
+                }, $bad, []);
+                $dataBad[$user->fullName] = $bad;
             }
 
-            $bad = array_map(function () {
-                return array_sum(func_get_args());
-            }, $bad, []);
             $data[$user->fullName] = $dataDate;
-            $dataBad[$user->fullName] = $bad;
         }
 
         $sumTotal = array_sum($dataTotal);
