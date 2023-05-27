@@ -8,7 +8,6 @@ use App\Http\Requests\Admin\TaskRequest;
 use App\Imports\TasksImport;
 use App\Tasks;
 use Carbon\Carbon;
-use Google\Service\Batch\Task;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
@@ -153,7 +152,7 @@ class TaskController
                             'estimate_QA' => $estimate_QA,
                         ]);
                     } else {
-                        Task::create([
+                        Tasks::create([
                             'name' => $caseName,
                             'path' => $casePath,
                             'countRecord' => $countRecord,

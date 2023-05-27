@@ -127,8 +127,44 @@ class ReportController
 
     public function salary()
     {
-        $tasks = Tasks::whereMonth('created_at', Carbon::today())->whereDate('created_at', '!=', Carbon::today())->orderBy('created_at', 'desc')->get();
-        dd($tasks);
+        $current_user = auth()->user();
+        $currentRoleName = $current_user->getRoleNames()[0];
+        $user_id = auth()->id();
+
+        if ($currentRoleName == 'editor' || $currentRoleName == 'QA') {
+            $users = Admin::with(['QAMonthTasks', 'EditorMonthTasks'])->whereHas('roles', function (Builder $subQuery) {
+                $subQuery->whereIn(config('permission.table_names.roles') . '.name', ['QA', 'editor']);
+            })->get();
+
+            if ($currentRoleName == 'editor') {
+                $conditionAssigner = "editor_id";
+            } else {
+                $conditionAssigner = 'QA_id';
+            }
+            $tasks = Tasks::where($conditionAssigner, $user_id)->whereMonth('created_at', Carbon::today())
+                ->whereDate('created_at', '!=', Carbon::today())
+                ->selectRaw('*, datediff(start_at, end_at) as time_real')
+                ->orderBy('created_at', 'desc')->get();
+
+        } else {
+            $tasks = Tasks::whereMonth('created_at', Carbon::today())->whereDate('created_at', '!=', Carbon::today())
+                ->orderBy('created_at', 'desc')->get();
+            $users = Admin::with(['QAMonthTasks', 'EditorMonthTasks'])->whereHas('roles', function (Builder $subQuery) {
+                $subQuery->whereIn(config('permission.table_names.roles') . '.name', ['QA', 'editor']);
+            })->get();
+        }
+        foreach ($tasks as $task) {
+            $time_spent = 0;
+            if ($task->start_at && $task->end_at) {
+                $start_at = Carbon::createFromFormat('Y-m-d H:i:s', $task->start_at);
+                $end_at = Carbon::createFromFormat('Y-m-d H:i:s', $task->end_at);
+                $time_spent = $end_at->diffInMinutes($start_at);
+            }
+            $task->timespent = $time_spent;
+            $task->average = $task->estimate ? ($time_spent/$task->estimate) : 0;
+        }
+
+        return view('admin.reports.salary', compact('tasks', 'users'));
     }
 
     public function customer()
