@@ -58,6 +58,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('/assign-qa/{id}', [DashboardController::class, 'assignQA'])->name('assign-qa');
             Route::get('/popup/{id}', [DashboardController::class, 'showPopup'])->name('popup');
             Route::post('/popup/{id}', [DashboardController::class, 'savePopup'])->name('popup.save');
+            Route::post('/update-status', [DashboardController::class, 'updateStatus'])->name('update-status');
 
             //task
             Route::get('tasks', [TaskController::class, 'index'])->name('tasks.index');
@@ -66,7 +67,6 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('tasks/{task}/edit', [TaskController::class, 'edit'])->name('tasks.edit');
             Route::delete('tasks/{task}', [TaskController::class, 'destroy'])->name('tasks.destroy');
             Route::put('tasks/{task}', [TaskController::class, 'update'])->name('tasks.update');
-            Route::post('tasks/update-status', [TaskController::class, 'updateStatus'])->name('tasks.update-status');
             Route::get('tasks/cron', [TaskController::class, 'cron'])->name('tasks.cron');
 
             //Upload Tinymce
