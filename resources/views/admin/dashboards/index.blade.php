@@ -127,7 +127,7 @@
                   <div id={{$task->id}}
                     data-toggle="modal"
                     data-url="{{ route('admin.popup', $task->id) }}"
-                    class="card rounded-0 mb-3 border-0 border-start border-primary border-3 shadow-sm">
+                    class="card rounded-0 mb-3 border-0 border-start border-primary border-3 shadow">
                       <div class="card-body px-3 py-3">
                           <div class="card-text mb-1">{{$task->name}}</div>
                           @if (@$editor)
@@ -162,7 +162,7 @@
                   <div id={{$task->id}}
                     data-toggle="modal"
                     data-url="{{ route('admin.popup', $task->id) }}"
-                    class="card rounded-0 mb-3 border-0 border-start border-primary border-3 shadow-sm">
+                    class="card rounded-0 mb-3 border-0 border-start border-primary border-3 shadow">
                       <div class="card-body px-3 py-3">
                           <div class="card-text mb-1">{{$task->name}}</div>
                           @if (@$editor)
@@ -183,7 +183,7 @@
                             @endif
                           </div>
                           <div class="status rounded bug d-inline p-1 fw-semibold small text-white project-name">
-                            Bug
+                            Rejected
                           </div>
                       </div>
                   </div>
@@ -207,7 +207,7 @@
                   <div id={{$task->id}}
                     data-toggle="modal"
                     data-url="{{ route('admin.popup', $task->id) }}"
-                    class="card rounded-0 mb-3 border-0 border-start border-primary border-3 shadow-sm">
+                    class="card rounded-0 mb-3 border-0 border-start border-primary border-3 shadow">
                       <div class="card-body px-3 py-3">
                           <div class="card-text mb-1">{{$task->name}}</div>
                           @if (@$editor)
@@ -253,7 +253,7 @@
                     <div id={{$task->id}}
                       data-toggle="modal"
                       data-url="{{ route('admin.popup', $task->id) }}"
-                      class="card rounded-0 mb-3 border-0 border-start border-primary border-3 shadow-sm">
+                      class="card rounded-0 mb-3 border-0 border-start border-primary border-3 shadow">
                         <div class="card-body px-3 py-3">
                             <div class="card-text mb-1">{{$task->name}}</div>
                             @if (@$editor)
@@ -369,7 +369,7 @@
           let is_inProgress = ui.item.data('is_inProgress');
           if(hasSiblings && is_inProgress){
             $('#in-progress').sortable('cancel');
-            const message_drop = 'Bạn phải hoàn thành hết các case(s) bug trước.'
+            const message_drop = 'Bạn phải hoàn thành hết các case(s) rejected trước.'
             alert(message_drop);
           }
         },
@@ -382,7 +382,7 @@
           switch (thisProcess) {
             case 'in-progress':
               processStatus = 4;
-              status = 'Bug';
+              status = 'Rejected';
               ui.item.find('.status').css("background-color", "#BB0000")
               break;
             case 'testing':
@@ -438,7 +438,7 @@
         let this_id = $(this).parents('.card').attr('id');
         let saveStartAt = true;
         let currentTime = new Date();
-        let formated_time = currentTime.getDate()/currentTime.getMonth() + 1/currentTime.getFullYear() + ' ' + currentTime.getHours() + ':' + currentTime.getMinutes();
+        let formated_time = 'Start: ' + currentTime.getDate() + '/' + (currentTime.getMonth() + 1) + '/' + currentTime.getFullYear() + ' ' + currentTime.getHours() + ':' + currentTime.getMinutes();
         updateTaskStatus(this_id, 1, saveStartAt);
         $(this).siblings('.status').text('In progress');
         $(this).parents().siblings('.card-text').find('.start-time').text(formated_time);
