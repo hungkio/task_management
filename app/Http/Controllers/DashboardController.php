@@ -166,4 +166,30 @@ class DashboardController
 
         return $user;
     }
+
+    public function updateStatus(Request $request)
+    {
+        $taskId = $request->input('id');
+        $processStatus = $request->input('status');
+        if ($request->input('status')) {
+            $confirm = $request->input('confirm');
+        }
+
+        $task = Tasks::findOrFail($taskId);
+        $task->status = $processStatus;
+        if ($processStatus == Tasks::DONE) {
+            $endTime = date("Y-m-d H:i");
+            $task->update([
+                'end_at' => $endTime,
+                'QA_end' => $endTime
+            ]);
+        }
+        if (isset($confirm)) {
+            $task->start_at = date("Y-m-d H:i");
+        }
+        $task->save();
+
+        // Phản hồi JSON với thông tin cập nhật thành công
+        return response()->json(['message' => 'Cập nhật trạng thái thành công'], 200);
+    }
 }
