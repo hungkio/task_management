@@ -80,6 +80,32 @@ class Admin extends Authenticatable implements HasMedia
         'Basic_rt' => 10
     ];
 
+    const ESTIMATE_QA = [
+        'INV' => 0.5,
+        'SE' => 1.5,
+        'Se_DE' => 1.5,
+        'SE_DE' => 1.5,
+        'SE_PR' => 2.5,
+        'SE_FL' => 3,
+        'SE_TW' => 5,
+        'DTD' => 10,
+        'DBAV' => 30,
+        'AV' => 15,
+        'PRT' => 5,
+        'EXT' => 60,
+        'PANO' => 5,
+        'HEN' => 15,
+        'HI_END' => 7.5,
+        'VT' => 90,
+        'VTP' => 150,
+        'VTP360' => 150,
+        'FL' => 90,
+        'FLB' => 90,
+        'FLP' => 150,
+        'Floor' => 30,
+        'Basic_rt' => 0.5
+    ];
+
     const BAD = [
         'BAD_QUY TRÌNH','BAD_MÀU SẮC', 'BAD_ÁNH SÁNG','BAD_THÁI ĐỘ','BAD_KH','BAD_STYLES','BAD_SKY,TV','EXCELLENT!'
     ];

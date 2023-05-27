@@ -46,6 +46,7 @@ class TaskController
         $this->authorize('create', Tasks::class);
         $data = $request->all();
         $data['estimate'] = Admin::ESTIMATE[$data['level']];
+        $data['estimate_QA'] = Admin::ESTIMATE_QA[$data['level']];
         $task = Tasks::create($data);
 
         flash()->success(__('Case ":model" đã được tạo thành công !', ['model' => $task->title]));
@@ -72,6 +73,7 @@ class TaskController
 
         $data = $request->all();
         $data['estimate'] = Admin::ESTIMATE[$data['level']];
+        $data['estimate_QA'] = Admin::ESTIMATE_QA[$data['level']];
 
         if (@$data['redo']) {
             $data['redo'] = $task->redo ?? json_encode([]);
@@ -130,8 +132,6 @@ class TaskController
                     ], [
                         'path' => $casePath,
                         'countRecord' => $countRecord,
-                        'date' => "$currentMonthNumber $currentDay",
-                        'month' => $currentMonthText,
                         'case' => $taskName,
                         'customer' => $customer,
                     ]);

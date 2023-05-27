@@ -45,6 +45,7 @@ class TasksImport implements ToCollection
             ], [
                 'path' => $casePath,
                 'estimate' => $estimate,
+                'estimate_QA' => $estimate/2,
                 'level' => $level,
                 'status' => $status,
                 'countRecord' => $countRecord,

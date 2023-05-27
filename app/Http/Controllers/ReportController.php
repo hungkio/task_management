@@ -66,13 +66,18 @@ class ReportController
                 ->get([
                     DB::raw('DATE( created_at ) as date'),
                     DB::raw('sum(estimate) AS "count"'),
+                    DB::raw('sum(estimate_QA) AS "count_QA"'),
                 ]);
 
             // mapping data
             $dataDate = [];
             $dataBonus = [];
             foreach ($dates as $key => $date) {
-                $totalTime = $counts->where('date', $key)->first()->count ?? 0;
+                if ($roleName == 'editor') {
+                    $totalTime = $counts->where('date', $key)->first()->count ?? 0;
+                } else if ($roleName == 'QA') {
+                    $totalTime = $counts->where('date', $key)->first()->count_QA ?? 0;
+                }
                 $dataDate[] = $totalTime;
                 $dataBonus[] = ($totalTime >= 600) ? 100000 :0;
             }
