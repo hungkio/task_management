@@ -125,17 +125,18 @@ class ReportController
         return view('admin.reports.month', compact('data', 'dataTotal', 'sumTotal', 'sumBonus', 'bonusTotal', 'dataBad', 'badTotal', 'sumBad'));
     }
 
+    public function salary()
+    {
+        $tasks = Tasks::whereMonth('created_at', Carbon::today())->whereDate('created_at', '!=', Carbon::today())->orderBy('created_at', 'desc')->get();
+        dd($tasks);
+    }
+
     public function customer()
     {
 
     }
 
     public function employee()
-    {
-
-    }
-
-    public function salary()
     {
 
     }
