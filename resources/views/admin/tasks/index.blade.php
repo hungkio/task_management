@@ -11,12 +11,13 @@
     <style>
         @media (max-width: 767.98px) {
             .btn-danger {
-                margin-left: 0!important;
+                margin-left: 0 !important;
             }
         }
+
         @media (width: 320px) {
             .btn-danger {
-                margin-left: .625rem!important;
+                margin-left: .625rem !important;
             }
         }
     </style>
@@ -27,12 +28,39 @@
         {{$dataTable->table()}}
     </x-card>
 
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <form class="modal-content" method="POST" action="{{ route('admin.tasks.import') }}" enctype="multipart/form-data">
+                @csrf
+                <div class="modal-header  text-center">
+                    <h4 class="modal-title" id="exampleModalLabel">Import case</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group row">
+                        <label class="col-lg-2 col-form-label text-lg-right" for="redo">
+                            File excel:
+                        </label>
+                        <div class="col-lg-9">
+                            <input  type="file" name="file" id="file" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
 @stop
 
 @push('js')
     {{$dataTable->scripts()}}
     <script>
-        $(document).on('change','#select_status', function () {
+        $(document).on('change', '#select_status', function () {
             var status = $(this).val();
             var url = $(this).attr('data-url');
             confirmAction('Bạn có muốn thay đổi trạng thái ?', function (result) {
@@ -44,16 +72,16 @@
                         },
                         type: 'POST',
                         dataType: 'json',
-                        success: function(res) {
-                            if(res.status == true){
+                        success: function (res) {
+                            if (res.status == true) {
                                 showMessage('success', res.message);
-                            }else{
+                            } else {
                                 showMessage('error', res.message);
                             }
                             window.LaravelDataTables['{{ $dataTable->getTableAttribute('id') }}'].ajax.reload();
                         },
                     });
-                }else{
+                } else {
                     window.LaravelDataTables['{{ $dataTable->getTableAttribute('id') }}'].ajax.reload();
                 }
             });
@@ -70,6 +98,18 @@
 
         $(function () {
             $('[data-toggle="tooltip"]').tooltip()
+
+            $('#TaskDataTable thead ')
+                .append('<tr role="row" class="filters"><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr>');
+
+            $('.import').click(function () {
+                $('#exampleModal').modal('show')
+            })
+            // $('.datepicker').datepicker({
+            //     dateFormat: 'yy-mm-dd',
+            //     altFormat: 'dd.mm.yy',
+            //     altField: $(this)
+            // });
         })
     </script>
 @endpush

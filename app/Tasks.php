@@ -19,11 +19,11 @@ class Tasks extends Model
     const FINISH = 6; // khi đã bàn giao cho khách
     const STATUS = [
         self::WAITING => 'Waiting',
-        self::EDITING => 'Đang Edit',
+        self::EDITING => 'Editing',
         self::TESTING => 'QA Check',
         self::DONE => 'Done Reject',
         self::REJECTED => 'Reject',
-        self::TODO => 'Sẵn Sàng',
+        self::TODO => 'Ready',
         self::FINISH => 'Finish',
     ];
 

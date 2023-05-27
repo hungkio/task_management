@@ -5,14 +5,17 @@ namespace App\Http\Controllers;
 use App\DataTables\TaskDataTable;
 use App\Domain\Admin\Models\Admin;
 use App\Http\Requests\Admin\TaskRequest;
+use App\Imports\TasksImport;
 use App\Tasks;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\View\View;
+use Maatwebsite\Excel\Facades\Excel;
 
 class TaskController
 {
@@ -123,6 +126,7 @@ class TaskController
                     $countRecord = count($taskRecord);
                     Tasks::updateOrCreate([
                         'name' => $caseName,
+                        'created_at' => Tasks::whereDate('created_at', Carbon::today())->first()->created_at ?? null
                     ], [
                         'path' => $casePath,
                         'countRecord' => $countRecord,
@@ -137,5 +141,17 @@ class TaskController
                 continue;
             }
         }
+    }
+
+    public function import(Request $request)
+    {
+        try {
+            Excel::import(new TasksImport, $request->file);
+            flash()->success(__('Đã import danh sách case!'));
+        } catch (\Exception $exception) {
+            flash()->success($exception->getMessage());
+        }
+
+        return back();
     }
 }
