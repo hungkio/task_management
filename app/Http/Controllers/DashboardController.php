@@ -193,4 +193,9 @@ class DashboardController
         // Phản hồi JSON với thông tin cập nhật thành công
         return response()->json(['message' => 'Cập nhật trạng thái thành công'], 200);
     }
+
+    public function checkOnline($id)
+    {
+        return $this->getUser($id)->is_online;
+    }
 }

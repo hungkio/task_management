@@ -89,7 +89,9 @@
                   <div id={{$task->id}}
                     data-toggle="modal"
                     data-url="{{ route('admin.popup', $task->id) }}"
-                    class="card rounded-0 mb-3 border-0 border-start border-primary border-3 shadow">
+                    class="card rounded-0 mb-3 border-0 border-start border-primary border-3 shadow"
+                    editor-id = "{{ $task->editor_id }}"
+                    qa-id = "{{ $task->QA_id }}">
                       <div class="card-body px-3 py-3">
                           <div class="card-text mb-1">{{$task->name}}</div>
                           @if (@$editor)
@@ -127,7 +129,9 @@
                   <div id={{$task->id}}
                     data-toggle="modal"
                     data-url="{{ route('admin.popup', $task->id) }}"
-                    class="card rounded-0 mb-3 border-0 border-start border-primary border-3 shadow">
+                    class="card rounded-0 mb-3 border-0 border-start border-primary border-3 shadow"
+                    editor-id = "{{ $task->editor_id }}"
+                    qa-id = "{{ $task->QA_id }}">
                       <div class="card-body px-3 py-3">
                           <div class="card-text mb-1">{{$task->name}}</div>
                           @if (@$editor)
@@ -156,13 +160,15 @@
                 <!-- render task bug -->
                 @foreach ($tasks_rejected as $task)
                   @php
-                  $editor = App\Domain\Admin\Models\Admin::find($task->editor_id);
-                  $qa = App\Domain\Admin\Models\Admin::find($task->QA_id);
+                    $editor = App\Domain\Admin\Models\Admin::find($task->editor_id);
+                    $qa = App\Domain\Admin\Models\Admin::find($task->QA_id);
                   @endphp
                   <div id={{$task->id}}
                     data-toggle="modal"
                     data-url="{{ route('admin.popup', $task->id) }}"
-                    class="card rounded-0 mb-3 border-0 border-start border-primary border-3 shadow">
+                    class="card rounded-0 mb-3 border-0 border-start border-primary border-3 shadow"
+                    editor-id = "{{ $task->editor_id }}"
+                    qa-id = "{{ $task->QA_id }}">
                       <div class="card-body px-3 py-3">
                           <div class="card-text mb-1">{{$task->name}}</div>
                           @if (@$editor)
@@ -207,7 +213,9 @@
                   <div id={{$task->id}}
                     data-toggle="modal"
                     data-url="{{ route('admin.popup', $task->id) }}"
-                    class="card rounded-0 mb-3 border-0 border-start border-primary border-3 shadow">
+                    class="card rounded-0 mb-3 border-0 border-start border-primary border-3 shadow"
+                    editor-id = "{{ $task->editor_id }}"
+                    qa-id = "{{ $task->QA_id }}">
                       <div class="card-body px-3 py-3">
                           <div class="card-text mb-1">{{$task->name}}</div>
                           @if (@$editor)
@@ -255,7 +263,9 @@
                     <div id={{$task->id}}
                       data-toggle="modal"
                       data-url="{{ route('admin.popup', $task->id) }}"
-                      class="card rounded-0 mb-3 border-0 border-start border-primary border-3 shadow">
+                      class="card rounded-0 mb-3 border-0 border-start border-primary border-3 shadow"
+                      editor-id = "{{ $task->editor_id }}"
+                      qa-id = "{{ $task->QA_id }}">
                         <div class="card-body px-3 py-3">
                             <div class="card-text mb-1">{{$task->name}}</div>
                             @if (@$editor)
@@ -293,7 +303,9 @@
                     <div id={{$task->id}}
                       data-toggle="modal"
                       data-url="{{ route('admin.popup', $task->id) }}"
-                      class="card rounded-0 mb-3 border-0 border-start border-primary border-3 shadow">
+                      class="card rounded-0 mb-3 border-0 border-start border-primary border-3 shadow"
+                      editor-id = "{{ $task->editor_id }}"
+                      qa-id = "{{ $task->QA_id }}">
                         <div class="card-body px-3 py-3">
                             <div class="card-text mb-1">{{$task->name}}</div>
                             @if (@$editor)
@@ -347,7 +359,9 @@
             const formatedMinute = ('0' + startAt.getMinutes()).slice(-2);
 
             const formattedStartAt = `${formatedDate}/${formatedMonth}/${startAt.getFullYear()} ${formatedHour}:${formatedMinute}`;
-            const newTask = "<div id="+response.id+" data-toggle='modal' data-url='admin/popup/"+response.id+"' class='card rounded-0 mb-3 border-0 border-start border-primary border-3 shadow'>"+
+            const newTask = "<div id="+response.id+" data-toggle='modal' data-url='admin/popup/"+response.id+
+            "' class='card rounded-0 mb-3 border-0 border-start border-primary border-3 shadow' editor-id="+
+            response.editor_id+" qa-id="+response.QA_id+">"+
                           "<div class='card-body px-3 py-3'>"+
                             "<div class='card-text mb-1'>"+response.name+"</div>"+
                             "<div class='card-text mb-1'>"+
@@ -467,15 +481,31 @@
           switch (thisProcess) {
             case 'in-progress':
               processStatus = 4;
-              status = 'Rejected';
-              ui.item.find('.status').css("background-color", "#BB0000");
               removeButton(ui.item.find('.button-box'));
+              checkOnline(ui.item.attr('editor-id'), function(result) {
+                if (result) {
+                  status = 'Rejected';
+                  ui.item.find('.status').css("background-color", "#BB0000");
+                  updateTaskStatus(taskId, processStatus);
+                }else{
+                  $('#testing').sortable('cancel').sortable('cancel');
+                  alert('Editor hiện tại đang không online. Liên hệ với admin để chuyển task sang Editor khác.')
+                }
+              });
               break;
             case 'testing':
-              status = 'Testing';
-              ui.item.find('.status').css("background-color", "#ebc334")
               processStatus = 2;
-              removeButton(ui.item.find('.button-box'));
+              checkOnline(ui.item.attr('qa_id'), function(result) {
+                if (result) {
+                  status = 'Testing';
+                  ui.item.find('.status').css("background-color", "#ebc334")
+                  removeButton(ui.item.find('.button-box'));
+                  updateTaskStatus(taskId, processStatus);
+                }else{
+                  $('#in-progress').sortable('cancel').sortable('cancel');
+                  alert('QA hiện tại đang không online. Liên hệ với admin để chuyển task sang Editor khác.')
+                }
+              });
               break;
             case 'done':
               processStatus = 3;
@@ -493,9 +523,9 @@
           }
 
           // nếu là in-progress thì chỉ cho chạy vào hàm assign QA
-          if (!ui.item.has(".in-progress").length) {
-            updateTaskStatus(taskId, processStatus);
-          }
+          // if (!ui.item.has(".in-progress").length) {
+          //   updateTaskStatus(taskId, processStatus);
+          // }
           ui.item.find('.status').text(status);
 
           if (processStatus == 2) {
@@ -583,6 +613,21 @@
           }
         })
       })
+
+      function checkOnline(UserId, callback) {
+        var result;
+        $.ajax({
+          url: "admin/check-online/" + UserId,
+          type: "GET",
+          dataType: 'json',
+          success: function(response) {
+            callback(response);
+          },
+          error: function(xhr) {
+            console.log(xhr.responseText);
+          }
+        })
+      }
     })
   </script>
 @endpush
