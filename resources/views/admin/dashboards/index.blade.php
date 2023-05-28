@@ -110,7 +110,7 @@
                             @endif
                           </div>
                           <div class="d-flex justify-content-between">
-                            <div class="status px-2 rounded in-progress d-inline p-1 fw-semibold text-white project-name">
+                            <div class="status px-2 rounded in-progress d-inline-block p-1 fw-semibold text-white project-name">
                               To do
                             </div>
                             <button class="start-task px-2 text-white border-0 rounded outline-0 d-inline-block in-progress">Start</button>
@@ -147,7 +147,7 @@
                               <div class="card-text mb-1">QA checked: {{$task->QA_check_num}}</div>
                             @endif
                           </div>
-                          <div class="status px-2 rounded in-progress d-inline p-1 fw-semibold text-white project-name">
+                          <div class="status px-2 rounded in-progress d-inline-block p-1 fw-semibold text-white project-name">
                             In progress
                           </div>
                       </div>
@@ -182,7 +182,7 @@
                               <div class="card-text mb-1">QA checked: {{$task->QA_check_num}}</div>
                             @endif
                           </div>
-                          <div class="status rounded bug d-inline p-1 fw-semibold small text-white project-name">
+                          <div class="status px-2 rounded bug d-inline-block p-1 fw-semibold text-white project-name">
                             Rejected
                           </div>
                       </div>
@@ -227,7 +227,7 @@
                               <div class="card-text mb-1">QA checked: {{$task->QA_check_num}}</div>
                             @endif
                           </div>
-                          <div class="status rounded testing d-inline p-1 fw-semibold small text-white project-name">
+                          <div class="status px-2 rounded testing d-inline-block p-1 fw-semibold text-white project-name">
                             Testing
                           </div>
                       </div>
@@ -273,7 +273,7 @@
                                 <div class="card-text mb-1">QA checked: {{$task->QA_check_num}}</div>
                               @endif
                             </div>
-                            <div class="status rounded done d-inline p-1 fw-semibold small text-white project-name">
+                            <div class="status px-2 rounded done d-inline-block p-1 fw-semibold text-white project-name">
                               Done
                             </div>
                         </div>
@@ -297,8 +297,15 @@
           type: 'GET',
           dataType: 'json',
           success: function(response) {
+            console.log('run add new task');
             const startAt = new Date(response.start_at);
-            const formattedStartAt = `${startAt.getDate()}/${startAt.getMonth() + 1}/${startAt.getFullYear()} ${startAt.getHours()}:${startAt.getMinutes()}`;
+
+            const formatedDate = ('0' + startAt.getDate()).slice(-2);
+            const formatedMonth = ('0' + (startAt.getMonth()+1)).slice(-2);
+            const formatedHour = ('0' + startAt.getHours()).slice(-2);
+            const formatedMinute = ('0' + startAt.getMinutes()).slice(-2);
+
+            const formattedStartAt = `${formatedDate}/${formatedMonth}/${startAt.getFullYear()} ${formatedHour}:${formatedMinute}`;
             const newTask = "<div id="+response.id+" data-toggle='modal' data-url='admin/popup/"+response.id+"' class='card rounded-0 mb-3 border-0 border-start border-primary border-3 shadow'>"+
                           "<div class='card-body px-3 py-3'>"+
                             "<div class='card-text mb-1'>"+response.name+"</div>"+
@@ -309,7 +316,7 @@
                             "</div>"+
                             "<div class='qa-details'></div>"+
                             "<div class='d-flex justify-content-between'>"+
-                              "<div class='status px-2 rounded in-progress d-inline p-1 fw-semibold text-white project-name'>"+
+                              "<div class='status px-2 rounded in-progress d-inline-block p-1 fw-semibold text-white project-name'>"+
                                 "To do"+
                               "</div>"+
                               "<button class='start-task px-2 text-white border-0 rounded outline-0 d-inline-block in-progress'>Start</button>"+
@@ -321,26 +328,45 @@
               }
           },
           error: function(xhr) {
-            console.log(xhr.responseText);
+            console.log('success');
           }
         });
       }
 
-      function assignQA(taskId) {
+      function assignQA(taskId, statusLabel) {
         $.ajax({
           url: "admin/assign-qa/"+taskId,
           type: "GET",
           dataType: 'json',
           success: function(response) {
-            const qaStart = new Date(response.task.QA_start);
-            const formattedQaStart = `${qaStart.getDate()}/${qaStart.getMonth() + 1}/${qaStart.getFullYear()} ${qaStart.getHours()}:${qaStart.getMinutes()}`;
-            const qaDetails = "<div class='card-text mb-1'>"+
-                                "<span>QA: "+response.QA.last_name+"</span>"+
-                                " - "+
-                                "<span>Start: "+formattedQaStart+"</span>"+
-                              "</div>"+
-                              "<div class='card-text mb-1'>QA checked: "+(response.task.QA_check_num ? response.task.QA_check_num : '')+"</div>"
-            $('#'+taskId).find('.qa-details').append(qaDetails);
+            if(response.QA){
+              //nếu có QA online
+              addNewTask();
+
+              const qaStart = new Date(response.task.QA_start);
+  
+              const formatedDate = ('0' + qaStart.getDate()).slice(-2);
+              const formatedMonth = ('0' + (qaStart.getMonth()+1)).slice(-2);
+              const formatedHour = ('0' + qaStart.getHours()).slice(-2);
+              const formatedMinute = ('0' + qaStart.getMinutes()).slice(-2);
+  
+              const formattedQaStart = `${formatedDate}/${formatedMonth}/${qaStart.getFullYear()} ${formatedHour}:${formatedMinute}`;
+              const qaDetails = "<div class='card-text mb-1'>"+
+                                  "<span>QA: "+response.QA.last_name+"</span>"+
+                                  " - "+
+                                  "<span>Start: "+formattedQaStart+"</span>"+
+                                "</div>"+
+                                "<div class='card-text mb-1'>QA checked: "+(response.task.QA_check_num ? response.task.QA_check_num : '')+"</div>"
+              $('#'+taskId).find('.qa-details').append(qaDetails);
+            }else{
+              // nếu chạy vào đây tức là không có QA nào online
+              const columnId = '#testing'
+              const message_drop = 'Hiện tại không có QA nào online. Hãy liên hệ với admin để tìm cách giải quyết.'
+              $('#in-progress').sortable('cancel').sortable('cancel');
+              alert(message_drop);
+              statusLabel.text('In progress');
+              statusLabel.css("background-color", "#1890ff");
+            }
           },
           error: function(xhr) {
             console.log(xhr.responseText);
@@ -353,24 +379,42 @@
         return $.trim(status);
       }
 
+      function cancelDrop(columnId, message_drop) {
+        $(columnId).sortable('cancel');
+        alert(message_drop);
+      }
+
       $('.sortable').sortable({
         connectWith: ".sortable",
         placeholder: "task-placeholder",
         start: function(event, ui) {
           ui.item.toggleClass("dragging");
           taskId = ui.item.attr('id');
+
+          //check xem có còn task bug không
           let hasSiblings = ui.item.siblings().length > 1;
           let is_inProgress = checkStatus(taskId) == 'In progress';
           ui.item.data('hasSiblings', hasSiblings);
           ui.item.data('is_inProgress', is_inProgress);
+
+          //check xem có phải task todo không
+          let is_todo = checkStatus(taskId) == 'To do';
+          ui.item.data('is_todo', is_todo);
         },
         beforeStop: function(event, ui) {
+          //nếu còn bug thì không được kéo sang test
           let hasSiblings = ui.item.data('hasSiblings');
           let is_inProgress = ui.item.data('is_inProgress');
           if(hasSiblings && is_inProgress){
-            $('#in-progress').sortable('cancel');
             const message_drop = 'Bạn phải hoàn thành hết các case(s) rejected trước.'
-            alert(message_drop);
+            cancelDrop('#in-progress', message_drop);
+          }
+
+          //nếu là todo thì không được kéo sang test
+          let is_todo = ui.item.data('is_todo');
+          const message_drop = 'Bạn vẫn chưa bắt đầu làm case này.'
+          if (is_todo) {
+            cancelDrop('#in-progress', message_drop);
           }
         },
         stop: function(event, ui) {
@@ -387,7 +431,7 @@
               break;
             case 'testing':
               status = 'Testing';
-              ui.item.find('.status').css("background-color", "#FFD700")
+              ui.item.find('.status').css("background-color", "#ebc334")
               processStatus = 2;
               break;
             case 'done':
@@ -397,15 +441,20 @@
             default:
               break;
           }
-          updateTaskStatus(taskId, processStatus);
+
+          // nếu là in-progress thì chỉ cho chạy vào hàm assign QA
+          if (!ui.item.has(".in-progress").length) {
+            updateTaskStatus(taskId, processStatus);
+          }
           ui.item.find('.status').text(status);
 
           if (processStatus == 2) {
-            addNewTask();
-
+            console.log(processStatus);
+            
             //chỉ trường hợp task in-progress mới append html qaDetails
             if (ui.item.has(".in-progress").length && ui.item.find(".qa-details").find('div').length == 0) {
-              assignQA(taskId);
+              let statusLabel = ui.item.find('.status');
+              assignQA(taskId, statusLabel);
             }
           }
         }
@@ -438,7 +487,13 @@
         let this_id = $(this).parents('.card').attr('id');
         let saveStartAt = true;
         let currentTime = new Date();
-        let formated_time = 'Start: ' + currentTime.getDate() + '/' + (currentTime.getMonth() + 1) + '/' + currentTime.getFullYear() + ' ' + currentTime.getHours() + ':' + currentTime.getMinutes();
+
+        const formatedDate = ('0' + currentTime.getDate()).slice(-2);
+        const formatedMonth = ('0' + (currentTime.getMonth()+1)).slice(-2);
+        const formatedHour = ('0' + currentTime.getHours()).slice(-2);
+        const formatedMinute = ('0' + currentTime.getMinutes()).slice(-2);
+
+        let formated_time = 'Start: ' + formatedDate + '/' + formatedMonth + '/' + currentTime.getFullYear() + ' ' + formatedHour + ':' + formatedMinute;
         updateTaskStatus(this_id, 1, saveStartAt);
         $(this).siblings('.status').text('In progress');
         $(this).parents().siblings('.card-text').find('.start-time').text(formated_time);

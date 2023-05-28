@@ -72,16 +72,28 @@
             </div>
           </div>
           <div class="form-group">
+            <div class="row">
+              <div class="col d-flex">
+                <span class="mr-2 d-inline-block" for="redo">Redo:</span>
+                <input class="" style="width: 20px" type="checkbox" id="redo" name="redo">
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
             <label for="">QA Note:</label>
             <input class="form-control" type="text" value="{{$task->QA_note}}" name="QA_note" />
           </div>
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="redo" name="redo">
-            <label class="form-check-label" for="redo">Redo</label>
-          </div>
           <div class="form-group">
-            <label for="">Reasons:</label>
-            <input id="reason" class="form-control" type="text" name="redo_note" disabled/>
+            <label for="">Bad:</label>
+            <select class="form-control" name="redo_note">
+                <option value="">Lựa chọn</option>
+                @foreach (\App\Domain\Admin\Models\Admin::BAD as $bad)
+                <option value="{{ $bad }}"
+                  @if($bad == @$task->redo_note) selected @endif>
+                  {{ $bad }}
+                </option>
+              @endforeach
+            </select>
           </div>
         </div>
         <div class="modal-footer">
