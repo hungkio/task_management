@@ -53,7 +53,7 @@ if (!function_exists('formatDate')) {
             $date = Carbon::createFromFormat('Y-m-d H:i:s', $date);
         }
 
-        return $date->format('Y-m-d H:i:s');
+        return $date->format('d/m/Y');
     }
 }
 

@@ -121,6 +121,52 @@ class Admin extends Authenticatable implements HasMedia
         'EXCELLENT!' => 100
     ];
 
+    const CUSTOMER_LEVEL = [
+        'JD' => 'SE',
+        'TONIKA' => 'SE_DE',
+        'ES' => 'SE',
+        'CH' => 'SE_FL',
+        'AL' => 'SE_PR',
+        'CL' => 'SE',
+        'CBA' => 'SE',
+        'NK' => 'SE_FL',
+        'RT' => 'INV',
+        'DCL' => 'SE_FL',
+        'BR-A1' => 'SE_FL',
+        'JG' => 'SE',
+        'RK' => 'SE',
+        'MG' => 'SE',
+        'KS' => 'SE_PR',
+        'TJ' => 'SE',
+    ];
+
+    // Editor, QA, CTV
+    const COST = [
+        'INV' => [2000,400,0],
+        'SE' => [3500,700,8000],
+        'Se_DE' => [3500,700,8000],
+        'SE_DE' => [3500,700,8000],
+        'SE_PR' => [4500,900,10000],
+        'SE_FL' => [4500,900,10000],
+        'SE_TW' => [10000,2000,10000],
+        'DTD' => [60000,12000,60000],
+        'DBAV' => [110000,5000,110000],
+        'AV' => [50000,2000,50000],
+        'PRT' => [10000,2000,10000],
+        'EXT' => [200000,0,0],
+        'PANO' => [10000,1700,10000],
+        'HEN' => [10000,800,10000],
+        'HI_END' => [5000,400,5000],
+        'VT' => [0,0,250000],
+        'VTP' => [0,0,400000],
+        'VTP360' => [0,0,1100000],
+        'FL' => [0,0,300000],
+        'FLB' => [0,0,400000],
+        'FLP' => [0,0,500000],
+        'Floor' => [0,0,0],
+        'Basic_rt' => [10000,0,0]
+    ];
+
     public function registerMediaCollections(): void
     {
         $this

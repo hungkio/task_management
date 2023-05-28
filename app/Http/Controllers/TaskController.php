@@ -126,15 +126,43 @@ class TaskController
                     $caseName = "$customer/$currentMonthNumber $currentDay/$taskName";
                     $casePath = str_replace(' ', '%20', $taskPath);
                     $countRecord = count($taskRecord);
-                    Tasks::updateOrCreate([
-                        'name' => $caseName,
-                        'created_at' => Tasks::whereDate('created_at', Carbon::today())->first()->created_at ?? null
-                    ], [
-                        'path' => $casePath,
-                        'countRecord' => $countRecord,
-                        'case' => $taskName,
-                        'customer' => $customer,
-                    ]);
+
+                    // set level
+                    $level = null;
+                    $estimate = null;
+                    $estimate_QA = null;
+                    foreach (Admin::CUSTOMER_LEVEL as $key => $value) {
+                        if (stripos($customer, $key) !== false) {
+                            $level = $value;
+                            $estimate = Admin::ESTIMATE[$value];
+                            $estimate_QA = Admin::ESTIMATE_QA[$value];
+                            break;
+                        }
+                    }
+
+                    $task = Tasks::where('name', $caseName)->whereDate('created_at', Carbon::today())->orderBy('created_at', 'desc')->first();
+                    if ($task) {
+                        $task->update([
+                            'path' => $casePath,
+                            'countRecord' => $countRecord,
+                            'case' => $taskName,
+                            'customer' => $customer,
+                            'level' => $level,
+                            'estimate' => $estimate,
+                            'estimate_QA' => $estimate_QA,
+                        ]);
+                    } else {
+                        Tasks::create([
+                            'name' => $caseName,
+                            'path' => $casePath,
+                            'countRecord' => $countRecord,
+                            'case' => $taskName,
+                            'customer' => $customer,
+                            'level' => $level,
+                            'estimate' => $estimate,
+                            'estimate_QA' => $estimate_QA,
+                        ]);
+                    }
                 }
             } catch (\Exception $exception) {
                 Log::notice($exception->getMessage());

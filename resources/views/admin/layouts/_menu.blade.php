@@ -89,10 +89,6 @@
                 <li class="nav-item nav-item-submenu {{ request()->routeIs('admin.reports*') ? 'nav-item-expanded nav-item-open' : null }}">
                     <a href="#" class="nav-link"><i class="fal fa-user"></i> <span>{{ __('Báo cáo') }}</span></a>
                     <ul class="nav nav-group-sub" data-submenu-title="{{ __('Báo cáo') }}">
-                        <li class="nav-item">
-                            <a href="{{ route('admin.reports.month') }}"
-                               class="nav-link @if(request()->routeIs('admin.reports.month'))active @endif">{{ __('Báo cáo tháng') }}</a>
-                        </li>
                         @can('roles.view')
                             <li class="nav-item">
                                 <a href="{{ route('admin.reports.customer') }}"
@@ -102,11 +98,15 @@
                                 <a href="{{ route('admin.reports.employee') }}"
                                    class="nav-link @if(request()->routeIs('admin.reports.employee'))active @endif">{{ __('Báo cáo nhân viên') }}</a>
                             </li>
-                            <li class="nav-item">
-                                <a href="{{ route('admin.reports.salary') }}"
-                                   class="nav-link @if(request()->routeIs('admin.reports.salary'))active @endif">{{ __('Lương và năng lực') }}</a>
-                            </li>
                         @endcan
+                        <li class="nav-item">
+                            <a href="{{ route('admin.reports.month') }}"
+                               class="nav-link @if(request()->routeIs('admin.reports.month'))active @endif">{{ __('Báo cáo tháng') }}</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('admin.reports.salary') }}"
+                               class="nav-link @if(request()->routeIs('admin.reports.salary'))active @endif">{{ __('Lương và năng lực') }}</a>
+                        </li>
                     </ul>
                 </li>
 
