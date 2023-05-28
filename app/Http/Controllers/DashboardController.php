@@ -31,6 +31,7 @@ class DashboardController
 
         $tasks_waiting = $tasks->whereDate('created_at', Carbon::today())->where('status', Tasks::WAITING)->get();
         $tasks_todo = $tasks->whereDate('created_at', Carbon::today())->where('status', Tasks::TODO)->get();
+        $tasks_finished = $tasks->whereDate('created_at', Carbon::today())->where('status', Tasks::FINISH)->get();
 
         $this->assignEditor();
         if ($conditionAssigner) {
@@ -52,7 +53,8 @@ class DashboardController
             'tasks_testing' => $tasks_testing,
             'tasks_done' => $tasks_done,
             'tasks_rejected' => $tasks_rejected,
-            'tasks_todo' => $tasks_todo
+            'tasks_todo' => $tasks_todo,
+            'tasks_finished' => $tasks_finished,
         ]);
     }
 
