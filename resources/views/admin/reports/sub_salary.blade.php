@@ -1,5 +1,5 @@
 {{--salary--}}
-<table class="col-3 full mr-3" style="display: table;">
+<table class="col-3 salary mr-3" style="display: table;">
     <thead>
     <tr class="border">
         <th class="border bg-blue text-center">
@@ -31,7 +31,7 @@
 </table>
 
 {{--quality--}}
-<table class="col-3 full" style="display: table;">
+<table class="col-3 quality" style="display: table;">
     <thead>
     <tr class="border">
         <th class="border bg-blue text-center" colspan="2">

@@ -24,8 +24,12 @@
 @endpush
 
 @section('page-content')
+    <iframe id="txtArea1" style="display:none"></iframe>
     {{--Full--}}
-    <table class="full w-100" style="display: table;">
+    <button class="dt-button buttons-collection buttons-export btn btn-primary" onclick="exportMultipleTable(['full'], 'ReportAllCase');"
+            type="button" aria-haspopup="true"><span><i class="fal fa-download mr-2"></i>Xuất</span>
+    </button>
+    <table class="full w-100" style="display: table;" id="full">
         <thead>
         <tr class="border">
             <th class="border bg-blue text-center">
@@ -101,9 +105,21 @@
         </div>
     </div>
 
-    <div class="row mt-3 ml-0 salary_report">
+    <button class="mt-3 dt-button buttons-collection buttons-export btn btn-primary" onclick="exportMultipleTable(['salary', 'quality'], 'ReportSalary');"
+            type="button" aria-haspopup="true"><span><i class="fal fa-download mr-2"></i>Xuất</span>
+    </button>
+    <div class="row ml-0 salary_report">
         @include('admin.reports.sub_salary', ['salaries' => $salaries, 'qualities' => $qualities])
     </div>
+
+
+    <table border='2px'>
+        <tr bgcolor='#87AFC6'>
+            <th class="border bg-blue text-center">
+                <div class="relative"><span class="colHeader">STT</span></div>
+            </th>
+        </tr>
+    </table>
 @stop
 
 @push('js')
@@ -115,7 +131,7 @@
                     $.ajax({
                         type: 'get',
                         url: '{{ route("admin.reports.user_salary") }}/' + user_id,
-                        success: function(res) {
+                        success: function (res) {
                             if (res.status == 'error') {
                                 showMessage('error', res.message)
                             } else {
