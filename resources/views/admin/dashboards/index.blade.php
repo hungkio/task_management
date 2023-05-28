@@ -109,7 +109,7 @@
                               <div class="card-text mb-1">QA checked: {{$task->QA_check_num}}</div>
                             @endif
                           </div>
-                          <div class="d-flex justify-content-between">
+                          <div class="button-box d-flex justify-content-between">
                             <div class="status px-2 rounded in-progress d-inline-block p-1 fw-semibold text-white project-name">
                               To do
                             </div>
@@ -313,7 +313,7 @@
                                 <div class="card-text mb-1">QA checked: {{$task->QA_check_num}}</div>
                               @endif
                             </div>
-                            <div class="d-flex justify-content-between">
+                            <div class="button-box d-flex justify-content-between">
                               <div class="status px-2 rounded done d-inline-block p-1 fw-semibold text-white project-name">
                                 Finished
                               </div>
@@ -339,7 +339,6 @@
           type: 'GET',
           dataType: 'json',
           success: function(response) {
-            console.log('run add new task');
             const startAt = new Date(response.start_at);
 
             const formatedDate = ('0' + startAt.getDate()).slice(-2);
@@ -487,6 +486,7 @@
                 status = 'No bug left';
                 ui.item.find('.status').css("background-color", "#458B00")
                 qaToDone(ui.item.find('.button-box'));
+                updateTaskStatus(taskId, processStatus)
               }
             default:
               break;
