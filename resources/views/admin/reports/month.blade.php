@@ -207,7 +207,7 @@
                     <td class="border name">{{ $key }}</td>
                     @if(!empty($user))
                         @foreach($user as $badMoney)
-                            <td class="border text-center">{{ $badMoney }}</td>
+                            <td class="border text-center">{{ number_format($badMoney) }}</td>
                             @php($sum += $badMoney)
                         @endforeach
                     @endif
