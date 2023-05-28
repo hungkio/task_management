@@ -110,7 +110,6 @@ class DashboardController
                 $subQuery->where(config('permission.table_names.roles').'.name', 'QA');
             })->where('is_online', 1)->orderBy('q_a_tasks_count')->first();
         }
-
         if ($QA) {
             $task->update([
                 'QA_id' => $QA->id,
