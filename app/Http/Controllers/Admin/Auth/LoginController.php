@@ -56,7 +56,7 @@ class LoginController extends Controller
         ]);
 
         if($roleName == 'editor') {
-            $tasks_doing = Tasks::where('editor_id', auth()->id())->whereDate('created_at', Carbon::today())->whereIn('status', [Tasks::EDITING, Tasks::TODO, Tasks::REJECTED])->get();
+            $tasks_doing = Tasks::where('editor_id', auth()->id())->whereDate('created_at', Carbon::today())->whereIn('status', [Tasks::EDITING, Tasks::TODO, Tasks::REJECTED, Tasks::TESTING])->get();
             foreach ($tasks_doing as $task) {
                 $task->update([
                     'editor_id' => null,

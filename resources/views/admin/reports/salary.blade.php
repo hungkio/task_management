@@ -84,11 +84,47 @@
         </tbody>
     </table>
 
+    <div class="form-group row ml-0 mt-3">
+        <div class="col-lg-9 pl-0">
+            <select name="user_report" class="form-control w-auto" data-width="100%">
+                <option value="">
+                    Lựa chọn user
+                </option>
+                @if(!empty($users))
+                    @foreach($users as $user)
+                        <option value="{{ $user->id }}">
+                            {{ $user->fullName }}
+                        </option>
+                    @endforeach
+                @endif
+            </select>
+        </div>
+    </div>
+
+    <div class="row mt-3 ml-0 salary_report">
+        @include('admin.reports.sub_salary', ['salaries' => $salaries, 'qualities' => $qualities])
+    </div>
 @stop
 
 @push('js')
     <script>
         $(function () {
+            $('select[name="user_report"]').change(function () {
+                let user_id = $(this).val()
+                if (user_id) {
+                    $.ajax({
+                        type: 'get',
+                        url: '{{ route("admin.reports.user_salary") }}/' + user_id,
+                        success: function(res) {
+                            if (res.status == 'error') {
+                                showMessage('error', res.message)
+                            } else {
+                                $('.salary_report').html(res)
+                            }
+                        }
+                    })
+                }
+            })
         })
     </script>
 @endpush

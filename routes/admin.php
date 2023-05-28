@@ -76,6 +76,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('report/customer', [ReportController::class, 'customer'])->name('reports.customer');
             Route::get('report/employee', [ReportController::class, 'employee'])->name('reports.employee');
             Route::get('report/salary', [ReportController::class, 'salary'])->name('reports.salary');
+            Route::get('report/user_salary/{user_id?}', [ReportController::class, 'user_salary'])->name('reports.user_salary');
 
             //Upload Tinymce
             Route::post('uploads-tinymce', UploadTinymceController::class)->name('public.upload-tinymce');
