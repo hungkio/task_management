@@ -479,10 +479,15 @@
               removeButton(ui.item.find('.button-box'));
               break;
             case 'done':
-              status = 'No bug left';
-              ui.item.find('.status').css("background-color", "#458B00")
               processStatus = 3;
-              qaToDone(ui.item.find('.button-box'));
+              if ($.trim(ui.item.find('.status').text()) == 'In progress') {
+                alert('Bạn phải assign sang Testing trước.')
+                $('#in-progress').sortable('cancel');
+              }else{
+                status = 'No bug left';
+                ui.item.find('.status').css("background-color", "#458B00")
+                qaToDone(ui.item.find('.button-box'));
+              }
             default:
               break;
           }
