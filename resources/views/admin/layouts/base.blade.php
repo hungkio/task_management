@@ -57,6 +57,99 @@
 @stack('vendor-js')
 <script src="{{ asset('/backend/js/app.js') }}"></script>
 <script src="{{ asset('/backend/js/custom.js') }}"></script>
+<script>
+    function exportMultipleTable(elementClasses = [], reportName, canvasId = null) {
+        var html = ""
+        elementClasses.forEach(function(item) {
+            html += fnExcelReport(item)
+            html +='<br>'
+            // do something with `item`
+        });
+
+        //canvas
+        if (canvasId) {
+            let canvas = $('#' + canvasId + ' canvas');
+            let pngUrl = canvas[0].toDataURL(); // PNG is the default
+            html += '<table border=\'2px\'>\n' +
+                '        <tr bgcolor=\'#87AFC6\'>\n' +
+                '            <th class="border bg-blue text-center">\n' +
+                '<img width="500" height="600" src="' + pngUrl + '" alt="Pie Chart" />\n' +
+                '            </th>\n' +
+                '        </tr>\n' +
+                '    </table>';
+        }
+
+        html = html.replace(/<A[^>]*>|<\/A>/g, "");//remove if u want links in your table
+        html = html.replace(/<img[^>]*>/gi, ""); // remove if u want images in your table
+        html = html.replace(/<input[^>]*>|<\/input>/gi, ""); // reomves input params
+
+        var ua = window.navigator.userAgent;
+        var msie = ua.indexOf("MSIE ");
+
+        if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./))      // If Internet Explorer
+        {
+            txtArea1.document.open("txt/html", "replace");
+            txtArea1.document.write(html);
+            txtArea1.document.close();
+            txtArea1.focus();
+            sa = txtArea1.document.execCommand("SaveAs", true, "Say Thanks to Sumit.xls");
+            return (sa)
+        } else {
+            var result = 'data:application/vnd.ms-excel,' + encodeURIComponent(html);
+            var link = document.createElement("a");
+            document.body.appendChild(link);
+            link.download = reportName + ".xls"; //You need to change file_name here.
+            link.href = result;
+            link.click();
+        }                 //other browser not tested on IE 11
+
+    }
+    function fnExcelReport(elementClass) {
+        var tab_text = "<table border='2px'><tr bgcolor='#87AFC6'>";
+        var j = 0;
+        tab = $('.' + elementClass)[0] // class of table
+
+        for (j = 0; j < tab.rows.length; j++) {
+            tab_text = tab_text + tab.rows[j].innerHTML + "</tr>";
+        }
+
+        tab_text = tab_text + "</table>";
+
+        return tab_text
+    }
+    // function fnExcelReport(elementClass) {
+    //     var tab_text = "<table border='2px'><tr bgcolor='#87AFC6'>";
+    //     var textRange;
+    //     var j = 0;
+    //     tab = $('.' + elementClass)[0] // id of table
+    //
+    //     for (j = 0; j < tab.rows.length; j++) {
+    //         tab_text = tab_text + tab.rows[j].innerHTML + "</tr>";
+    //         //tab_text=tab_text+"</tr>";
+    //     }
+    //
+    //     tab_text = tab_text + "</table>";
+    //     tab_text = tab_text.replace(/<A[^>]*>|<\/A>/g, "");//remove if u want links in your table
+    //     tab_text = tab_text.replace(/<img[^>]*>/gi, ""); // remove if u want images in your table
+    //     tab_text = tab_text.replace(/<input[^>]*>|<\/input>/gi, ""); // reomves input params
+    //
+    //     var ua = window.navigator.userAgent;
+    //     var msie = ua.indexOf("MSIE ");
+    //
+    //     if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./))      // If Internet Explorer
+    //     {
+    //         txtArea1.document.open("txt/html", "replace");
+    //         txtArea1.document.write(tab_text);
+    //         txtArea1.document.close();
+    //         txtArea1.focus();
+    //         sa = txtArea1.document.execCommand("SaveAs", true, "Say Thanks to Sumit.xls");
+    //     } else                 //other browser not tested on IE 11
+    //         sa = window.open('data:application/vnd.ms-excel,' + encodeURIComponent(tab_text));
+    //
+    //     return (sa);
+    // }
+
+</script>
 @stack('js')
 </body>
 </html>

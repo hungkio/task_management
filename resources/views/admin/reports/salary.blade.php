@@ -24,8 +24,12 @@
 @endpush
 
 @section('page-content')
+    <iframe id="txtArea1" style="display:none"></iframe>
     {{--Full--}}
-    <table class="full w-100" style="display: table;">
+    <button class="dt-button buttons-collection buttons-export btn btn-primary" onclick="exportMultipleTable(['full'], 'ReportAllCase');"
+            type="button" aria-haspopup="true"><span><i class="fal fa-download mr-2"></i>Xuất</span>
+    </button>
+    <table class="full w-100" style="display: table;" id="full">
         <thead>
         <tr class="border">
             <th class="border bg-blue text-center">
@@ -84,11 +88,59 @@
         </tbody>
     </table>
 
+    <div class="form-group row ml-0 mt-3">
+        <div class="col-lg-9 pl-0">
+            <select name="user_report" class="form-control w-auto" data-width="100%">
+                <option value="">
+                    Lựa chọn user
+                </option>
+                @if(!empty($users))
+                    @foreach($users as $user)
+                        <option value="{{ $user->id }}">
+                            {{ $user->fullName }}
+                        </option>
+                    @endforeach
+                @endif
+            </select>
+        </div>
+    </div>
+
+    <button class="mt-3 dt-button buttons-collection buttons-export btn btn-primary" onclick="exportMultipleTable(['salary', 'quality'], 'ReportSalary');"
+            type="button" aria-haspopup="true"><span><i class="fal fa-download mr-2"></i>Xuất</span>
+    </button>
+    <div class="row ml-0 salary_report">
+        @include('admin.reports.sub_salary', ['salaries' => $salaries, 'qualities' => $qualities])
+    </div>
+
+
+    <table border='2px'>
+        <tr bgcolor='#87AFC6'>
+            <th class="border bg-blue text-center">
+                <div class="relative"><span class="colHeader">STT</span></div>
+            </th>
+        </tr>
+    </table>
 @stop
 
 @push('js')
     <script>
         $(function () {
+            $('select[name="user_report"]').change(function () {
+                let user_id = $(this).val()
+                if (user_id) {
+                    $.ajax({
+                        type: 'get',
+                        url: '{{ route("admin.reports.user_salary") }}/' + user_id,
+                        success: function (res) {
+                            if (res.status == 'error') {
+                                showMessage('error', res.message)
+                            } else {
+                                $('.salary_report').html(res)
+                            }
+                        }
+                    })
+                }
+            })
         })
     </script>
 @endpush

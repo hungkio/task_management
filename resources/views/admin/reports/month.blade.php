@@ -25,6 +25,9 @@
 
 @section('page-content')
     {{--Full--}}
+    <button class="dt-button buttons-collection buttons-export btn btn-primary" onclick="exportMultipleTable(['full', 'bonus', 'bad'], 'ReportMonth', 'chart-pie');"
+            type="button" aria-haspopup="true"><span><i class="fal fa-download mr-2"></i>Xuất</span>
+    </button>
     <table class="full w-100" style="display: table;">
         <thead>
         <tr class="border">
@@ -207,7 +210,7 @@
                     <td class="border name">{{ $key }}</td>
                     @if(!empty($user))
                         @foreach($user as $badMoney)
-                            <td class="border text-center">{{ $badMoney }}</td>
+                            <td class="border text-center">{{ number_format($badMoney) }}</td>
                             @php($sum += $badMoney)
                         @endforeach
                     @endif
@@ -251,7 +254,6 @@
             })
 
             setTimeout(function () {
-                console.log(data)
                 option = {
                     legend: {},
                     tooltip: {

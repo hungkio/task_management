@@ -130,9 +130,11 @@ class ReportController
         $current_user = auth()->user();
         $currentRoleName = $current_user->getRoleNames()[0];
         $user_id = auth()->id();
+        $salaries_id = null; // for salary and quality
 
         if ($currentRoleName == 'editor' || $currentRoleName == 'QA') {
-            $users = Admin::with(['QAMonthTasks', 'EditorMonthTasks'])->whereHas('roles', function (Builder $subQuery) {
+            $salaries_id = $user_id;
+            $users = Admin::with(['QAMonthTasks', 'EditorMonthTasks'])->where('id', $user_id)->whereHas('roles', function (Builder $subQuery) {
                 $subQuery->whereIn(config('permission.table_names.roles') . '.name', ['QA', 'editor']);
             })->get();
 
@@ -164,7 +166,91 @@ class ReportController
             $task->average = $task->estimate ? ($time_spent/$task->estimate) : 0;
         }
 
-        return view('admin.reports.salary', compact('tasks', 'users'));
+        // năng lực
+        list($salaries, $qualities) = $this->getUserSalaries($salaries_id);
+
+        return view('admin.reports.salary', compact('tasks', 'users', 'salaries', 'qualities'));
+    }
+
+    public function getUserSalaries($user_id)
+    {
+        $user = Admin::find($user_id);
+        if (!$user) {
+            return [[], []];
+        }
+        $currentRoleName = $user->getRoleNames()[0];
+        $salaries = [];
+        $qualities = [];
+
+        if ($currentRoleName == 'editor') {
+            $conditionAssigner = "editor_id";
+        } else {
+            $conditionAssigner = 'QA_id';
+        }
+        $tasks = Tasks::where($conditionAssigner, $user->id)->whereMonth('created_at', Carbon::today())
+            ->whereDate('created_at', '!=', Carbon::today())
+            ->selectRaw('*, datediff(start_at, end_at) as time_real')
+            ->orderBy('created_at', 'desc')->get();
+
+        foreach ($tasks as $task) {
+            if (!$task->level) {
+                continue;
+            }
+
+            $time_spent = 0;
+            if ($task->start_at && $task->end_at) {
+                $start_at = Carbon::createFromFormat('Y-m-d H:i:s', $task->start_at);
+                $end_at = Carbon::createFromFormat('Y-m-d H:i:s', $task->end_at);
+                $time_spent = $end_at->diffInMinutes($start_at);
+            }
+
+            if (array_key_exists($task->level, $salaries)) {
+                $salaries[$task->level] += $task->countRecord;
+                $qualities[$task->level] += $time_spent;
+            } else {
+                $salaries[$task->level] = $task->countRecord;
+                $qualities[$task->level] = $time_spent;
+            }
+        }
+
+        foreach ($salaries as $ax => $countRecord) {
+            $costRole = 0; //editor
+            if ($currentRoleName == 'QA') {
+                $costRole = 1;
+            } else if($user->is_ctv == 1) {
+                $costRole = 2;
+            }
+            $cost = Admin::COST[$ax][$costRole];
+            $salaries[$ax] = [
+                'cost' => $cost*$countRecord,
+                'countRecord' => $countRecord,
+                'unitCost' => $cost,
+            ];
+        }
+
+        if ($currentRoleName == "editor") {
+            foreach ($qualities as $key => &$quantity) {
+                $quantity = round($quantity/$salaries[$key]['countRecord'], 2);
+            }
+        } else {
+            $qualities = [];
+        }
+
+        return [$salaries, $qualities];
+    }
+
+    public function user_salary($user_id)
+    {
+        try {
+            list($salaries, $qualities) = $this->getUserSalaries($user_id);
+            return view('admin.reports.sub_salary', compact('salaries', 'qualities'))->render();
+        } catch (\Exception $exception) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $exception->getMessage()
+            ]);
+        }
+
     }
 
     public function customer()
