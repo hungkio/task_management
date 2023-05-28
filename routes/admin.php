@@ -60,6 +60,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('/popup/{id}', [DashboardController::class, 'showPopup'])->name('popup');
             Route::post('/popup/{id}', [DashboardController::class, 'savePopup'])->name('popup.save');
             Route::post('/update-status', [DashboardController::class, 'updateStatus'])->name('update-status');
+            Route::get('/check-online/{id}', [DashboardController::class, 'checkOnline'])->name('check-online');
 
             //task
             Route::get('tasks', [TaskController::class, 'index'])->name('tasks.index');
