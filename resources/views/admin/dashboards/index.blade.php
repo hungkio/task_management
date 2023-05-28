@@ -227,8 +227,10 @@
                               <div class="card-text mb-1">QA checked: {{$task->QA_check_num}}</div>
                             @endif
                           </div>
-                          <div class="status px-2 rounded testing d-inline-block p-1 fw-semibold text-white project-name">
-                            Testing
+                          <div class="button-box d-flex justify-content-between">
+                            <div class="status px-2 rounded testing d-inline-block p-1 fw-semibold text-white project-name">
+                              Testing
+                            </div>
                           </div>
                       </div>
                   </div>
@@ -273,8 +275,48 @@
                                 <div class="card-text mb-1">QA checked: {{$task->QA_check_num}}</div>
                               @endif
                             </div>
-                            <div class="status px-2 rounded done d-inline-block p-1 fw-semibold text-white project-name">
-                              Done
+                            <div class="button-box d-flex justify-content-between">
+                              <div class="status px-2 rounded done d-inline-block p-1 fw-semibold text-white project-name">
+                                No bug left
+                              </div>
+                              <button class="done-task px-2 text-white border-0 rounded outline-0 d-inline-block done">Finish</button>
+                            </div>
+                        </div>
+                    </div>
+                  @endforeach
+
+                  @foreach ($tasks_finished as $task)
+                    @php
+                      $editor = App\Domain\Admin\Models\Admin::find($task->editor_id);
+                      $qa = App\Domain\Admin\Models\Admin::find($task->QA_id);
+                    @endphp
+                    <div id={{$task->id}}
+                      data-toggle="modal"
+                      data-url="{{ route('admin.popup', $task->id) }}"
+                      class="card rounded-0 mb-3 border-0 border-start border-primary border-3 shadow">
+                        <div class="card-body px-3 py-3">
+                            <div class="card-text mb-1">{{$task->name}}</div>
+                            @if (@$editor)
+                              <div class="card-text mb-1">
+                                <span>Editor: {{$editor->last_name}}</span>
+                                -
+                                <span>Start: {{ date('d/m/Y H:i', strtotime($task->start_at)) }}</span>
+                              </div>
+                            @endif
+                            <div class="qa-details">
+                              @if (@$qa)
+                                <div class="card-text mb-1">
+                                  <span>QA: {{ $qa->last_name }}</span>
+                                  -
+                                <span>Start: {{ date('d/m/Y H:i', strtotime($task->QA_start)) }}</span>
+                                </div>
+                                <div class="card-text mb-1">QA checked: {{$task->QA_check_num}}</div>
+                              @endif
+                            </div>
+                            <div class="d-flex justify-content-between">
+                              <div class="status px-2 rounded done d-inline-block p-1 fw-semibold text-white project-name">
+                                Finished
+                              </div>
                             </div>
                         </div>
                     </div>
@@ -427,17 +469,20 @@
             case 'in-progress':
               processStatus = 4;
               status = 'Rejected';
-              ui.item.find('.status').css("background-color", "#BB0000")
+              ui.item.find('.status').css("background-color", "#BB0000");
+              removeButton(ui.item.find('.button-box'));
               break;
             case 'testing':
               status = 'Testing';
               ui.item.find('.status').css("background-color", "#ebc334")
               processStatus = 2;
+              removeButton(ui.item.find('.button-box'));
               break;
             case 'done':
-              status = 'Done';
+              status = 'No bug left';
               ui.item.find('.status').css("background-color", "#458B00")
               processStatus = 3;
+              qaToDone(ui.item.find('.button-box'));
             default:
               break;
           }
@@ -449,8 +494,6 @@
           ui.item.find('.status').text(status);
 
           if (processStatus == 2) {
-            console.log(processStatus);
-            
             //chỉ trường hợp task in-progress mới append html qaDetails
             if (ui.item.has(".in-progress").length && ui.item.find(".qa-details").find('div').length == 0) {
               let statusLabel = ui.item.find('.status');
@@ -459,6 +502,15 @@
           }
         }
       });
+
+      function qaToDone(buttonBox) {
+        const buttonFinish = "<button class='done-task px-2 text-white border-0 rounded outline-0 d-inline-block done'>Finish</button>";
+        buttonBox.append(buttonFinish);
+      }
+
+      function removeButton(buttonBox) {
+        buttonBox.find('.done-task').remove();
+      }
 
       function updateTaskStatus(taskId, processStatus, saveStartAt) {
         $.ajax({
@@ -497,6 +549,15 @@
         updateTaskStatus(this_id, 1, saveStartAt);
         $(this).siblings('.status').text('In progress');
         $(this).parents().siblings('.card-text').find('.start-time').text(formated_time);
+        $(this).remove();
+      })
+
+      //finish task
+      $(document).on('click', '.done-task', function (event) {
+        event.stopPropagation();
+        let this_id = $(this).parents('.card').attr('id');
+        updateTaskStatus(this_id, 6);
+        $(this).siblings('.status').text('Finished');
         $(this).remove();
       })
 
