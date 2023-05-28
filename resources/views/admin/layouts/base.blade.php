@@ -71,16 +71,15 @@
             let canvas = $('#' + canvasId + ' canvas');
             let pngUrl = canvas[0].toDataURL(); // PNG is the default
             html += '<table border=\'2px\'>\n' +
-                '        <tr bgcolor=\'#87AFC6\'>\n' +
-                '            <th class="border bg-blue text-center">\n' +
-                '<img width="500" height="600" src="' + pngUrl + '" alt="Pie Chart" />\n' +
-                '            </th>\n' +
-                '        </tr>\n' +
-                '    </table>';
+                '    <tr bgcolor=\'#87AFC6\'>\n' +
+                '        <th class="border bg-blue text-center">\n' +
+                '            <img width="1000" height="300" src="' + pngUrl + '" alt="Pie Chart" />\n' +
+                '        </th>\n' +
+                '    </tr>\n' +
+                '</table>';
         }
 
         html = html.replace(/<A[^>]*>|<\/A>/g, "");//remove if u want links in your table
-        html = html.replace(/<img[^>]*>/gi, ""); // remove if u want images in your table
         html = html.replace(/<input[^>]*>|<\/input>/gi, ""); // reomves input params
 
         var ua = window.navigator.userAgent;
