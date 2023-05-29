@@ -63,7 +63,6 @@
         elementClasses.forEach(function(item) {
             html += fnExcelReport(item)
             html +='<br>'
-            // do something with `item`
         });
 
         //canvas
@@ -71,7 +70,7 @@
             let canvas = $('#' + canvasId + ' canvas');
             let pngUrl = canvas[0].toDataURL(); // PNG is the default
             html += '<table border=\'2px\'>\n' +
-                '    <tr bgcolor=\'#87AFC6\'>\n' +
+                '    <tr>\n' +
                 '        <th class="border bg-blue text-center">\n' +
                 '            <img width="1000" height="300" src="' + pngUrl + '" alt="Pie Chart" />\n' +
                 '        </th>\n' +
