@@ -25,9 +25,6 @@
 
 @section('page-content')
     {{--Full--}}
-    <button class="dt-button buttons-collection buttons-export btn btn-primary" onclick="exportMultipleTable(['full', 'bonus', 'bad'], 'ReportMonth');"
-            type="button" aria-haspopup="true"><span><i class="fal fa-download mr-2"></i>Xuất</span>
-    </button>
     <button class="dt-button buttons-collection buttons-export btn btn-primary" onclick="exportImg();"
             type="button" aria-haspopup="true"><span><i class="fal fa-download mr-2"></i>Xuất</span>
     </button>
@@ -254,8 +251,9 @@
             }
             return bytes.buffer;
         }
+
         function saveByteArray(buffer, fileName) {
-            var blob = new Blob([buffer], { type: 'application/octet-stream' });
+            var blob = new Blob([buffer], {type: 'application/octet-stream'});
             var url = window.URL.createObjectURL(blob);
             var a = document.createElement('a');
             a.href = url;
@@ -263,19 +261,20 @@
             a.click();
             window.URL.revokeObjectURL(url);
         }
+
         function tableToData(table) {
             var rows = [];
             var headers = [];
 
             var headerCells = table.querySelectorAll('thead tr');
-            headerCells.forEach(function(row) {
+            headerCells.forEach(function (row) {
                 var rowData = [];
                 var cells = row.querySelectorAll('th');
-                cells.forEach(function(cell) {
+                cells.forEach(function (cell) {
                     let colspan = cell.getAttribute('colspan');
                     if (colspan) {
                         rowData.push(cell.innerText);
-                        for (let i = 0; i < colspan-1; i++) {
+                        for (let i = 0; i < colspan - 1; i++) {
                             rowData.push("");
                         }
                     } else {
@@ -287,16 +286,16 @@
             });
 
             var bodyRows = table.querySelectorAll('tbody tr');
-            bodyRows.forEach(function(row) {
+            bodyRows.forEach(function (row) {
                 var rowData = [];
                 var cells = row.querySelectorAll('td');
-                cells.forEach(function(cell) {
+                cells.forEach(function (cell) {
                     rowData.push(cell.innerText);
                 });
                 rows.push(rowData);
             });
 
-            return { columns: headers, rows: rows };
+            return {columns: headers, rows: rows};
         }
 
         function getExcelCellRef(row, column) {
@@ -313,38 +312,86 @@
 
             var workbook = new ExcelJS.Workbook();
             var worksheet = workbook.addWorksheet('Data');
+            let currentRow = 1
 
-
-            htmlTables.forEach(function(htmlTable, index) {
+            htmlTables.forEach(function (htmlTable, index) {
                 var tempContainer = document.createElement('div');
                 tempContainer.innerHTML = htmlTable;
 
                 var tableElement = tempContainer.querySelector('table');
                 var tableData = tableToData(tableElement);
 
-                var tableColumns = tableData.columns.length > 0 ? tableData.columns : [{ name: 'Column' }];
+                const headerRowStyle = {
+                    font: { bold: true, color: { argb: 'FFFFFFFF' } },
+                    fill: {type: 'pattern', pattern: 'solid', fgColor: {argb: 'FF1890FF'}},
+                    border: {
+                        style: 'thin',
+                        color: { argb: 'FF000000' }
+                    }
+                };
 
-                // worksheet.addTable({
-                //     name: 'Table ' + (index + 1),
-                //     ref: 'A' + (index * 10 + 1),
-                //     headerRow: true,
-                //     style: {
-                //         showRowStripes: true
-                //     },
-                //     columns: tableColumns,
-                //     rows: tableData.rows,
-                // });
+                const dataRowStyle = {
+                    fill: {type: 'pattern', pattern: 'solid', fgColor: {argb: 'FFFFFFFF'}}
+                };
 
-                tableColumns.forEach(rowData => {
-                    worksheet.addRow(rowData);
+                //header
+                tableData.columns.forEach(rowData => {
+                    var mergeStartCell = null;
+                    var mergeEndCell = null;
+                    rowData.forEach((header, columnIndex) => {
+                        const cell = worksheet.getCell(currentRow, columnIndex + 1);
+                        cell.value = header;
+                        cell.style = headerRowStyle;
+                        cell.alignment = { vertical: 'middle', horizontal: 'center' };
+
+                        // merge cell empty with previous
+                        if (cell.value !== '') {
+                            if (mergeStartCell && mergeEndCell) {
+                                worksheet.mergeCells(mergeStartCell.address+ ':' + mergeEndCell.address);
+                                mergeStartCell = null;
+                                mergeEndCell = null;
+                            }
+                            mergeStartCell = cell;
+                        } else {
+                            mergeEndCell = cell;
+                        }
+                    });
+                    currentRow++
                 });
 
-                tableData.rows.forEach(rowData => {
-                    worksheet.addRow(rowData);
+                //data
+                tableData.rows.forEach((rowData, rowIndex) => {
+                    rowData.forEach((data, columnIndex) => {
+                        const cell = worksheet.getCell(currentRow, columnIndex + 1);
+                        cell.value = data;
+                        cell.style = dataRowStyle;
+                        cell.alignment = { vertical: 'middle', horizontal: 'center' };
+                    });
+                    currentRow++
                 });
-                // worksheet.mergeCells('A1:C1');
+                currentRow++
             });
 
+            // Apply borders to all cells
+            const borderStyle = {
+                style: 'thin',
+                color: { argb: 'FF000000' }
+            };
+            worksheet.eachRow(row => {
+                row.eachCell(cell => {
+                    cell.border = {
+                        top: borderStyle,
+                        left: borderStyle,
+                        bottom: borderStyle,
+                        right: borderStyle
+                    };
+                });
+            });
+
+            worksheet.columns.forEach(column => {
+                column.width = 15;
+                column.bestFit = true;
+            });
 
             // for img
             let canvas = $('#chart-pie canvas');
@@ -361,12 +408,12 @@
 
             // Add the image to the worksheet
             worksheet.addImage(imageId, {
-                tl: { col: 1, row: htmlTables.length * 10 + 2 },
-                ext: { width: 1000, height: 300 },
+                tl: {col: 1, row: currentRow + 2},
+                ext: {width: 1500, height: 450},
             });
 
             workbook.xlsx.writeBuffer().then(function (buffer) {
-                saveByteArray(buffer,  'filename.xlsx');
+                saveByteArray(buffer, 'ReportMonth.xlsx');
             });
 
         }
