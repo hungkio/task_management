@@ -108,66 +108,110 @@ class TaskController
         $currentMonthText = Carbon::now()->format('F');
         $currentMonthNumber = Carbon::now()->format('m');
         $currentDay = Carbon::now()->format('d');
+        $currentDMY = Carbon::now()->format('n-j-Y');
 
         $currentMonthText = 'July';
         $currentMonthNumber = '07';
         $currentDay = '21';
+        $currentDMY = '7-21-2022';
+
+        $mapCustomer = [
+            '06. JD' => [
+                'NEW JOB',
+                "$currentMonthNumber $currentDay"
+            ],
+            '01. Tonika' => [
+                'NEW JOB',
+                "$currentMonthNumber $currentDay"
+            ],
+            '08. AL' => [
+                'NEW JOB',
+                "$currentDMY"
+            ],
+            '09. CL' => [
+                'New job',
+                "$currentMonthNumber $currentDay"
+            ],
+        ];
 
         $list = @$client->listFolder($parentPath)['entries'];
         foreach ($list as $sub1) {
             try {
-                $customer = $sub1['name']; //
-                $tasks = $client->listFolder("$parentPath/$customer/NEW JOB/$currentMonthText/$currentMonthNumber $currentDay")['entries'];
+                $customer = $sub1['name']; // customer
+                $newjob = $mapCustomer[$customer][0] ?? '';
+                $date = $mapCustomer[$customer][1] ?? '';
+                $tasks = $client->listFolder("$parentPath/$customer/$newjob/$currentMonthText/$date")['entries'];
                 foreach ($tasks as $task) {
+                    $tag = $task['.tag'];
+                    if ($tag == 'file') {
+                        continue;
+                    }
                     $taskName = $task['name'];
                     $taskPath = $task['path_display'];
-                    $taskRecord = $client->listFolder("$parentPath/$customer/NEW JOB/$currentMonthText/$currentMonthNumber $currentDay/$taskName")['entries'];
+                    $taskRecord = $client->listFolder("$parentPath/$customer/$newjob/$currentMonthText/$date/$taskName")['entries'];
 
-                    $caseName = "$customer/$currentMonthNumber $currentDay/$taskName";
-                    $casePath = str_replace(' ', '%20', $taskPath);
-                    $countRecord = count($taskRecord);
-
-                    // set level
-                    $level = null;
-                    $estimate = null;
-                    $estimate_QA = null;
-                    foreach (Admin::CUSTOMER_LEVEL as $key => $value) {
-                        if (stripos($customer, $key) !== false) {
-                            $level = $value;
-                            $estimate = Admin::ESTIMATE[$value];
-                            $estimate_QA = Admin::ESTIMATE_QA[$value];
-                            break;
+                    if ($taskRecord && $taskRecord[0]['.tag'] == 'folder') {
+                        foreach ($taskRecord as $record) {
+                            $recordName = $record['name'];
+                            $recordPath = $record['path_display'];
+                            $casePath = str_replace(' ', '%20', $recordPath);
+                            $caseName = "$customer/$date/$taskName/$recordName";
+                            $record_entries = $client->listFolder("$parentPath/$customer/$newjob/$currentMonthText/$date/$taskName/$recordName")['entries'];
+                            $countRecord = count($record_entries);
+                            $this->createNewTask($customer, $caseName, $casePath, $countRecord, $taskName);
                         }
+                    } else {
+                        $caseName = "$customer/$date/$taskName";
+                        $casePath = str_replace(' ', '%20', $taskPath);
+                        $countRecord = count($taskRecord);
+                        $this->createNewTask($customer, $caseName, $casePath, $countRecord, $taskName);
                     }
 
-                    $task = Tasks::where('name', $caseName)->whereDate('created_at', Carbon::today())->orderBy('created_at', 'desc')->first();
-                    if ($task) {
-                        $task->update([
-                            'path' => $casePath,
-                            'countRecord' => $countRecord,
-                            'case' => $taskName,
-                            'customer' => $customer,
-                            'level' => $level,
-                            'estimate' => $estimate,
-                            'estimate_QA' => $estimate_QA,
-                        ]);
-                    } else {
-                        Tasks::create([
-                            'name' => $caseName,
-                            'path' => $casePath,
-                            'countRecord' => $countRecord,
-                            'case' => $taskName,
-                            'customer' => $customer,
-                            'level' => $level,
-                            'estimate' => $estimate,
-                            'estimate_QA' => $estimate_QA,
-                        ]);
-                    }
                 }
             } catch (\Exception $exception) {
                 Log::notice($exception->getMessage());
                 continue;
             }
+        }
+    }
+
+    public function createNewTask($customer, $caseName, $casePath, $countRecord, $taskName)
+    {
+        // set level
+        $level = null;
+        $estimate = null;
+        $estimate_QA = null;
+        foreach (Admin::CUSTOMER_LEVEL as $key => $value) {
+            if (stripos($customer, $key) !== false) {
+                $level = $value;
+                $estimate = Admin::ESTIMATE[$value];
+                $estimate_QA = Admin::ESTIMATE_QA[$value];
+                break;
+            }
+        }
+
+        $task = Tasks::where('name', $caseName)->whereDate('created_at', Carbon::today())->orderBy('created_at', 'desc')->first();
+        if ($task) {
+            $task->update([
+                'path' => $casePath,
+                'countRecord' => $countRecord,
+                'case' => $taskName,
+                'customer' => $customer,
+                'level' => $level,
+                'estimate' => $estimate,
+                'estimate_QA' => $estimate_QA,
+            ]);
+        } else {
+            Tasks::create([
+                'name' => $caseName,
+                'path' => $casePath,
+                'countRecord' => $countRecord,
+                'case' => $taskName,
+                'customer' => $customer,
+                'level' => $level,
+                'estimate' => $estimate,
+                'estimate_QA' => $estimate_QA,
+            ]);
         }
     }
 
