@@ -105,7 +105,7 @@
         </div>
     </div>
 
-    <button class="mt-3 dt-button buttons-collection buttons-export btn btn-primary" onclick="exportMultipleTable(['salary', 'quality'], 'ReportSalary');"
+    <button class="mt-3 dt-button buttons-collection buttons-export btn btn-primary" onclick="exportMultipleTable(['salary', 'quality', 'deadline'], 'ReportSalary');"
             type="button" aria-haspopup="true"><span><i class="fal fa-download mr-2"></i>Xuất</span>
     </button>
     <div class="row ml-0 salary_report">

@@ -31,7 +31,7 @@
 </table>
 
 {{--quality--}}
-<table class="col-3 quality" style="display: table;">
+<table class="col-3 quality mr-3" style="display: table;">
     <thead>
     <tr class="border">
         <th class="border bg-blue text-center" colspan="2">
@@ -56,5 +56,34 @@
             </tr>
         @endforeach
     @endif
+    </tbody>
+</table>
+
+{{--deadline--}}
+<table class="col-3 deadline" style="display: table;">
+    <thead>
+    <tr class="border">
+        <th class="border bg-blue text-center" colspan="2">
+            <div class="relative"><span class="colHeader">Tỷ lệ random hoàn thành deadline</span></div>
+        </th>
+    </tr>
+    <tr class="border">
+        <th class="border text-danger text-center">
+            <div class="relative"><span class="colHeader">Trạng thái</span></div>
+        </th>
+        <th class="border text-danger text-center">
+            <div class="relative"><span class="colHeader">Số lần</span></div>
+        </th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td class="border text-center">Hoàn thành</td>
+        <td class="border text-center">{{ @$deadline[0] }}</td>
+    </tr>
+    <tr>
+        <td class="border text-center">Hoàn thành muộn</td>
+        <td class="border text-center">{{ @$deadline[1] }}</td>
+    </tr>
     </tbody>
 </table>
