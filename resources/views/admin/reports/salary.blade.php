@@ -112,14 +112,6 @@
         @include('admin.reports.sub_salary', ['salaries' => $salaries, 'qualities' => $qualities])
     </div>
 
-
-    <table border='2px'>
-        <tr bgcolor='#87AFC6'>
-            <th class="border bg-blue text-center">
-                <div class="relative"><span class="colHeader">STT</span></div>
-            </th>
-        </tr>
-    </table>
 @stop
 
 @push('js')
