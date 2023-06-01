@@ -263,7 +263,22 @@ class ReportController
 
     public function customer()
     {
+        $customers_list = Tasks::distinct()->pluck('customer');
+        $data = [];
+        foreach ($customers_list as $customer) {
+            $tasks_amount = Tasks::where('customer',$customer)->count();
+            $duplicateCounts = Tasks::where('customer',$customer)->groupBy('case')
+            ->select('case', DB::raw('count(*) as count'))
+            ->having('count', '>', 1)
+            ->first();
+            $data[$customer] = [
+                'tasks_amount' => $tasks_amount,
+                'seperated_task' => $duplicateCounts['case'],
+                'seperated_task_amount' => $duplicateCounts['count']
+            ];
+        }
 
+        return view('admin.reports.customer',compact('data'));
     }
 
     public function employee()
