@@ -105,21 +105,13 @@
         </div>
     </div>
 
-    <button class="mt-3 dt-button buttons-collection buttons-export btn btn-primary" onclick="exportMultipleTable(['salary', 'quality'], 'ReportSalary');"
+    <button class="mt-3 dt-button buttons-collection buttons-export btn btn-primary" onclick="exportMultipleTable(['salary', 'quality', 'deadline'], 'ReportSalary');"
             type="button" aria-haspopup="true"><span><i class="fal fa-download mr-2"></i>Xuất</span>
     </button>
     <div class="row ml-0 salary_report">
         @include('admin.reports.sub_salary', ['salaries' => $salaries, 'qualities' => $qualities])
     </div>
 
-
-    <table border='2px'>
-        <tr bgcolor='#87AFC6'>
-            <th class="border bg-blue text-center">
-                <div class="relative"><span class="colHeader">STT</span></div>
-            </th>
-        </tr>
-    </table>
 @stop
 
 @push('js')

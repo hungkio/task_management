@@ -167,20 +167,22 @@ class ReportController
         }
 
         // năng lực
-        list($salaries, $qualities) = $this->getUserSalaries($salaries_id);
+        list($salaries, $qualities, $deadline) = $this->getUserSalaries($salaries_id);
 
-        return view('admin.reports.salary', compact('tasks', 'users', 'salaries', 'qualities'));
+        return view('admin.reports.salary', compact('tasks', 'users', 'salaries', 'qualities', 'deadline'));
     }
 
     public function getUserSalaries($user_id)
     {
         $user = Admin::find($user_id);
         if (!$user) {
-            return [[], []];
+            return [[], [], []];
         }
         $currentRoleName = $user->getRoleNames()[0];
         $salaries = [];
         $qualities = [];
+        $on_time = 0;
+        $late = 0;
 
         if ($currentRoleName == 'editor') {
             $conditionAssigner = "editor_id";
@@ -202,6 +204,12 @@ class ReportController
                 $start_at = Carbon::createFromFormat('Y-m-d H:i:s', $task->start_at);
                 $end_at = Carbon::createFromFormat('Y-m-d H:i:s', $task->end_at);
                 $time_spent = $end_at->diffInMinutes($start_at);
+            }
+
+            if ($time_spent - ($task->estimate * $task->countRecord) <= 0) {
+                $on_time++;
+            } else {
+                $late++;
             }
 
             if (array_key_exists($task->level, $salaries)) {
@@ -236,14 +244,14 @@ class ReportController
             $qualities = [];
         }
 
-        return [$salaries, $qualities];
+        return [$salaries, $qualities, [$on_time, $late]];
     }
 
     public function user_salary($user_id)
     {
         try {
-            list($salaries, $qualities) = $this->getUserSalaries($user_id);
-            return view('admin.reports.sub_salary', compact('salaries', 'qualities'))->render();
+            list($salaries, $qualities, $deadline) = $this->getUserSalaries($user_id);
+            return view('admin.reports.sub_salary', compact('salaries', 'qualities', 'deadline'))->render();
         } catch (\Exception $exception) {
             return response()->json([
                 'status' => 'error',

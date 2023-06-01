@@ -105,6 +105,9 @@
             $('.import').click(function () {
                 $('#exampleModal').modal('show')
             })
+            $('.select_status').change(function () {
+                $('input.status_filter').val($(this).val()).trigger('change')
+            })
             // $('.datepicker').datepicker({
             //     dateFormat: 'yy-mm-dd',
             //     altFormat: 'dd.mm.yy',

@@ -21,8 +21,8 @@ class TaskDataTable extends BaseDatable
         return datatables()
             ->eloquent($query)
             ->addIndexColumn()
-            ->editColumn('name', fn (Tasks $task) => $task->name)
-            ->editColumn('case', fn (Tasks $task) => $task->case)
+            ->editColumn('name', fn (Tasks $task) => substr($task->name,0,45). '...')
+            ->editColumn('case', fn (Tasks $task) => substr($task->case,0,45). '...')
             ->editColumn('customer', fn (Tasks $task) => $task->customer)
             ->editColumn('level', fn (Tasks $task) => $task->level ?? '')
             ->editColumn('status', fn (Tasks $task) => Tasks::STATUS[$task->status])
@@ -96,8 +96,9 @@ class TaskDataTable extends BaseDatable
 
     protected function getBuilderParameters(): array
     {
-        $input = "<input type=\"text\" placeholder=\"' + title + '\" />";
+        $input = "<input style=\"width: 100%\" type=\"text\" placeholder=\"' + title + '\" />";
         $inputDate = "<input class=\"datepicker\" type=\"date\" placeholder=\"' + title + '\" />";
+        $selectStatus = "<input class=\"status_filter\" style=\"display: none\" type=\"text\"/>" . "<select style=\"width: 100%\" class=\"p-0 select_status form-control is-valid\" data-width=\"100%\" aria-invalid=\"false\"> <option value=\"0\" selected=\"\">Waiting</option><option value=\"1\">Editing</option><option value=\"2\">QA Check</option> <option value=\"3\">Done Reject</option> <option value=\"4\">Reject</option> <option value=\"5\">Ready</option> <option value=\"6\">Finish</option> </select>";
         return [
             'order' => [8, 'desc'],
             "initComplete" => "function () {
@@ -113,23 +114,23 @@ class TaskDataTable extends BaseDatable
                                 $(api.column(colIdx).header()).index()
                             );
                         var title = $(cell).text();
-                        if (colIdx== 0 || colIdx== 1 || colIdx== 4 || colIdx== 7 || colIdx== 9) {
+                        if (colIdx== 0 || colIdx== 1|| colIdx== 7 || colIdx== 9) {
                             $(cell).html('');
                             return;
                         }
 
                         if (colIdx== 8) {
                             $(cell).html('$inputDate');
-
+                        } else if (colIdx== 4) {
+                            $(cell).html('$selectStatus');
                         } else {
                             $(cell).html('$input');
                         }
-
+                        $('.select_status').change(function () {
+                            $('input.status_filter').val($(this).val()).trigger('change')
+                        })
                         // On every keypress in this input
-                        $(
-                                'input',
-                            $('.filters th').eq($(api.column(colIdx).header()).index())
-                            )
+                        $('input', $('.filters th').eq($(api.column(colIdx).header()).index()))
                         .off('keyup change')
                         .on('change', function (e) {
                             // Get the search value
