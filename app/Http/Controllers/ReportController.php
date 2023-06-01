@@ -271,10 +271,12 @@ class ReportController
             ->select('case', DB::raw('count(*) as count'))
             ->having('count', '>', 1)
             ->first();
+            $separated_task = $duplicateCounts ? $duplicateCounts['case'] : '';
+            $seperated_task_amount = $duplicateCounts ? $duplicateCounts['count'] : 0;
             $data[$customer] = [
                 'tasks_amount' => $tasks_amount,
-                'seperated_task' => $duplicateCounts['case'],
-                'seperated_task_amount' => $duplicateCounts['count']
+                'seperated_task' => $separated_task,
+                'seperated_task_amount' => $seperated_task_amount
             ];
         }
 
