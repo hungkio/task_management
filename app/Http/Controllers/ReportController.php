@@ -6,6 +6,7 @@ use App\Domain\Admin\Models\Admin;
 use App\Tasks;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class ReportController
@@ -260,14 +261,13 @@ class ReportController
         }
 
     }
-
-    public function customer()
+    public function getCustomerData($date)
     {
-        $customers_list = Tasks::distinct()->pluck('customer');
+        $customers_list = Tasks::whereDate(DB::raw('DATE(created_at)'), date('Y-m-d', strtotime($date)))->distinct()->pluck('customer');
         $data = [];
         foreach ($customers_list as $customer) {
-            $tasks_amount = Tasks::where('customer',$customer)->get()->unique('case')->count();
-            $duplicateCounts = Tasks::where('customer',$customer)->groupBy('case')
+            $tasks_amount = Tasks::whereDate(DB::raw('DATE(created_at)'), date('Y-m-d', strtotime($date)))->where('customer',$customer)->get()->unique('case')->count();
+            $duplicateCounts = Tasks::whereDate(DB::raw('DATE(created_at)'), date('Y-m-d', strtotime($date)))->where('customer',$customer)->groupBy('case')
             ->select('case', DB::raw('count(*) as count'))
             ->having('count', '>', 1)
             ->get();
@@ -280,11 +280,19 @@ class ReportController
                 'seperated_task_amount' => $seperated_count
             ];
         }
+        
+        return $data;
+    }
+
+    public function customer()
+    {   
+        $subday = Carbon::now()->subDay()->format('Y-m-d');
+
+        $data = $this->getCustomerData($subday);
 
         return view('admin.reports.customer',compact('data'));
     }
-
-    public function employee()
+    public function getEmployeeData($date)
     {
         $employees = Admin::with(['QAMonthTasks', 'EditorMonthTasks'])->whereHas('roles', function (Builder $subQuery) {
             $subQuery->whereIn(config('permission.table_names.roles') . '.name', ['QA', 'editor']);
@@ -297,8 +305,8 @@ class ReportController
             $name = $employee->fullName;
             $role = $employee->getRoleNames()[0];
             if ($role == 'editor') {
-                $tasks_amount = Tasks::where('editor_id',$id)->get()->unique('case')->count();
-                $duplicateCounts = Tasks::where('editor_id',$id)->groupBy('case')
+                $tasks_amount = Tasks::whereDate(DB::raw('DATE(created_at)'), date('Y-m-d', strtotime($date)))->where('editor_id',$id)->get()->unique('case')->count();
+                $duplicateCounts = Tasks::whereDate(DB::raw('DATE(created_at)'), date('Y-m-d', strtotime($date)))->where('editor_id',$id)->groupBy('case')
                 ->select('case', DB::raw('count(*) as count'))
                 ->having('count', '>', 1)
                 ->get();
@@ -311,8 +319,8 @@ class ReportController
                     'seperated_task_amount' => $seperated_count
                 ];
             }else{
-                $tasks_amount = Tasks::where('qa_id',$id)->get()->unique('case')->count();
-                $duplicateCounts = Tasks::where('QA_id',$id)->groupBy('case')
+                $tasks_amount = Tasks::whereDate(DB::raw('DATE(created_at)'), date('Y-m-d', strtotime($date)))->where('qa_id',$id)->get()->unique('case')->count();
+                $duplicateCounts = Tasks::whereDate(DB::raw('DATE(created_at)'), date('Y-m-d', strtotime($date)))->where('QA_id',$id)->groupBy('case')
                 ->select('case', DB::raw('count(*) as count'))
                 ->having('count', '>', 1)
                 ->get();
@@ -326,6 +334,27 @@ class ReportController
                 'seperated_task_amount' => $seperated_count
             ];
         }
+        return $data;
+    }
+    public function employee()
+    {
+        $subday = Carbon::now()->subDay()->format('Y-m-d');
+
+        $data = $this->getCustomerData($subday);
+
         return view('admin.reports.employee',compact('data'));
+    }
+
+    public function getTasksByDate(Request $request)
+    {
+        $date = $request->input('date');
+        $category = $request->input('category');
+        if ($category == 'customer') {
+            $data = $this->getCustomerData(date('Y-m-d', strtotime($date)));
+        }else{
+            $data = $this->getEmployeeData(date('Y-m-d', strtotime($date)));
+        }
+
+        return view('admin.reports.section.customer-table',compact('data'))->render();
     }
 }

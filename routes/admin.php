@@ -76,6 +76,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('report/month', [ReportController::class, 'month'])->name('reports.month');
             Route::get('report/customer', [ReportController::class, 'customer'])->name('reports.customer');
             Route::get('report/employee', [ReportController::class, 'employee'])->name('reports.employee');
+            Route::post('report/filter-by-date', [ReportController::class, 'getTasksByDate'])->name('reports.filter-by-date');
             Route::get('report/salary', [ReportController::class, 'salary'])->name('reports.salary');
             Route::get('report/user_salary/{user_id?}', [ReportController::class, 'user_salary'])->name('reports.user_salary');
 
