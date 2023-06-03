@@ -27,9 +27,17 @@
     {{--Full--}}
     <iframe id="txtArea1" style="display:none"></iframe>
     {{--Full--}}
-    <button class="dt-button buttons-collection buttons-export btn btn-primary" onclick="exportMultipleTable(['full'], 'ReportCustomers');"
-            type="button" aria-haspopup="true"><span><i class="fal fa-download mr-2"></i>Xuất</span>
-    </button>
+    <div class="d-flex mb-4 justify-content-between">
+        <button class="dt-button buttons-collection buttons-export btn btn-primary mb-0" onclick="exportMultipleTable(['full'], 'ReportCustomers');"
+                type="button" aria-haspopup="true"><span><i class="fal fa-download mr-2"></i>Xuất</span>
+        </button>
+        <div class="input-group date" data-provide="datepicker">
+            <input type="text" class="form-control">
+            <div class="input-group-addon">
+                <span class="glyphicon glyphicon-th"></span>
+            </div>
+        </div>
+    </div>
     <table class="full w-100" style="display: table;">
         <thead>
         <tr class="border">

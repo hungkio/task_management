@@ -6,6 +6,7 @@ use App\Domain\Admin\Models\Admin;
 use App\Tasks;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class ReportController
@@ -261,8 +262,14 @@ class ReportController
 
     }
 
-    public function customer()
+    public function customer(Request $request)
     {
+        $date = $request->input('date');
+
+        $tasks = $this->getTasksByDate($date);
+        
+        // dd($tasks);
+
         $customers_list = Tasks::distinct()->pluck('customer');
         $data = [];
         foreach ($customers_list as $customer) {
@@ -327,5 +334,10 @@ class ReportController
             ];
         }
         return view('admin.reports.employee',compact('data'));
+    }
+
+    private function getTasksByDate($date)
+    {
+        return Tasks::whereDate(DB::raw('DATE(created_at)'), date('Y-m-d', strtotime($date)))->get();
     }
 }
