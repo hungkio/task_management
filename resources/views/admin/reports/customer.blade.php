@@ -31,11 +31,9 @@
         <button class="dt-button buttons-collection buttons-export btn btn-primary mb-0" onclick="exportMultipleTable(['full'], 'ReportCustomers');"
                 type="button" aria-haspopup="true"><span><i class="fal fa-download mr-2"></i>Xuất</span>
         </button>
-        <div class="input-group date" data-provide="datepicker">
-            <input type="text" class="form-control">
-            <div class="input-group-addon">
-                <span class="glyphicon glyphicon-th"></span>
-            </div>
+        <div class="d-flex align-items-center">
+            <label class="mb-0 mr-2 lead" for="date">Lọc theo ngày:</label>
+            <input type="text" class="datepicker outline-none text-center d-block h-100" name="date">
         </div>
     </div>
     <table class="full w-100" style="display: table;">
@@ -56,29 +54,36 @@
         </tr>
         </thead>
         <tbody>
-        @if(!empty($data))
-            @php($row = 1)
-            @php($sumCases = 0)
-            @php($sumCasesTach = 0)
-            @foreach($data as $customer => $value)
-                @php($sumCases += $value['tasks_amount'])
-                @php($sumCasesTach += $value['seperated_task_amount'])
-                <tr>
-                    <td class="border text-center">{{ $row }}</td>
-                    <td class="border name">{{ $customer }}</td>
-                    <td class="border text-center">{{ $value['tasks_amount'] }}</td>
-                    <td class="border text-center">{{ $value['seperated_task_amount'] }}</td>
-                </tr>
-                @php($row += 1)
-            @endforeach
-            <tr>
-                <td class="border"></td>
-                <td class="border">Total</td>
-                <td class="border text-center">{{ $sumCases }}</td>
-                <td class="border text-center">{{ $sumCasesTach }}</td>
-            </tr>
-        @endif
+            @include('admin.reports.section.customer-table', ['data' => $data])
         </tbody>
     </table>
     
 @stop
+
+@push('js')
+<script>
+  $(document).ready(function(){
+    $('.datepicker').datepicker({
+      format: 'yyyy-mm-dd' // Định dạng ngày tháng năm
+    });
+    $('.datepicker').on('change', function() {
+      $.ajax({
+        url: "{{ route('admin.reports.filter-by-date')}}",
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            'date': $(this).val(),
+            'category': 'customer'
+        },
+        complete: function(res) {
+            if (res.status == 200) {
+                $('.full tbody').html(res.responseText);
+            } else {
+                showMessage('error', res.responseText);
+            }
+        }
+      })
+    })
+  });
+</script>
+@endpush
