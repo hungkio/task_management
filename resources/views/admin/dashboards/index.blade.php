@@ -495,17 +495,23 @@
               break;
             case 'testing':
               processStatus = 2;
-              checkOnline(ui.item.attr('qa_id'), function(result) {
-                if (result) {
-                  status = 'Testing';
-                  ui.item.find('.status').css("background-color", "#ebc334")
-                  removeButton(ui.item.find('.button-box'));
-                  updateTaskStatus(taskId, processStatus);
-                }else{
-                  $('#in-progress').sortable('cancel').sortable('cancel');
-                  alert('QA hiện tại đang không online. Liên hệ với admin để chuyển task sang Editor khác.')
-                }
-              });
+              if ($.trim(ui.item.find('.status').text()) == 'Rejected') {
+                checkOnline(ui.item.attr('qa-id'), function(result) {
+                  if (result) {
+                    status = 'Testing';
+                    ui.item.find('.status').css("background-color", "#ebc334")
+                    removeButton(ui.item.find('.button-box'));
+                    updateTaskStatus(taskId, processStatus);
+                  }else{
+                    $('#in-progress').sortable('cancel').sortable('cancel');
+                    alert('QA hiện tại đang không online. Liên hệ với admin để chuyển task sang Editor khác.')
+                  }
+                });
+              }else{
+                status = 'Testing';
+                ui.item.find('.status').css("background-color", "#ebc334")
+                updateTaskStatus(taskId, processStatus);
+              }
               break;
             case 'done':
               processStatus = 3;
@@ -522,10 +528,6 @@
               break;
           }
 
-          // nếu là in-progress thì chỉ cho chạy vào hàm assign QA
-          // if (!ui.item.has(".in-progress").length) {
-          //   updateTaskStatus(taskId, processStatus);
-          // }
           ui.item.find('.status').text(status);
 
           if (processStatus == 2) {
