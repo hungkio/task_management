@@ -25,9 +25,10 @@
 
 @section('page-content')
     {{--Full--}}
+    
     <iframe id="txtArea1" style="display:none"></iframe>
     {{--Full--}}
-    <button class="dt-button buttons-collection buttons-export btn btn-primary" onclick="exportMultipleTable(['full'], 'ReportCustomers');"
+    <button class="dt-button buttons-collection buttons-export btn btn-primary" onclick="exportMultipleTable(['full'], 'ReportEmployees');"
             type="button" aria-haspopup="true"><span><i class="fal fa-download mr-2"></i>Xuất</span>
     </button>
     <table class="full w-100" style="display: table;">
@@ -37,7 +38,7 @@
                 <div class="relative"><span class="colHeader">STT</span></div>
             </th>
             <th class="border bg-blue text-center">
-                <div class="relative"><span class="colHeader">Tên Khách Hàng</span></div>
+                <div class="relative"><span class="colHeader">Tên Nhân Viên</span></div>
             </th>
             <th class="border bg-blue text-center">
                 <div class="relative"><span class="colHeader">Số Lượng Cases</span></div>
@@ -52,12 +53,12 @@
             @php($row = 1)
             @php($sumCases = 0)
             @php($sumCasesTach = 0)
-            @foreach($data as $customer => $value)
+            @foreach($data as $employee => $value)
                 @php($sumCases += $value['tasks_amount'])
                 @php($sumCasesTach += $value['seperated_task_amount'])
                 <tr>
                     <td class="border text-center">{{ $row }}</td>
-                    <td class="border name">{{ $customer }}</td>
+                    <td class="border name">{{ $employee }}</td>
                     <td class="border text-center">{{ $value['tasks_amount'] }}</td>
                     <td class="border text-center">{{ $value['seperated_task_amount'] }}</td>
                 </tr>

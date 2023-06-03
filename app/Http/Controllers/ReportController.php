@@ -266,17 +266,18 @@ class ReportController
         $customers_list = Tasks::distinct()->pluck('customer');
         $data = [];
         foreach ($customers_list as $customer) {
-            $tasks_amount = Tasks::where('customer',$customer)->count();
+            $tasks_amount = Tasks::where('customer',$customer)->get()->unique('case')->count();
             $duplicateCounts = Tasks::where('customer',$customer)->groupBy('case')
             ->select('case', DB::raw('count(*) as count'))
             ->having('count', '>', 1)
-            ->first();
-            $separated_task = $duplicateCounts ? $duplicateCounts['case'] : '';
-            $seperated_task_amount = $duplicateCounts ? $duplicateCounts['count'] : 0;
+            ->get();
+            $seperated_count = 0;
+            foreach ($duplicateCounts as $duplicateCount) {
+                $seperated_count += $duplicateCount['count'];
+            }
             $data[$customer] = [
                 'tasks_amount' => $tasks_amount,
-                'seperated_task' => $separated_task,
-                'seperated_task_amount' => $seperated_task_amount
+                'seperated_task_amount' => $seperated_count
             ];
         }
 
@@ -285,6 +286,46 @@ class ReportController
 
     public function employee()
     {
+        $employees = Admin::with(['QAMonthTasks', 'EditorMonthTasks'])->whereHas('roles', function (Builder $subQuery) {
+            $subQuery->whereIn(config('permission.table_names.roles') . '.name', ['QA', 'editor']);
+        })->get();
 
+        $data = [];
+
+        foreach ($employees as $employee) {
+            $id = $employee->id;
+            $name = $employee->fullName;
+            $role = $employee->getRoleNames()[0];
+            if ($role == 'editor') {
+                $tasks_amount = Tasks::where('editor_id',$id)->get()->unique('case')->count();
+                $duplicateCounts = Tasks::where('editor_id',$id)->groupBy('case')
+                ->select('case', DB::raw('count(*) as count'))
+                ->having('count', '>', 1)
+                ->get();
+                $seperated_count = 0;
+                foreach ($duplicateCounts as $duplicateCount) {
+                    $seperated_count += $duplicateCount['count'];
+                }
+                $data[$name] = [
+                    'tasks_amount' => $tasks_amount,
+                    'seperated_task_amount' => $seperated_count
+                ];
+            }else{
+                $tasks_amount = Tasks::where('qa_id',$id)->get()->unique('case')->count();
+                $duplicateCounts = Tasks::where('QA_id',$id)->groupBy('case')
+                ->select('case', DB::raw('count(*) as count'))
+                ->having('count', '>', 1)
+                ->get();
+                $seperated_count = 0;
+                foreach ($duplicateCounts as $duplicateCount) {
+                    $seperated_count += $duplicateCount['count'];
+                }
+            }
+            $data[$name] = [
+                'tasks_amount' => $tasks_amount,
+                'seperated_task_amount' => $seperated_count
+            ];
+        }
+        return view('admin.reports.employee',compact('data'));
     }
 }
