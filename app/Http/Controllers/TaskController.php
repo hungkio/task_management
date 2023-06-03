@@ -132,6 +132,38 @@ class TaskController
                 'New job',
                 "$currentMonthNumber $currentDay"
             ],
+            '11. CH' => [
+                'NEW JOB',
+                "$currentMonthNumber $currentDay"
+            ],
+            '02. DC' => [
+                'NEW JOB',
+                "$currentMonthNumber $currentDay"
+            ],
+            '03. CBA' => [
+                'NEW JOB',
+                "$currentMonthNumber $currentDay"
+            ],
+            '12. GL' => [
+                'NEW JOB',
+                "$currentMonthNumber $currentDay"
+            ],
+            '05. ES' => [
+                'NEW JOB',
+                "$currentMonthNumber $currentDay"
+            ],
+            '14. DRJ(PM)' => [
+                'NEW JOB',
+                "$currentMonthNumber $currentDay"
+            ],
+            '04. NK' => [
+                'NEW JOB',
+                "$currentMonthNumber $currentDay"
+            ],
+            '13. TLA(PM)' => [
+                'NEW JOB',
+                "$currentMonthNumber $currentDay"
+            ],
         ];
 
         $list = @$client->listFolder($parentPath)['entries'];
