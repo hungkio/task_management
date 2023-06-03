@@ -23,5 +23,9 @@
         "vue": "^2.5.17",
         "vue-template-compiler": "^2.6.10",
         "tinymce": "^4.9.8"
+    },
+    "dependencies": {
+        "boostrap": "^2.0.0",
+        "bootstrap-datepicker": "^1.10.0"
     }
 }
