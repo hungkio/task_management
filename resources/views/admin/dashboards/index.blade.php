@@ -512,7 +512,8 @@
                 $('#done').sortable('cancel').sortable('cancel');
               }else{
                 status = 'Testing';
-                ui.item.find('.status').css("background-color", "#ebc334")
+                removeButton(ui.item.find('.button-box'));
+                ui.item.find('.status').css("background-color", "#ebc334");
                 updateTaskStatus(taskId, processStatus);
               }
               break;
