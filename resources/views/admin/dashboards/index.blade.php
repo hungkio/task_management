@@ -507,6 +507,9 @@
                     alert('QA hiện tại đang không online. Liên hệ với admin để chuyển task sang Editor khác.')
                   }
                 });
+              }else if ($.trim(ui.item.find('.status').text()) == 'Finished'){
+                alert('Case đã hoàn thành không thể chuyển lại về test.')
+                $('#done').sortable('cancel').sortable('cancel');
               }else{
                 status = 'Testing';
                 ui.item.find('.status').css("background-color", "#ebc334")
@@ -592,10 +595,13 @@
       //finish task
       $(document).on('click', '.done-task', function (event) {
         event.stopPropagation();
-        let this_id = $(this).parents('.card').attr('id');
-        updateTaskStatus(this_id, 6);
-        $(this).siblings('.status').text('Finished');
-        $(this).remove();
+        let text = "Tác vụ này sẽ không thể đảo ngược. Xác nhận case đã hoàn thành?";
+        if (confirm(text) == true) {
+          let this_id = $(this).parents('.card').attr('id');
+          updateTaskStatus(this_id, 6);
+          $(this).siblings('.status').text('Finished');
+          $(this).remove();
+        }
       })
 
       // when click on task, show popup
