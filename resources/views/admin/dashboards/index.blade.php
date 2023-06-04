@@ -188,8 +188,10 @@
                               <div class="card-text mb-1">QA checked: {{$task->QA_check_num}}</div>
                             @endif
                           </div>
-                          <div class="status px-2 rounded bug d-inline-block p-1 fw-semibold text-white project-name">
-                            Rejected
+                          <div class="button-box d-flex justify-content-between">
+                            <div class="status px-2 rounded bug d-inline-block p-1 fw-semibold text-white project-name">
+                              Rejected
+                            </div>
                           </div>
                       </div>
                   </div>
@@ -484,9 +486,16 @@
               removeButton(ui.item.find('.button-box'));
               checkOnline(ui.item.attr('editor-id'), function(result) {
                 if (result) {
-                  status = 'Rejected';
-                  ui.item.find('.status').css("background-color", "#BB0000");
-                  updateTaskStatus(taskId, processStatus);
+                  
+                  if ($.trim(ui.item.find('.status').text()) == 'Finished'){
+                    alert('Case đã hoàn thành không thể chuyển lại về edit.');
+                    $('#done').sortable('cancel').sortable('cancel');
+                  }else{
+                    ui.item.find('.status').css("background-color", "#BB0000");
+                    status = 'Rejected';
+                    updateTaskStatus(taskId, processStatus);
+                    ui.item.find('.status').text(status);
+                  }
                 }else{
                   $('#testing').sortable('cancel').sortable('cancel');
                   alert('Editor hiện tại đang không online. Liên hệ với admin để chuyển task sang Editor khác.')
@@ -502,19 +511,21 @@
                     ui.item.find('.status').css("background-color", "#ebc334")
                     removeButton(ui.item.find('.button-box'));
                     updateTaskStatus(taskId, processStatus);
+                    ui.item.find('.status').text(status);
                   }else{
                     $('#in-progress').sortable('cancel').sortable('cancel');
                     alert('QA hiện tại đang không online. Liên hệ với admin để chuyển task sang Editor khác.')
                   }
                 });
               }else if ($.trim(ui.item.find('.status').text()) == 'Finished'){
-                alert('Case đã hoàn thành không thể chuyển lại về test.')
                 $('#done').sortable('cancel').sortable('cancel');
+                alert('Case đã hoàn thành không thể chuyển lại về test.');
               }else{
                 status = 'Testing';
                 removeButton(ui.item.find('.button-box'));
-                ui.item.find('.status').css("background-color", "#ebc334");
                 updateTaskStatus(taskId, processStatus);
+                ui.item.find('.status').css("background-color", "#ebc334");
+                ui.item.find('.status').text(status);
               }
               break;
             case 'done':
@@ -526,13 +537,12 @@
                 status = 'No bug left';
                 ui.item.find('.status').css("background-color", "#458B00")
                 qaToDone(ui.item.find('.button-box'));
-                updateTaskStatus(taskId, processStatus)
+                updateTaskStatus(taskId, processStatus);
+                ui.item.find('.status').text(status);
               }
             default:
               break;
           }
-
-          ui.item.find('.status').text(status);
 
           if (processStatus == 2) {
             //chỉ trường hợp task in-progress mới append html qaDetails
