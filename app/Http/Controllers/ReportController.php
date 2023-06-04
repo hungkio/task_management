@@ -340,7 +340,7 @@ class ReportController
     {
         $subday = Carbon::now()->subDay()->format('Y-m-d');
 
-        $data = $this->getCustomerData($subday);
+        $data = $this->getEmployeeData($subday);
 
         return view('admin.reports.employee',compact('data'));
     }
