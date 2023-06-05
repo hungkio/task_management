@@ -10,7 +10,7 @@ use App\Tasks;
 
 // Home
 Breadcrumbs::for('admin.dashboards', function (BreadcrumbsGenerator $trail) {
-    $trail->push(__('dashboards'), route('admin.dashboards'), ['icon' => 'fal fa-home']);
+    $trail->push(__('Dashboards'), route('admin.dashboards'), ['icon' => 'fal fa-home']);
 });
 
 Breadcrumbs::for('admin.popup.save', function (BreadcrumbsGenerator $trail, $id) {

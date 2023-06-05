@@ -164,7 +164,7 @@ class ReportController
                 $time_spent = $end_at->diffInMinutes($start_at);
             }
             $task->timespent = $time_spent;
-            $task->average = $task->estimate ? ($time_spent/$task->estimate) : 0;
+            $task->average = $task->estimate ? round($time_spent/$task->estimate, 2) : 0;
         }
 
         // năng lực
@@ -280,12 +280,12 @@ class ReportController
                 'seperated_task_amount' => $seperated_count
             ];
         }
-        
+
         return $data;
     }
 
     public function customer()
-    {   
+    {
         $subday = Carbon::now()->subDay()->format('Y-m-d');
 
         $data = $this->getCustomerData($subday);
