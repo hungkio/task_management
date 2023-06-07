@@ -105,65 +105,97 @@ class TaskController
     {
         $client = getDropboxClient();
         $parentPath = '1.Working';
-        $currentMonthText = Carbon::now()->format('F');
-        $currentMonthNumber = Carbon::now()->format('m');
-        $currentDay = Carbon::now()->format('d');
-        $currentDMY = Carbon::now()->format('n-j-Y');
+        $today = Carbon::now()->subDay(1);
+        $currentMonthText = $today->format('F');
+        $currentMonthNumber = $today->format('m');
+        $currentDay = $today->format('d');
 
-        $currentMonthText = 'July';
-        $currentMonthNumber = '07';
-        $currentDay = '21';
-        $currentDMY = '7-21-2022';
+//        $currentMonthText = 'June';
+//        $currentMonthNumber = '06';
+//        $currentDay = '06';
 
         $mapCustomer = [
             '06. JD' => [
-                'NEW JOB',
+                'Originals',
+                $currentMonthText,
                 "$currentMonthNumber $currentDay"
             ],
             '01. Tonika' => [
-                'NEW JOB',
-                "$currentMonthNumber $currentDay"
+                'Originals',
+                $currentMonthText,
+                ""
             ],
-            '08. AL' => [
+            '02. DCL' => [
                 'NEW JOB',
-                "$currentDMY"
-            ],
-            '09. CL' => [
-                'New job',
-                "$currentMonthNumber $currentDay"
-            ],
-            '11. CH' => [
-                'NEW JOB',
-                "$currentMonthNumber $currentDay"
-            ],
-            '02. DC' => [
-                'NEW JOB',
+                $currentMonthText,
                 "$currentMonthNumber $currentDay"
             ],
             '03. CBA' => [
-                'NEW JOB',
-                "$currentMonthNumber $currentDay"
-            ],
-            '12. GL' => [
-                'NEW JOB',
-                "$currentMonthNumber $currentDay"
-            ],
-            '05. ES' => [
-                'NEW JOB',
-                "$currentMonthNumber $currentDay"
-            ],
-            '14. DRJ(PM)' => [
-                'NEW JOB',
+                'Originals',
+                $currentMonthText,
                 "$currentMonthNumber $currentDay"
             ],
             '04. NK' => [
-                'NEW JOB',
+                'Originals',
+                $currentMonthText,
                 "$currentMonthNumber $currentDay"
             ],
-            '13. TLA(PM)' => [
-                'NEW JOB',
+            '05. ES' => [
+                'Originals',
+                "",
                 "$currentMonthNumber $currentDay"
             ],
+            '08. AL' => [
+                'Originals',
+                $currentMonthText,
+                "$currentMonthNumber $currentDay"
+            ],
+            '09. CL' => [
+                'Originals',
+                "",
+                "$currentMonthNumber $currentDay"
+            ],
+            '10.MCC' => [
+                'NEW JOB',
+                $currentMonthText,
+                "$currentMonthNumber $currentDay",
+            ],
+            '11. CH' => [
+                'Originals',
+                "",
+                "$currentMonthNumber $currentDay",
+            ],
+            '12. BRAUS(PM)' => [
+                'Originals',
+                $currentMonthText,
+                "$currentMonthNumber $currentDay",
+            ],
+            '13.KS' => [
+                'Originals',
+                "",
+                "$currentMonthNumber $currentDay",
+            ],
+            '14.JG' => [
+                'New Job Judy',
+                "",
+                "$currentMonthNumber $currentDay",
+            ],
+            '15.RK' => [
+                'Originals',
+                "",
+                "$currentMonthNumber $currentDay",
+            ],
+            '18. DRJ' => [
+                'NEW JOB',
+                "",
+                "$currentMonthNumber $currentDay",
+            ],
+            '19.MX' => [
+                'Originals',
+                "",
+                "$currentMonthNumber $currentDay",
+            ],
+
         ];
 
         $list = @$client->listFolder($parentPath)['entries'];
@@ -171,8 +203,19 @@ class TaskController
             try {
                 $customer = $sub1['name']; // customer
                 $newjob = $mapCustomer[$customer][0] ?? '';
-                $date = $mapCustomer[$customer][1] ?? '';
-                $tasks = $client->listFolder("$parentPath/$customer/$newjob/$currentMonthText/$date")['entries'];
+                $monthText = $mapCustomer[$customer][1] ? $mapCustomer[$customer][1] . '/' : '/';
+                $date = $mapCustomer[$customer][2] ?? '';
+
+                if ($date) {
+                    dump("$parentPath/$customer/$newjob/$monthText$date");
+
+                    $tasks = $client->listFolder("$parentPath/$customer/$newjob/$monthText$date")['entries'];
+                } else {
+                    dump("$parentPath/$customer/$newjob");
+
+                    $tasks = $client->listFolder("$parentPath/$customer/$newjob")['entries'];
+                }
+
                 foreach ($tasks as $task) {
                     $tag = $task['.tag'];
                     if ($tag == 'file') {
@@ -180,7 +223,11 @@ class TaskController
                     }
                     $taskName = $task['name'];
                     $taskPath = $task['path_display'];
-                    $taskRecord = $client->listFolder("$parentPath/$customer/$newjob/$currentMonthText/$date/$taskName")['entries'];
+                    if ($date) {
+                        $taskRecord = $client->listFolder("$parentPath/$customer/$newjob/$monthText$date/$taskName")['entries'];
+                    } else {
+                        $taskRecord = $client->listFolder("$parentPath/$customer/$newjob/$taskName")['entries'];
+                    }
 
                     if ($taskRecord && $taskRecord[0]['.tag'] == 'folder') {
                         foreach ($taskRecord as $record) {
@@ -188,7 +235,11 @@ class TaskController
                             $recordPath = $record['path_display'];
                             $casePath = str_replace(' ', '%20', $recordPath);
                             $caseName = "$customer/$date/$taskName/$recordName";
-                            $record_entries = $client->listFolder("$parentPath/$customer/$newjob/$currentMonthText/$date/$taskName/$recordName")['entries'];
+                            if ($date) {
+                                $record_entries = $client->listFolder("$parentPath/$customer/$newjob/$monthText$date/$taskName/$recordName")['entries'];
+                            } else {
+                                $record_entries = $client->listFolder("$parentPath/$customer/$newjob/$taskName/$recordName")['entries'];
+                            }
                             $countRecord = count($record_entries);
                             $this->createNewTask($customer, $caseName, $casePath, $countRecord, $taskName);
                         }
