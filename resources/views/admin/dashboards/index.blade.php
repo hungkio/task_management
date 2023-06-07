@@ -239,7 +239,11 @@
                           </div>
                           <div class="button-box d-flex justify-content-between">
                             <div class="status px-2 rounded testing d-inline-block p-1 fw-semibold text-white project-name">
-                              Testing
+                              @if ($task->QA_check_num)
+                                Reject resolve                              
+                              @else
+                                Testing
+                              @endif
                             </div>
                           </div>
                       </div>
@@ -415,6 +419,8 @@
                                 "</div>"+
                                 "<div class='card-text mb-1'>QA checked: "+(response.task.QA_check_num ? response.task.QA_check_num : '')+"</div>"
               $('#'+taskId).find('.qa-details').append(qaDetails);
+              statusLabel.text('Testing');
+              statusLabel.css("background-color", "#ebc334");
             }else{
               // nếu chạy vào đây tức là không có QA nào online
               const columnId = '#testing'
@@ -507,7 +513,7 @@
               if ($.trim(ui.item.find('.status').text()) == 'Rejected') {
                 checkOnline(ui.item.attr('qa-id'), function(result) {
                   if (result) {
-                    status = 'Testing';
+                    status = 'Reject resolve';
                     ui.item.find('.status').css("background-color", "#ebc334")
                     removeButton(ui.item.find('.button-box'));
                     updateTaskStatus(taskId, processStatus);
@@ -520,6 +526,16 @@
               }else if ($.trim(ui.item.find('.status').text()) == 'Finished'){
                 $('#done').sortable('cancel').sortable('cancel');
                 alert('Case đã hoàn thành không thể chuyển lại về test.');
+              }else if(ui.item.has(".in-progress").length && ui.item.find(".qa-details").find('div').length == 0){
+                //chỉ trường hợp task in-progress mới append html qaDetails
+                let statusLabel = ui.item.find('.status');
+                assignQA(taskId, statusLabel);
+              }else if($.trim(ui.item.find('.status').text()) == 'No bug left'){
+                status = 'Reject resolve';
+                removeButton(ui.item.find('.button-box'));
+                updateTaskStatus(taskId, processStatus);
+                ui.item.find('.status').css("background-color", "#ebc334");
+                ui.item.find('.status').text(status);
               }else{
                 status = 'Testing';
                 removeButton(ui.item.find('.button-box'));
@@ -530,7 +546,7 @@
               break;
             case 'done':
               processStatus = 3;
-              if ($.trim(ui.item.find('.status').text()) == 'In progress') {
+              if ($.trim(ui.item.find('.status').text()) == 'In progress' || $.trim(ui.item.find('.status').text()) == 'Rejected') {
                 alert('Bạn phải assign sang Testing trước.')
                 $('#in-progress').sortable('cancel');
               }else{
@@ -545,11 +561,7 @@
           }
 
           if (processStatus == 2) {
-            //chỉ trường hợp task in-progress mới append html qaDetails
-            if (ui.item.has(".in-progress").length && ui.item.find(".qa-details").find('div').length == 0) {
-              let statusLabel = ui.item.find('.status');
-              assignQA(taskId, statusLabel);
-            }
+            
           }
         }
       });
