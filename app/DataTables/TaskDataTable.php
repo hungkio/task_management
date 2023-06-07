@@ -29,7 +29,7 @@ class TaskDataTable extends BaseDatable
             ->editColumn('editor_id', fn (Tasks $task) => $task->editor->fullName ?? '')
             ->editColumn('QA_id', fn (Tasks $task) => $task->QA->fullName ?? '')
             ->editColumn('countRecord', fn (Tasks $task) => $task->countRecord)
-            ->editColumn('created_at', fn (Tasks $task) => formatDate($task->created_at))
+            ->editColumn('created_at', fn (Tasks $task) => formatDate($task->created_at, 'd/m/Y H:i:s'))
             ->addColumn('action', 'admin.tasks._tableAction')
             ->filterColumn('name', function($query, $keyword) {
                 $query->where('name', 'like', "%$keyword%");

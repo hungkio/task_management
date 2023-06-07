@@ -139,6 +139,15 @@
                                     </div>
                                 </div>
 
+                                <x-text-field
+                                    name="editor_check_num"
+                                    :placeholder="__('Số ảnh edit')"
+                                    :label="__('Số ảnh edit')"
+                                    :value="$task->editor_check_num"
+                                    type="number"
+                                >
+                                </x-text-field>
+
                                 <div class="form-group row">
                                     <label for="select-taxon" class="col-lg-2 text-lg-right col-form-label">
                                         {{ __('QA') }}

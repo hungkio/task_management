@@ -47,13 +47,13 @@ if (!function_exists('setting')) {
 }
 
 if (!function_exists('formatDate')) {
-    function formatDate($date): string
+    function formatDate($date, $format = null): string
     {
         if (!$date instanceof Carbon) {
             $date = Carbon::createFromFormat('Y-m-d H:i:s', $date);
         }
 
-        return $date->format('d/m/Y');
+        return $date->format($format ?? 'd/m/Y');
     }
 }
 

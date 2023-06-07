@@ -206,13 +206,12 @@ class TaskController
                 $monthText = $mapCustomer[$customer][1] ? $mapCustomer[$customer][1] . '/' : '/';
                 $date = $mapCustomer[$customer][2] ?? '';
 
+                if (!$newjob) {
+                    continue;
+                }
                 if ($date) {
-                    dump("$parentPath/$customer/$newjob/$monthText$date");
-
                     $tasks = $client->listFolder("$parentPath/$customer/$newjob/$monthText$date")['entries'];
                 } else {
-                    dump("$parentPath/$customer/$newjob");
-
                     $tasks = $client->listFolder("$parentPath/$customer/$newjob")['entries'];
                 }
 
@@ -240,8 +239,20 @@ class TaskController
                             } else {
                                 $record_entries = $client->listFolder("$parentPath/$customer/$newjob/$taskName/$recordName")['entries'];
                             }
-                            $countRecord = count($record_entries);
-                            $this->createNewTask($customer, $caseName, $casePath, $countRecord, $taskName);
+                            if ($record_entries && $record_entries[0]['.tag'] == 'folder') {
+                                foreach ($record_entries as $entry) {
+                                    $child_folder = $client->listFolder($entry['path_display'])['entries'];
+                                    $childName = $entry['name'];
+                                    $childPath = $entry['path_display'];
+                                    $casePath = str_replace(' ', '%20', $childPath);
+                                    $caseName = "$customer/$date/$taskName/$recordName/$childName";
+                                    $countRecord = count($child_folder);
+                                    $this->createNewTask($customer, $caseName, $casePath, $countRecord, $taskName);
+                                }
+                            } else {
+                                $countRecord = count($record_entries);
+                                $this->createNewTask($customer, $caseName, $casePath, $countRecord, $taskName);
+                            }
                         }
                     } else {
                         $caseName = "$customer/$date/$taskName";
