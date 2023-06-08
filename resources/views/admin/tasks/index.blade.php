@@ -20,6 +20,16 @@
                 margin-left: .625rem !important;
             }
         }
+        tbody tr td:first-child {
+            min-width: 300px;
+            word-break: break-all;
+            white-space: normal;
+        }
+        tbody tr td:nth-child(2) {
+            min-width: 300px;
+            word-break: break-all;
+            white-space: normal;
+        }
     </style>
 @endpush
 

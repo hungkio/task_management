@@ -21,8 +21,8 @@ class TaskDataTable extends BaseDatable
         return datatables()
             ->eloquent($query)
             ->addIndexColumn()
-            ->editColumn('name', fn (Tasks $task) => substr($task->name,0,45). '...')
-            ->editColumn('case', fn (Tasks $task) => substr($task->case,0,45). '...')
+            ->editColumn('name', fn (Tasks $task) => $task->name)
+            ->editColumn('case', fn (Tasks $task) => $task->case)
             ->editColumn('customer', fn (Tasks $task) => $task->customer)
             ->editColumn('level', fn (Tasks $task) => $task->level ?? '')
             ->editColumn('status', fn (Tasks $task) => Tasks::STATUS[$task->status])
@@ -64,7 +64,7 @@ class TaskDataTable extends BaseDatable
     protected function getColumns(): array
     {
         return [
-            Column::make('name')->title(__('Tên case')),
+            Column::make('name')->title(__('Tên case'))->width('20%'),
             Column::make('case')->title(__('Tên case tách')),
             Column::make('customer')->title(__('Khách hàng')),
             Column::make('level')->title(__('Level')),
