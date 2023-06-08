@@ -447,7 +447,16 @@
         $(columnId).sortable('cancel');
         alert(message_drop);
       }
-
+      function checkRejected() {
+        let result = false
+        $('#in-progress').children().map(() => {
+          if ($(this).find('.status').text('Rejected')) {
+            result = true
+          }
+        })
+        return result
+      }
+      console.log(checkRejected());
       $('.sortable').sortable({
         connectWith: ".sortable",
         placeholder: "task-placeholder",
@@ -455,10 +464,11 @@
           ui.item.toggleClass("dragging");
           taskId = ui.item.attr('id');
 
-          //check xem có còn task bug không
-          let hasSiblings = ui.item.siblings().length > 1;
+          // check xem có còn task bug không
+          let hasRejected = checkRejected();
           let is_inProgress = checkStatus(taskId) == 'In progress';
-          ui.item.data('hasSiblings', hasSiblings);
+          // truyền xuống before stop
+          ui.item.data('hasRejected', hasRejected);
           ui.item.data('is_inProgress', is_inProgress);
 
           //check xem có phải task todo không
@@ -467,7 +477,7 @@
         },
         beforeStop: function(event, ui) {
           //nếu còn bug thì không được kéo sang test
-          let hasRejected = $.trim($('#in-progress').find('.status').text()) == 'Rejected';
+          let hasRejected = ui.item.data('hasRejected');
           let is_inProgress = ui.item.data('is_inProgress');
           if(hasRejected && is_inProgress){
             const message_drop = 'Bạn phải hoàn thành hết các case(s) rejected trước.'
