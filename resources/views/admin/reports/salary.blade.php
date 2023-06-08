@@ -24,9 +24,32 @@
 @endpush
 
 @section('page-content')
+    <div class="form-group row ml-0">
+        <div class="col-lg-9 pl-0">
+            <select name="user_report" class="form-control w-auto" data-width="100%">
+                <option value="">
+                    Lựa chọn user
+                </option>
+                @if(!empty($users))
+                    @foreach($users as $user)
+                        <option value="{{ $user->id }}">
+                            {{ $user->fullName }}
+                        </option>
+                    @endforeach
+                @endif
+            </select>
+        </div>
+    </div>
+    <button class="dt-button buttons-collection buttons-export btn btn-primary" onclick="exportMultipleTable(['salary', 'quality', 'deadline'], 'ReportSalary');"
+            type="button" aria-haspopup="true"><span><i class="fal fa-download mr-2"></i>Xuất</span>
+    </button>
+    <div class="row ml-0 salary_report">
+        @include('admin.reports.sub_salary', ['salaries' => $salaries, 'qualities' => $qualities])
+    </div>
+
     <iframe id="txtArea1" style="display:none"></iframe>
     {{--Full--}}
-    <button class="dt-button buttons-collection buttons-export btn btn-primary" onclick="exportMultipleTable(['full'], 'ReportAllCase');"
+    <button class="dt-button buttons-collection buttons-export btn btn-primary  mt-3" onclick="exportMultipleTable(['full'], 'ReportAllCase');"
             type="button" aria-haspopup="true"><span><i class="fal fa-download mr-2"></i>Xuất</span>
     </button>
     <table class="full w-100" style="display: table;" id="full">
@@ -87,30 +110,6 @@
         @endif
         </tbody>
     </table>
-
-    <div class="form-group row ml-0 mt-3">
-        <div class="col-lg-9 pl-0">
-            <select name="user_report" class="form-control w-auto" data-width="100%">
-                <option value="">
-                    Lựa chọn user
-                </option>
-                @if(!empty($users))
-                    @foreach($users as $user)
-                        <option value="{{ $user->id }}">
-                            {{ $user->fullName }}
-                        </option>
-                    @endforeach
-                @endif
-            </select>
-        </div>
-    </div>
-
-    <button class="mt-3 dt-button buttons-collection buttons-export btn btn-primary" onclick="exportMultipleTable(['salary', 'quality', 'deadline'], 'ReportSalary');"
-            type="button" aria-haspopup="true"><span><i class="fal fa-download mr-2"></i>Xuất</span>
-    </button>
-    <div class="row ml-0 salary_report">
-        @include('admin.reports.sub_salary', ['salaries' => $salaries, 'qualities' => $qualities])
-    </div>
 
 @stop
 

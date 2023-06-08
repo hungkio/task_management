@@ -232,7 +232,6 @@ class TaskController
                         foreach ($taskRecord as $record) {
                             $recordName = $record['name'];
                             $recordPath = $record['path_display'];
-                            $casePath = str_replace('/1.Working', '', $recordPath);
                             $caseName = "$customer/$date/$taskName/$recordName";
                             if ($date) {
                                 $record_entries = $client->listFolder("$parentPath/$customer/$newjob/$monthText$date/$taskName/$recordName")['entries'];
@@ -244,27 +243,25 @@ class TaskController
                                     $child_folder = $client->listFolder($entry['path_display'])['entries'];
                                     $childName = $entry['name'];
                                     $childPath = $entry['path_display'];
-                                    $casePath = str_replace('/1.Working', '', $childPath);
                                     $caseName = "$customer/$date/$taskName/$recordName/$childName";
                                     $countRecord = count($child_folder);
                                     if ($customer == '02. DCL') { //change case tách thành tên thư mục bên trong
                                         $taskName = $recordName;
                                     }
-                                    $this->createNewTask($customer, $caseName, $casePath, $countRecord, $taskName);
+                                    $this->createNewTask($customer, $caseName, $childPath, $countRecord, $taskName);
                                 }
                             } else {
                                 $countRecord = count($record_entries);
                                 if ($customer == '09. CL') { //change case tách thành tên thư mục bên trong
                                     $taskName = $recordName;
                                 }
-                                $this->createNewTask($customer, $caseName, $casePath, $countRecord, $taskName);
+                                $this->createNewTask($customer, $caseName, $recordPath, $countRecord, $taskName);
                             }
                         }
                     } else {
                         $caseName = "$customer/$date/$taskName";
-                        $casePath = str_replace('/1.Working', '', $taskPath);
                         $countRecord = count($taskRecord);
-                        $this->createNewTask($customer, $caseName, $casePath, $countRecord, $taskName);
+                        $this->createNewTask($customer, $caseName, $taskPath, $countRecord, $taskName);
                     }
 
                 }
@@ -277,6 +274,7 @@ class TaskController
 
     public function createNewTask($customer, $caseName, $casePath, $countRecord, $taskName)
     {
+        $casePath = str_replace('/1.Working', '', $casePath);
         // set level
         $level = null;
         $estimate = null;

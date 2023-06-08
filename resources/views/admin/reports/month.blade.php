@@ -46,7 +46,7 @@
         </tr>
         <tr class="border">
             <th class="border bg-purple text-center" colspan="2">
-                <div class="relative">Kết quả</div>
+                <div class="relative">Thống kê số phút</div>
             </th>
             @if(!empty($data))
                 @if(!empty(reset($data)))

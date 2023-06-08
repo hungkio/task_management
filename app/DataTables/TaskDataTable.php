@@ -25,10 +25,10 @@ class TaskDataTable extends BaseDatable
             ->editColumn('case', fn (Tasks $task) => $task->case)
             ->editColumn('customer', fn (Tasks $task) => $task->customer)
             ->editColumn('level', fn (Tasks $task) => $task->level ?? '')
+            ->editColumn('countRecord', fn (Tasks $task) => $task->countRecord)
             ->editColumn('status', fn (Tasks $task) => Tasks::STATUS[$task->status])
             ->editColumn('editor_id', fn (Tasks $task) => $task->editor->fullName ?? '')
             ->editColumn('QA_id', fn (Tasks $task) => $task->QA->fullName ?? '')
-            ->editColumn('countRecord', fn (Tasks $task) => $task->countRecord)
             ->editColumn('created_at', fn (Tasks $task) => formatDate($task->created_at, 'd/m/Y H:i:s'))
             ->addColumn('action', 'admin.tasks._tableAction')
             ->filterColumn('name', function($query, $keyword) {
@@ -64,14 +64,14 @@ class TaskDataTable extends BaseDatable
     protected function getColumns(): array
     {
         return [
-            Column::make('name')->title(__('Tên case'))->width('20%'),
-            Column::make('case')->title(__('Tên case tách')),
-            Column::make('customer')->title(__('Khách hàng')),
-            Column::make('level')->title(__('Level')),
+            Column::make('name')->title(__('Tên nhiệm vụ'))->width('20%'),
+            Column::make('case')->title(__('Tên Jobs')),
+            Column::make('customer')->title(__('Mã Khách')),
+            Column::make('level')->title(__('Level AX')),
+            Column::make('countRecord')->title(__('Original')),
             Column::make('status')->title(__('Trạng thái')),
             Column::make('editor_id')->title(__('Editor')),
             Column::make('QA_id')->title(__('QA')),
-            Column::make('countRecord')->title(__('Original')),
             Column::make('created_at')->title(__('Thời gian tạo')),
             Column::computed('action')
                 ->title(__('Tác vụ'))
@@ -114,14 +114,14 @@ class TaskDataTable extends BaseDatable
                                 $(api.column(colIdx).header()).index()
                             );
                         var title = $(cell).text();
-                        if (colIdx== 0 || colIdx== 1|| colIdx== 7 || colIdx== 9) {
+                        if (colIdx== 0 || colIdx== 1|| colIdx== 4 || colIdx== 9) {
                             $(cell).html('');
                             return;
                         }
 
                         if (colIdx== 8) {
                             $(cell).html('$inputDate');
-                        } else if (colIdx== 4) {
+                        } else if (colIdx== 5) {
                             $(cell).html('$selectStatus');
                         } else {
                             $(cell).html('$input');

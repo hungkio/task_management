@@ -101,11 +101,11 @@
                         @endcan
                         <li class="nav-item">
                             <a href="{{ route('admin.reports.month') }}"
-                               class="nav-link @if(request()->routeIs('admin.reports.month'))active @endif">{{ __('Báo cáo tháng') }}</a>
+                               class="nav-link @if(request()->routeIs('admin.reports.month'))active @endif">{{ __('Báo cáo Hot & Bad') }}</a>
                         </li>
                         <li class="nav-item">
                             <a href="{{ route('admin.reports.salary') }}"
-                               class="nav-link @if(request()->routeIs('admin.reports.salary'))active @endif">{{ __('Lương và năng lực') }}</a>
+                               class="nav-link @if(request()->routeIs('admin.reports.salary'))active @endif">{{ __('Data Lương sp') }}</a>
                         </li>
                     </ul>
                 </li>
