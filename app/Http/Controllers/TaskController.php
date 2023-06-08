@@ -232,7 +232,7 @@ class TaskController
                         foreach ($taskRecord as $record) {
                             $recordName = $record['name'];
                             $recordPath = $record['path_display'];
-                            $casePath = str_replace(' ', '%20', $recordPath);
+                            $casePath = str_replace('/1.Working', '', $recordPath);
                             $caseName = "$customer/$date/$taskName/$recordName";
                             if ($date) {
                                 $record_entries = $client->listFolder("$parentPath/$customer/$newjob/$monthText$date/$taskName/$recordName")['entries'];
@@ -244,19 +244,25 @@ class TaskController
                                     $child_folder = $client->listFolder($entry['path_display'])['entries'];
                                     $childName = $entry['name'];
                                     $childPath = $entry['path_display'];
-                                    $casePath = str_replace(' ', '%20', $childPath);
+                                    $casePath = str_replace('/1.Working', '', $childPath);
                                     $caseName = "$customer/$date/$taskName/$recordName/$childName";
                                     $countRecord = count($child_folder);
+                                    if ($customer == '02. DCL') { //change case tách thành tên thư mục bên trong
+                                        $taskName = $recordName;
+                                    }
                                     $this->createNewTask($customer, $caseName, $casePath, $countRecord, $taskName);
                                 }
                             } else {
                                 $countRecord = count($record_entries);
+                                if ($customer == '09. CL') { //change case tách thành tên thư mục bên trong
+                                    $taskName = $recordName;
+                                }
                                 $this->createNewTask($customer, $caseName, $casePath, $countRecord, $taskName);
                             }
                         }
                     } else {
                         $caseName = "$customer/$date/$taskName";
-                        $casePath = str_replace(' ', '%20', $taskPath);
+                        $casePath = str_replace('/1.Working', '', $taskPath);
                         $countRecord = count($taskRecord);
                         $this->createNewTask($customer, $caseName, $casePath, $countRecord, $taskName);
                     }
