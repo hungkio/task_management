@@ -14,4 +14,4 @@ yarn-error.log
 .idea/
 composer.lock
 .gitignore
-/storage/
+storage/
