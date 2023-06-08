@@ -449,14 +449,16 @@
       }
       function checkRejected() {
         let result = false
-        $('#in-progress').children().map(() => {
-          if ($(this).find('.status').text('Rejected')) {
+        $('#in-progress').children().each(function(index, child) {
+          if($.trim($(child).find('.status').text()) === 'Rejected'){
             result = true
-          }
-        })
+            return false
+          };
+        });
         return result
       }
       console.log(checkRejected());
+      
       $('.sortable').sortable({
         connectWith: ".sortable",
         placeholder: "task-placeholder",
@@ -496,7 +498,6 @@
         },
         receive: function(event, ui) {
           let thisProcess = $(this).attr('id');
-          
           switch (thisProcess) {
             case 'in-progress':
               processStatus = 4;
@@ -529,6 +530,7 @@
                     removeButton(ui.item.find('.button-box'));
                     updateTaskStatus(taskId, processStatus);
                     ui.item.find('.status').text(status);
+                    console.log(checkRejected());
                   }else{
                     $('#in-progress').sortable('cancel').sortable('cancel');
                     alert('QA hiện tại đang không online. Liên hệ với admin để chuyển task sang Editor khác.')
@@ -571,10 +573,7 @@
             default:
               break;
           }
-
-          if (processStatus == 2) {
-            
-          }
+          
         }
       });
 
