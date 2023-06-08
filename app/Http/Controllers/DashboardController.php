@@ -70,7 +70,7 @@ class DashboardController
         $tasks_editing = $tasks->whereDate('created_at', Carbon::today())->where('status', Tasks::WAITING)->whereNotNull('level')->whereNotNull('estimate')->get();
 
         $today = Carbon::today()->format("Y-m-d");
-        $from = strtotime($today . ' 08:00:00');
+        $from = strtotime($today . ' 07:00:00');
         $to = strtotime($today . ' 23:59:00');
         if(time() >= $from && time() <= $to) { // in working time
             if ($roleName == 'editor' && $tasks_ready->isEmpty() && $tasks_rejected->isEmpty()) {
