@@ -37,7 +37,7 @@
             <th class="border bg-blue text-center">
                 <div class="relative"><span class="colHeader">Tên NV</span></div>
             </th>
-            <th class="border bg-blue text-center" colspan="{{ count(@reset($data)) ?? 0 }}">
+            <th class="border bg-blue text-center" colspan="{{ $data ? (count(@reset($data)) ?? 0) : 0 }}">
                 <div class="relative"><span class="colHeader">Ngày</span></div>
             </th>
             <th class="border bg-blue text-center">
@@ -106,7 +106,7 @@
             <th class="border bg-blue text-center">
                 <div class="relative"><span class="colHeader">Tên NV</span></div>
             </th>
-            <th class="border bg-blue text-center" colspan="{{ count(@reset($data)) ?? 0 }}">
+            <th class="border bg-blue text-center" colspan="{{ $data ? (count(@reset($data)) ?? 0) : 0 }}">
                 <div class="relative"><span class="colHeader">Ngày</span></div>
             </th>
             <th class="border bg-blue text-center">
@@ -175,7 +175,7 @@
             <th class="border bg-blue text-center">
                 <div class="relative"><span class="colHeader">Tên NV</span></div>
             </th>
-            <th class="border bg-blue text-center" colspan="{{ count(@reset($dataBad)) ?? 0 }}">
+            <th class="border bg-blue text-center" colspan="{{ $dataBad ? (count(@reset($dataBad)) ?? 0) : 0 }}">
                 <div class="relative"><span class="colHeader">Ngày</span></div>
             </th>
             <th class="border bg-blue text-center">
