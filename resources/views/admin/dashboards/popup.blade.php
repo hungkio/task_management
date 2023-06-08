@@ -17,6 +17,10 @@
                 <label for="">Editor:</label>
                 <input class="form-control" type="text" value="{{ $editor ? ($editor->last_name . ' ' . $editor->first_name) : '' }}" disabled/>
               </div>
+                <div class="col">
+                    <label for="">Editor done number:</label>
+                    <input class="form-control" type="text" value="{{ $task->editor_check_num }}" name="editor_check_num" />
+                </div>
               <div class="col">
                 <label for="">Estimate:</label>
                 <input class="form-control" type="text" value="{{ $task->estimate }}" name="estimate" {{ ($roleName == 'admin' || $roleName == 'superadmin') ? '' : 'disabled' }}/>
