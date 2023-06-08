@@ -32,11 +32,11 @@ class TaskController
     {
         $this->authorize('create', Tasks::class);
         $QAs = Admin::whereHas('roles', function (Builder $subQuery) {
-            $subQuery->where(config('permission.table_names.roles').'.name', 'QA');
+            $subQuery->where(config('permission.table_names.roles') . '.name', 'QA');
         })->get();
 
         $editors = Admin::whereHas('roles', function (Builder $subQuery) {
-            $subQuery->where(config('permission.table_names.roles').'.name', 'editor');
+            $subQuery->where(config('permission.table_names.roles') . '.name', 'editor');
         })->get();
         return view('admin.tasks.create', compact('QAs', 'editors'));
     }
@@ -58,11 +58,11 @@ class TaskController
     {
         $this->authorize('update', $task);
         $QAs = Admin::whereHas('roles', function (Builder $subQuery) {
-            $subQuery->where(config('permission.table_names.roles').'.name', 'QA');
+            $subQuery->where(config('permission.table_names.roles') . '.name', 'QA');
         })->get();
 
         $editors = Admin::whereHas('roles', function (Builder $subQuery) {
-            $subQuery->where(config('permission.table_names.roles').'.name', 'editor');
+            $subQuery->where(config('permission.table_names.roles') . '.name', 'editor');
         })->get();
         return view('admin.tasks.edit', compact('task', 'QAs', 'editors'));
     }
@@ -202,9 +202,9 @@ class TaskController
         foreach ($list as $sub1) {
             try {
                 $customer = $sub1['name']; // customer
-                $newjob = $mapCustomer[$customer][0] ?? '';
-                $monthText = $mapCustomer[$customer][1] ? $mapCustomer[$customer][1] . '/' : '/';
-                $date = $mapCustomer[$customer][2] ?? '';
+                $newjob = @$mapCustomer[$customer][0] ?? '';
+                $monthText = @$mapCustomer[$customer][1] ? $mapCustomer[$customer][1] . '/' : '/';
+                $date = @$mapCustomer[$customer][2] ?? '';
 
                 if (!$newjob) {
                     continue;
@@ -222,24 +222,22 @@ class TaskController
                     }
                     $taskName = $task['name'];
                     $taskPath = $task['path_display'];
-                    if ($date) {
-                        $taskRecord = $client->listFolder("$parentPath/$customer/$newjob/$monthText$date/$taskName")['entries'];
-                    } else {
-                        $taskRecord = $client->listFolder("$parentPath/$customer/$newjob/$taskName")['entries'];
-                    }
+                    $taskRecord = $client->listFolder($taskPath)['entries'];
 
                     if ($taskRecord && $taskRecord[0]['.tag'] == 'folder') {
                         foreach ($taskRecord as $record) {
+                            if ($record['.tag'] != 'folder') {
+                                continue;
+                            }
                             $recordName = $record['name'];
                             $recordPath = $record['path_display'];
                             $caseName = "$customer/$date/$taskName/$recordName";
-                            if ($date) {
-                                $record_entries = $client->listFolder("$parentPath/$customer/$newjob/$monthText$date/$taskName/$recordName")['entries'];
-                            } else {
-                                $record_entries = $client->listFolder("$parentPath/$customer/$newjob/$taskName/$recordName")['entries'];
-                            }
+                            $record_entries = $client->listFolder($recordPath)['entries'];
                             if ($record_entries && $record_entries[0]['.tag'] == 'folder') {
                                 foreach ($record_entries as $entry) {
+                                    if ($entry['.tag'] != 'folder') {
+                                        continue;
+                                    }
                                     $child_folder = $client->listFolder($entry['path_display'])['entries'];
                                     $childName = $entry['name'];
                                     $childPath = $entry['path_display'];
