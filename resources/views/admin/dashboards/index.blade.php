@@ -419,6 +419,7 @@
                                 "</div>"+
                                 "<div class='card-text mb-1'>QA checked: "+(response.task.QA_check_num ? response.task.QA_check_num : '')+"</div>"
               $('#'+taskId).find('.qa-details').append(qaDetails);
+              $('#'+taskId).attr('qa-id',response.QA.id);
               statusLabel.text('Testing');
               statusLabel.css("background-color", "#ebc334");
             }else{
