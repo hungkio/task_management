@@ -19,7 +19,7 @@
               </div>
                 <div class="col">
                     <label for="">Editor done number:</label>
-                    <input class="form-control" type="text" value="{{ $task->editor_check_num }}" name="editor_check_num" />
+                    <input class="form-control" type="number" value="{{ $task->editor_check_num }}" name="editor_check_num" />
                 </div>
               <div class="col">
                 <label for="">Estimate:</label>

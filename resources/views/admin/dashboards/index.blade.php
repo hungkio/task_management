@@ -361,6 +361,7 @@
 @push('js')
   <script>
     $(document).ready(function () {
+      const user_role = '{{ auth()->user()->getRoleNames()[0] }}';
       function addNewTask() {
         $.ajax({
           url: "{{ route('admin.assign-editor')}}",
@@ -490,8 +491,8 @@
           //nếu còn bug thì không được kéo sang test
           let hasRejected = ui.item.data('hasRejected');
           let is_inProgress = ui.item.data('is_inProgress');
-          if(hasRejected && is_inProgress){
-            const message_drop = 'Bạn phải hoàn thành hết các case(s) rejected trước.'
+          if(hasRejected && is_inProgress && user_role != 'superadmin'){ // admin ko bị chặn case này
+            const message_drop = 'Bạn phải hoàn thành hết các case(s) rejected trước.';
             cancelDrop('#in-progress', message_drop);
           }
 
@@ -508,6 +509,12 @@
           if($(this).attr('id') == 'in-progress' && (editor_check_num == '' || finish_path == '')) {
             let message_drop = 'Bạn chưa điền số lượng ảnh done hoặc đường dẫn file done'
             cancelDrop('#in-progress', message_drop);
+          }
+
+          // nếu là editor chỉ được kéo từ IP sang test
+          if($(this).attr('id') != 'in-progress' && user_role == 'editor') {
+            let message_drop = 'Bạn không có quyền kéo case này';
+            cancelDrop('#' +$(this).attr('id'), message_drop);
           }
         },
         stop: function(event, ui) {
