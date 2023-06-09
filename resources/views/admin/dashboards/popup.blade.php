@@ -59,7 +59,7 @@
               </div>
               <div class="col">
                 <label for="">Check Num:</label>
-                <input class="form-control" type="text" value="{{ $task->QA_check_num }}" name="QA_check_num" />
+                <input class="form-control" type="number" value="{{ $task->QA_check_num }}" name="QA_check_num" />
               </div>
             </div>
           </div>
