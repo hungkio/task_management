@@ -131,6 +131,8 @@
                     data-url="{{ route('admin.popup', $task->id) }}"
                     class="card rounded-0 mb-3 border-0 border-start border-primary border-3 shadow"
                     editor-id = "{{ $task->editor_id }}"
+                    data-editor-check-num = "{{ $task->editor_check_num }}"
+                    data-finish-path = "{{ $task->finish_path }}"
                     qa-id = "{{ $task->QA_id }}">
                       <div class="card-body px-3 py-3">
                           <div class="card-text mb-1">{{$task->name}}</div>
@@ -168,6 +170,8 @@
                     data-url="{{ route('admin.popup', $task->id) }}"
                     class="card rounded-0 mb-3 border-0 border-start border-primary border-3 shadow"
                     editor-id = "{{ $task->editor_id }}"
+                    data-editor-check-num = "{{ $task->editor_check_num }}"
+                    data-finish-path = "{{ $task->finish_path }}"
                     qa-id = "{{ $task->QA_id }}">
                       <div class="card-body px-3 py-3">
                           <div class="card-text mb-1">{{$task->name}}</div>
@@ -217,6 +221,8 @@
                     data-url="{{ route('admin.popup', $task->id) }}"
                     class="card rounded-0 mb-3 border-0 border-start border-primary border-3 shadow"
                     editor-id = "{{ $task->editor_id }}"
+                    data-editor-check-num = "{{ $task->editor_check_num }}"
+                    data-finish-path = "{{ $task->finish_path }}"
                     qa-id = "{{ $task->QA_id }}">
                       <div class="card-body px-3 py-3">
                           <div class="card-text mb-1">{{$task->name}}</div>
@@ -240,7 +246,7 @@
                           <div class="button-box d-flex justify-content-between">
                             <div class="status px-2 rounded {{$task->QA_check_num ? 'bug' : 'testing'}} d-inline-block p-1 fw-semibold text-white project-name">
                               @if ($task->QA_check_num)
-                                Reject resolve                              
+                                Reject resolve
                               @else
                                 Testing
                               @endif
@@ -249,7 +255,7 @@
                       </div>
                   </div>
                 @endforeach
-  
+
               </div>
           </div>
         </div>
@@ -271,6 +277,8 @@
                       data-url="{{ route('admin.popup', $task->id) }}"
                       class="card rounded-0 mb-3 border-0 border-start border-primary border-3 shadow"
                       editor-id = "{{ $task->editor_id }}"
+                      data-editor-check-num = "{{ $task->editor_check_num }}"
+                      data-finish-path = "{{ $task->finish_path }}"
                       qa-id = "{{ $task->QA_id }}">
                         <div class="card-body px-3 py-3">
                             <div class="card-text mb-1">{{$task->name}}</div>
@@ -311,6 +319,8 @@
                       data-url="{{ route('admin.popup', $task->id) }}"
                       class="card rounded-0 mb-3 border-0 border-start border-primary border-3 shadow"
                       editor-id = "{{ $task->editor_id }}"
+                      data-editor-check-num = "{{ $task->editor_check_num }}"
+                      data-finish-path = "{{ $task->finish_path }}"
                       qa-id = "{{ $task->QA_id }}">
                         <div class="card-body px-3 py-3">
                             <div class="card-text mb-1">{{$task->name}}</div>
@@ -405,12 +415,12 @@
               addNewTask();
 
               const qaStart = new Date(response.task.QA_start);
-  
+
               const formatedDate = ('0' + qaStart.getDate()).slice(-2);
               const formatedMonth = ('0' + (qaStart.getMonth()+1)).slice(-2);
               const formatedHour = ('0' + qaStart.getHours()).slice(-2);
               const formatedMinute = ('0' + qaStart.getMinutes()).slice(-2);
-  
+
               const formattedQaStart = `${formatedDate}/${formatedMonth}/${qaStart.getFullYear()} ${formatedHour}:${formatedMinute}`;
               const qaDetails = "<div class='card-text mb-1'>"+
                                   "<span>QA: "+response.QA.last_name+"</span>"+
@@ -457,8 +467,7 @@
         });
         return result
       }
-      console.log(checkRejected());
-      
+
       $('.sortable').sortable({
         connectWith: ".sortable",
         placeholder: "task-placeholder",
@@ -488,8 +497,16 @@
 
           //nếu là todo thì không được kéo sang test
           let is_todo = ui.item.data('is_todo');
-          const message_drop = 'Bạn vẫn chưa bắt đầu làm case này.'
           if (is_todo) {
+              const message_drop = 'Bạn vẫn chưa bắt đầu làm case này.'
+              cancelDrop('#in-progress', message_drop);
+          }
+
+          // nếu chưa có editor_check_num or finish_path thì ko kéo dc sang test
+          let editor_check_num = ui.item.data('editor-check-num');
+          let finish_path = ui.item.data('finish-path');
+          if($(this).attr('id') == 'in-progress' && (editor_check_num == '' || finish_path == '')) {
+            let message_drop = 'Bạn chưa điền số lượng ảnh done hoặc đường dẫn file done'
             cancelDrop('#in-progress', message_drop);
           }
         },
@@ -504,7 +521,7 @@
               removeButton(ui.item.find('.button-box'));
               checkOnline(ui.item.attr('editor-id'), function(result) {
                 if (result) {
-                  
+
                   if ($.trim(ui.item.find('.status').text()) == 'Finished'){
                     alert('Case đã hoàn thành không thể chuyển lại về edit.');
                     $('#done').sortable('cancel').sortable('cancel');
@@ -530,7 +547,6 @@
                     removeButton(ui.item.find('.button-box'));
                     updateTaskStatus(taskId, processStatus);
                     ui.item.find('.status').text(status);
-                    console.log(checkRejected());
                   }else{
                     $('#in-progress').sortable('cancel').sortable('cancel');
                     alert('QA hiện tại đang không online. Liên hệ với admin để chuyển task sang Editor khác.')
@@ -542,7 +558,6 @@
               }else if(ui.item.has(".in-progress").length && ui.item.find(".qa-details").find('div').length == 0){
                 //chỉ trường hợp task in-progress mới append html qaDetails
                 let statusLabel = ui.item.find('.status');
-                console.log(taskId);
                 assignQA(taskId, statusLabel);
               }else if($.trim(ui.item.find('.status').text()) == 'No bug left'){
                 status = 'Reject resolve';
@@ -573,7 +588,7 @@
             default:
               break;
           }
-          
+
         }
       });
 
@@ -591,8 +606,8 @@
           url: "{{ route('admin.update-status')}}",
           type: 'POST',
           dataType: 'json',
-          data: { 
-            id: taskId, 
+          data: {
+            id: taskId,
             status: processStatus,
             ...(saveStartAt && {confirm: saveStartAt})
           },
