@@ -33,7 +33,7 @@
                 @if(!empty($users))
                     @foreach($users as $user)
                         <option value="{{ $user->id }}">
-                            {{ $user->fullName }}
+                            {{ $user->email }}
                         </option>
                     @endforeach
                 @endif
@@ -100,8 +100,8 @@
                     <td class="border text-center">{{ $task->level }}</td>
                     <td class="border text-center">{{ $task->countRecord }}</td>
                     <td class="border text-center">{{ $task->name }}</td>
-                    <td class="border text-center">{{ $task->editor->fullName ?? '' }}</td>
-                    <td class="border text-center">{{ $task->QA->fullName ?? '' }}</td>
+                    <td class="border text-center">{{ $task->editor->email ?? '' }}</td>
+                    <td class="border text-center">{{ $task->QA->email ?? '' }}</td>
                     <td class="border text-center">{{ $task->QA_check_num }}</td>
                     <td class="border text-center">{{ $task->timespent }}</td>
                     <td class="border text-center">{{ $task->average }}</td>

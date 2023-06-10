@@ -28,8 +28,8 @@ class TaskDataTable extends BaseDatable
             ->editColumn('level', fn (Tasks $task) => $task->level ?? '')
             ->editColumn('countRecord', fn (Tasks $task) => $task->countRecord)
             ->editColumn('status', fn (Tasks $task) => Tasks::STATUS[$task->status])
-            ->editColumn('editor_id', fn (Tasks $task) => $task->editor->fullName ?? '')
-            ->editColumn('QA_id', fn (Tasks $task) => $task->QA->fullName ?? '')
+            ->editColumn('editor_id', fn (Tasks $task) => $task->editor->email ?? '')
+            ->editColumn('QA_id', fn (Tasks $task) => $task->QA->email ?? '')
             ->editColumn('updated_at', fn (Tasks $task) => formatDate($task->updated_at, 'd/m/Y H:i:s'))
             ->addColumn('action', 'admin.tasks._tableAction')
             ->filterColumn('name', function($query, $keyword) {
@@ -37,14 +37,12 @@ class TaskDataTable extends BaseDatable
             })
             ->filterColumn('editor_id', function($query, $keyword) {
                 $query->whereHas('editor', function($q) use ($keyword) {
-                    $q->orWhere('first_name', 'like', "%$keyword%")
-                        ->orWhere('last_name', 'like', "%$keyword%");
+                    $q->where('email', 'like', "%$keyword%");
                 });
             })
             ->filterColumn('QA_id', function($query, $keyword) {
                 $query->whereHas('QA', function($q) use ($keyword) {
-                    $q->orWhere('first_name', 'like', "%$keyword%")
-                        ->orWhere('last_name', 'like', "%$keyword%");
+                    $q->where('email', 'like', "%$keyword%");
                 });
             })
             ->orderColumn('name', 'name $1')
