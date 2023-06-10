@@ -103,6 +103,7 @@ class TaskDataTable extends BaseDatable
         $inputDate = "<input class=\"datepicker\" type=\"date\" placeholder=\"' + title + '\" />";
         $selectStatus = "<input class=\"status_filter\" style=\"display: none\" type=\"text\"/>" . "<select style=\"width: 100%\" class=\"p-0 select_status form-control is-valid\" data-width=\"100%\" aria-invalid=\"false\"> <option value=\"0\" selected=\"\">Waiting</option><option value=\"1\">Editing</option><option value=\"2\">QA Check</option> <option value=\"3\">Done Reject</option> <option value=\"4\">Reject</option> <option value=\"5\">Ready</option> <option value=\"6\">Finish</option> </select>";
         return [
+            'dom' => '<"dt-buttons-full"B><"datatable-header"l><"datatable-scroll-wrap"t><"datatable-footer"ip>',
             'order' => [9, 'desc'],
             "initComplete" => "function () {
                     var api = this.api();
@@ -117,7 +118,7 @@ class TaskDataTable extends BaseDatable
                                 $(api.column(colIdx).header()).index()
                             );
                         var title = $(cell).text();
-                        if (colIdx== 0 || colIdx== 2 || colIdx== 1|| colIdx== 5 || colIdx== 10) {
+                        if (colIdx== 0 || colIdx== 2 || colIdx== 5 || colIdx== 10) {
                             $(cell).html('');
                             return;
                         }
