@@ -5,6 +5,7 @@ namespace App\DataTables;
 use App\DataTables\Core\BaseDatable;
 use App\DataTables\Export\TaskExportHandler;
 use App\Tasks;
+use Carbon\Carbon;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 
@@ -176,14 +177,15 @@ class TaskDataTable extends BaseDatable
         return 'tasks_'.date('YmdHis');
     }
 
-    protected function buildExcelFile()
-    {
-        $this->request()->merge(['length' => -1]);
-        $source = app()->call([$this, 'query']);
-        $source = $this->applyScopes($source);
-
-        return new TaskExportHandler($source->get());
-    }
+//    protected function buildExcelFile()
+//    {
+//        $this->request()->merge(['length' => -1]);
+//        $source = app()->call([$this, 'query']);
+//        $source = $this->applyScopes($source);
+//
+////        return new TaskExportHandler($source->whereDate('created_at', Carbon::today())->get());
+//        return new TaskExportHandler($source->get());
+//    }
 
     public function printPreview()
     {
