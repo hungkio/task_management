@@ -25,7 +25,7 @@ class PreTaskDataTable extends BaseDatable
             ->editColumn('countRecord', fn (PreTasks $task) => $task->countRecord)
             ->editColumn('name', fn (PreTasks $task) => $task->name)
             ->editColumn('case', fn (PreTasks $task) => $task->case)
-            ->editColumn('created_at', fn (PreTasks $task) => formatDate($task->created_at, 'd/m/Y H:i:s'))
+            ->editColumn('updated_at', fn (PreTasks $task) => formatDate($task->updated_at, 'd/m/Y H:i:s'))
             ->addColumn('action', 'admin.pre_tasks._tableAction')
             ->filterColumn('name', function($query, $keyword) {
                 $query->where('name', 'like', "%$keyword%");
@@ -54,7 +54,7 @@ class PreTaskDataTable extends BaseDatable
             Column::make('countRecord')->title(__('Original')),
             Column::make('name')->title(__('Tên nhiệm vụ'))->width('20%'),
             Column::make('case')->title(__('Tên Jobs')),
-            Column::make('created_at')->title(__('Thời gian tạo')),
+            Column::make('updated_at')->title(__('Cập nhật')),
             Column::computed('action')
                 ->title(__('Tác vụ'))
                 ->exportable(false)
@@ -83,7 +83,7 @@ class PreTaskDataTable extends BaseDatable
         $inputDate = "<input class=\"datepicker\" type=\"date\" placeholder=\"' + title + '\" />";
         return [
             'dom' => '<"dt-buttons-full"B><"datatable-header"l><"datatable-scroll-wrap"t><"datatable-footer"ip>',
-            'order' => [7, 'desc'],
+            'order' => [6, 'desc'],
             "initComplete" => "function () {
                     var api = this.api();
 

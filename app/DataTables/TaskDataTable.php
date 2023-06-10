@@ -30,7 +30,7 @@ class TaskDataTable extends BaseDatable
             ->editColumn('status', fn (Tasks $task) => Tasks::STATUS[$task->status])
             ->editColumn('editor_id', fn (Tasks $task) => $task->editor->fullName ?? '')
             ->editColumn('QA_id', fn (Tasks $task) => $task->QA->fullName ?? '')
-            ->editColumn('created_at', fn (Tasks $task) => formatDate($task->created_at, 'd/m/Y H:i:s'))
+            ->editColumn('updated_at', fn (Tasks $task) => formatDate($task->updated_at, 'd/m/Y H:i:s'))
             ->addColumn('action', 'admin.tasks._tableAction')
             ->filterColumn('name', function($query, $keyword) {
                 $query->where('name', 'like', "%$keyword%");
@@ -74,7 +74,7 @@ class TaskDataTable extends BaseDatable
             Column::make('status')->title(__('Trạng thái')),
             Column::make('editor_id')->title(__('Editor')),
             Column::make('QA_id')->title(__('QA')),
-            Column::make('created_at')->title(__('Thời gian tạo')),
+            Column::make('updated_at')->title(__('Cập nhật')),
             Column::computed('action')
                 ->title(__('Tác vụ'))
                 ->exportable(false)
