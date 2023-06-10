@@ -20,7 +20,7 @@
                 margin-left: .625rem !important;
             }
         }
-        tbody tr td:first-child {
+        tbody tr td:nth-child(3) {
             min-width: 300px;
             word-break: break-all;
             white-space: normal;

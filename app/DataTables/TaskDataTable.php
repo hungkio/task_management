@@ -64,6 +64,7 @@ class TaskDataTable extends BaseDatable
     protected function getColumns(): array
     {
         return [
+            Column::checkbox(''),
             Column::make('name')->title(__('Tên nhiệm vụ'))->width('20%'),
             Column::make('case')->title(__('Tên Jobs')),
             Column::make('customer')->title(__('Mã Khách')),
@@ -91,6 +92,7 @@ class TaskDataTable extends BaseDatable
             Button::make('selected')->addClass('btn bg-teal-400 import')
                 ->text('<i class="icon-compose mr-2"></i>'.__('Import')
                 ),
+            Button::make('bulkDelete')->addClass('btn btn-danger d-none')->text('<i class="fal fa-trash-alt mr-2"></i>'.__('Xóa')),
         ];
     }
 
@@ -100,7 +102,7 @@ class TaskDataTable extends BaseDatable
         $inputDate = "<input class=\"datepicker\" type=\"date\" placeholder=\"' + title + '\" />";
         $selectStatus = "<input class=\"status_filter\" style=\"display: none\" type=\"text\"/>" . "<select style=\"width: 100%\" class=\"p-0 select_status form-control is-valid\" data-width=\"100%\" aria-invalid=\"false\"> <option value=\"0\" selected=\"\">Waiting</option><option value=\"1\">Editing</option><option value=\"2\">QA Check</option> <option value=\"3\">Done Reject</option> <option value=\"4\">Reject</option> <option value=\"5\">Ready</option> <option value=\"6\">Finish</option> </select>";
         return [
-            'order' => [8, 'desc'],
+            'order' => [9, 'desc'],
             "initComplete" => "function () {
                     var api = this.api();
 
@@ -114,14 +116,14 @@ class TaskDataTable extends BaseDatable
                                 $(api.column(colIdx).header()).index()
                             );
                         var title = $(cell).text();
-                        if (colIdx== 0 || colIdx== 1|| colIdx== 4 || colIdx== 9) {
+                        if (colIdx== 0 || colIdx== 2 || colIdx== 1|| colIdx== 5 || colIdx== 10) {
                             $(cell).html('');
                             return;
                         }
 
-                        if (colIdx== 8) {
+                        if (colIdx== 9) {
                             $(cell).html('$inputDate');
-                        } else if (colIdx== 5) {
+                        } else if (colIdx== 6) {
                             $(cell).html('$selectStatus');
                         } else {
                             $(cell).html('$input');

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\DataTables\TaskDataTable;
 use App\Domain\Admin\Models\Admin;
+use App\Http\Requests\Admin\TaskBulkDeleteRequest;
 use App\Http\Requests\Admin\TaskRequest;
 use App\Imports\TasksImport;
 use App\Tasks;
@@ -321,5 +322,23 @@ class TaskController
         }
 
         return back();
+    }
+
+    public function bulkDelete(TaskBulkDeleteRequest $request)
+    {
+        $count_deleted = 0;
+        $deletedRecord = Tasks::whereIn('id', $request->input('id'))->get();
+        foreach ($deletedRecord as $post) {
+                $post->delete();
+                $count_deleted++;
+        }
+        return response()->json([
+            'status' => true,
+            'message' => __('Đã xóa ":count" case thành công ',
+                [
+                    'count' => $count_deleted,
+                    'count_fail' => count($request->input('id')) - $count_deleted,
+                ]),
+        ]);
     }
 }

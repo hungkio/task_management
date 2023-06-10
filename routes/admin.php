@@ -71,6 +71,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::put('tasks/{task}', [TaskController::class, 'update'])->name('tasks.update');
             Route::get('tasks/cron', [TaskController::class, 'cron'])->name('tasks.cron');
             Route::post('tasks/import', [TaskController::class, 'import'])->name('tasks.import');
+            Route::post('/tasks/bulk-delete', [TaskController::class, 'bulkDelete'])->name('posts.bulk-delete');
 
             //reports
             Route::get('report/month', [ReportController::class, 'month'])->name('reports.month');
