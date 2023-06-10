@@ -33,11 +33,11 @@ class TasksImport implements ToCollection
             $QAName = $row[7];
             $editor = Admin::whereHas('roles', function (Builder $subQuery) {
                 $subQuery->where(config('permission.table_names.roles').'.name', 'editor');
-            })->whereRaw("concat(first_name, ' ', last_name) = '$editorName'")->first();
+            })->where("email", $editorName)->first();
 
             $QA = Admin::whereHas('roles', function (Builder $subQuery) {
                 $subQuery->where(config('permission.table_names.roles').'.name', 'QA');
-            })->whereRaw("concat(first_name, ' ', last_name) = '$QAName'")->first();
+            })->where("email", $QAName)->first();
             $countRecord = $row[8];
             $casePath = $row[9];
             Tasks::updateOrCreate([

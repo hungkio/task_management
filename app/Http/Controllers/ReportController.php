@@ -113,10 +113,10 @@ class ReportController
                 $bad = array_map(function () {
                     return array_sum(func_get_args());
                 }, $bad, []);
-                $dataBad[$user->fullName] = $bad;
+                $dataBad[$user->email] = $bad;
             }
 
-            $data[$user->fullName] = $dataDate;
+            $data[$user->email] = $dataDate;
         }
 
         $sumTotal = array_sum($dataTotal);
@@ -302,7 +302,7 @@ class ReportController
 
         foreach ($employees as $employee) {
             $id = $employee->id;
-            $name = $employee->fullName;
+            $name = $employee->email;
             $role = $employee->getRoleNames()[0];
             if ($role == 'editor') {
                 $tasks_amount = Tasks::whereDate(DB::raw('DATE(created_at)'), date('Y-m-d', strtotime($date)))->where('editor_id',$id)->get()->unique('case')->count();

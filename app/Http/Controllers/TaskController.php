@@ -287,7 +287,7 @@ class TaskController
 
     public function createNewTask($customer, $caseName, $casePath, $countRecord, $taskName)
     {
-        $casePath = str_replace('/1.Working', '', $casePath);
+        $casePath = str_replace('/1.Working/', '', $casePath);
         // set level
         $level = null;
         foreach (Admin::CUSTOMER_LEVEL as $key => $value) {

@@ -23,8 +23,8 @@
             <td>{{ $task->customer }}</td>
             <td>{{ $task->level }}</td>
             <td>{{ \App\Tasks::STATUS[$task->status] }}</td>
-            <td>{{ $task->editor->fullName ?? '' }}</td>
-            <td>{{ $task->QA->fullName ?? '' }}</td>
+            <td>{{ $task->editor->email ?? '' }}</td>
+            <td>{{ $task->QA->email ?? '' }}</td>
             <td>{{ $task->countRecord }}</td>
             <td>{{ $task->path }}</td>
             <td>{{ formatDate($task->created_at) }}</td>

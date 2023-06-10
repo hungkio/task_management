@@ -133,7 +133,7 @@
                                             @foreach($editors as $editor)
                                                 <option value="{{ $editor->id }}"
                                                         @if($editor->id == @$task->editor_id) selected @endif>
-                                                    {{ $editor->fullName }}
+                                                    {{ $editor->email }}
                                                 </option>
                                             @endforeach
                                         </select>
@@ -168,7 +168,7 @@
                                             @foreach($QAs as $qa)
                                                 <option value="{{ $qa->id }}"
                                                         @if($qa->id == @$task->QA_id) selected @endif>
-                                                    {{ $qa->fullName }}
+                                                    {{ $qa->email }}
                                                 </option>
                                             @endforeach
                                         </select>

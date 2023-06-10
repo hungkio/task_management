@@ -2,13 +2,10 @@
     <thead>
     <tr>
         <th>Thứ tự</th>
-        <th>Tên case</th>
-        <th>Tên case tách</th>
+        <th>Tên nhiệm vụ</th>
+        <th>Tên jobs</th>
         <th>Khách hàng</th>
-        <th>Level</th>
-        <th>Trạng thái</th>
-        <th>Editor</th>
-        <th>QA</th>
+        <th>Level AX</th>
         <th>Số lượng original</th>
         <th>Case path</th>
         <th>Thời gian tạo</th>
@@ -22,9 +19,6 @@
             <td>{{ $task->case }}</td>
             <td>{{ $task->customer }}</td>
             <td>{{ $task->level }}</td>
-            <td>{{ \App\Tasks::STATUS[$task->status] }}</td>
-            <td>{{ $task->editor->fullName ?? '' }}</td>
-            <td>{{ $task->QA->fullName ?? '' }}</td>
             <td>{{ $task->countRecord }}</td>
             <td>{{ $task->path }}</td>
             <td>{{ formatDate($task->created_at) }}</td>

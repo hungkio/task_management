@@ -15,7 +15,7 @@
             <div class="row">
               <div class="col">
                 <label for="">Editor:</label>
-                <input class="form-control" type="text" value="{{ $editor ? ($editor->last_name . ' ' . $editor->first_name) : '' }}" disabled/>
+                <input class="form-control" type="text" value="{{ $editor ? ($editor->email) : '' }}" disabled/>
               </div>
                 <div class="col">
                     <label for="">Editor done number:</label>
@@ -65,7 +65,7 @@
             <div class="row">
               <div class="col">
                 <label for="">QA:</label>
-                <input class="form-control" type="text" value="{{ $QA ? ($QA->last_name . ' ' . $QA->first_name) : '' }}" disabled/>
+                <input class="form-control" type="text" value="{{ $QA ? ($QA->email) : '' }}" disabled/>
               </div>
               <div class="col">
                 <label for="">Check Num:</label>
