@@ -138,6 +138,7 @@ class Admin extends Authenticatable implements HasMedia
         'TJ' => 'SE',
     ];
 
+
     // Editor, QA, CTV
     const COST = [
         'INV' => [2000,400,0],

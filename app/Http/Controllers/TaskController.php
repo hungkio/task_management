@@ -286,7 +286,6 @@ class TaskController
                 break;
             }
         }
-
         $task = Tasks::where('name', $caseName)->whereDate('created_at', Carbon::today())->orderBy('created_at', 'desc')->first();
         if ($task) {
             $task->update([
