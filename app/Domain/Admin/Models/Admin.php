@@ -165,6 +165,26 @@ class Admin extends Authenticatable implements HasMedia
         'Basic_rt' => [10000,0,0]
     ];
 
+    const PRIORITY = [
+        'SE_FL' => 5,
+        'SE_DE' => 4,
+        'SE' => 3,
+        'INV' => 3,
+        'SE_TW' => 2,
+        'DTD' => 2,
+        'AV' => 2,
+        'DBAV' => 2,
+        'VT' => 1,
+        'VTP' => 1,
+        'VTP360' => 1,
+        'FL' => 1,
+        'FLB' => 1,
+        'FLP' => 1,
+        'HEN' => 0,
+        'PRT' => 0,
+        'EXT' => 0,
+    ];
+
     public function registerMediaCollections(): void
     {
         $this

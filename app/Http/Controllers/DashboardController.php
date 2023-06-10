@@ -98,7 +98,7 @@ class DashboardController
 
         $tasks_rejected = $tasks->where('editor_id', $user_id)->whereDate('created_at', Carbon::today())->where('status', Tasks::REJECTED)->get();
         $tasks_ready = $tasks->where('editor_id', $user_id)->whereDate('created_at', Carbon::today())->whereIn('status', [Tasks::EDITING, Tasks::TODO])->get();
-        $tasks_editing = $tasks->whereDate('created_at', Carbon::today())->where('status', Tasks::WAITING)->whereNotNull('level')->whereNotNull('estimate')->get();
+        $tasks_editing = $tasks->whereDate('created_at', Carbon::today())->where('status', Tasks::WAITING)->whereNotNull('level')->whereNotNull('estimate')->orderBy('priority', 'DESC')->get();
 
         $today = Carbon::today()->format("Y-m-d");
         $from = strtotime($today . ' 07:00:00');

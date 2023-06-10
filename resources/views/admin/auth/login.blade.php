@@ -21,7 +21,7 @@
                             </div>
 
                             <div class="form-group form-group-feedback form-group-feedback-left">
-                                <input value="" id="email" name="email" type="email" class="form-control @error('email') border-danger @enderror" placeholder="{{ __('Email') }}">
+                                <input value="" id="email" name="email" type="text" class="form-control @error('email') border-danger @enderror" placeholder="{{ __('Username') }}">
                                 <div class="form-control-feedback">
                                     <i class="far fa-user text-muted"></i>
                                 </div>
