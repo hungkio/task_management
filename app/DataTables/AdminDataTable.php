@@ -24,6 +24,7 @@ class AdminDataTable extends BaseDatable
             ->addColumn('roles', fn (Admin $admin) => $admin->roles->implode('display_name', ', '))
             ->addColumn('is_online', fn (Admin $admin) => view('admin.admins._tableOnline', compact('admin')))
             ->editColumn('created_at', fn (Admin $admin) => formatDate($admin->created_at))
+            ->editColumn('updated_at', fn (Admin $admin) => formatDate($admin->updated_at))
             ->orderColumn('full_name',
                 fn($query, $direction) => $query->orderByRaw("CONCAT(first_name, ' ', last_name) $direction")
             )
@@ -54,6 +55,7 @@ class AdminDataTable extends BaseDatable
             Column::make('roles')->title(__('Quyền')),
             Column::make('is_online')->title(__('Trạng thái')),
             Column::make('created_at')->title(__('Thời gian tạo'))->searchable(false),
+            Column::make('updated_at')->title(__('Cập nhật'))->searchable(false),
             Column::computed('action')
                 ->title(__('Tác vụ'))
                 ->exportable(false)
@@ -66,7 +68,7 @@ class AdminDataTable extends BaseDatable
     protected function getBuilderParameters(): array
     {
         return [
-            'order' => [5, 'desc'],
+            'order' => [7, 'desc'],
         ];
     }
 

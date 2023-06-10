@@ -29,22 +29,22 @@ class DashboardController
             $conditionAssigner = 'QA_id';
         }
 
-        $tasks_waiting = $tasks->whereDate('created_at', Carbon::today())->where('status', Tasks::WAITING)->get();
-        $tasks_todo = $tasks->whereDate('created_at', Carbon::today())->where('status', Tasks::TODO)->get();
-        $tasks_finished = $tasks->whereDate('created_at', Carbon::today())->where('status', Tasks::FINISH)->get();
+        $tasks_waiting = $tasks->whereDate('created_at', Carbon::today())->where('status', Tasks::WAITING)->orderBy('updated_at', 'DESC')->get();
+        $tasks_todo = $tasks->whereDate('created_at', Carbon::today())->where('status', Tasks::TODO)->orderBy('updated_at', 'DESC')->get();
+        $tasks_finished = $tasks->whereDate('created_at', Carbon::today())->where('status', Tasks::FINISH)->orderBy('updated_at', 'DESC')->get();
 
         $this->assignEditor();
         if ($conditionAssigner) {
-            $tasks_editing = $tasks->where($conditionAssigner, $user_id)->whereDate('created_at', Carbon::today())->where('status', Tasks::EDITING)->get();
-            $tasks_testing = $tasks->where($conditionAssigner, $user_id)->whereDate('created_at', Carbon::today())->where('status', Tasks::TESTING)->get();
-            $tasks_done = $tasks->where($conditionAssigner, $user_id)->whereDate('created_at', Carbon::today())->where('status', Tasks::DONE)->get();
-            $tasks_rejected = $tasks->where($conditionAssigner, $user_id)->whereDate('created_at', Carbon::today())->where('status', Tasks::REJECTED)->get();
-            $tasks_todo = $tasks->where($conditionAssigner, $user_id)->whereDate('created_at', Carbon::today())->where('status', Tasks::TODO)->get();
+            $tasks_editing = $tasks->where($conditionAssigner, $user_id)->whereDate('created_at', Carbon::today())->where('status', Tasks::EDITING)->orderBy('updated_at', 'DESC')->get();
+            $tasks_testing = $tasks->where($conditionAssigner, $user_id)->whereDate('created_at', Carbon::today())->where('status', Tasks::TESTING)->orderBy('updated_at', 'DESC')->get();
+            $tasks_done = $tasks->where($conditionAssigner, $user_id)->whereDate('created_at', Carbon::today())->where('status', Tasks::DONE)->orderBy('updated_at', 'DESC')->get();
+            $tasks_rejected = $tasks->where($conditionAssigner, $user_id)->whereDate('created_at', Carbon::today())->where('status', Tasks::REJECTED)->orderBy('updated_at', 'DESC')->get();
+            $tasks_todo = $tasks->where($conditionAssigner, $user_id)->whereDate('created_at', Carbon::today())->where('status', Tasks::TODO)->orderBy('updated_at', 'DESC')->get();
         } else {
-            $tasks_editing = $tasks->whereDate('created_at', Carbon::today())->where('status', Tasks::EDITING)->get();
-            $tasks_testing = $tasks->whereDate('created_at', Carbon::today())->where('status', Tasks::TESTING)->get();
-            $tasks_done = $tasks->whereDate('created_at', Carbon::today())->where('status', Tasks::DONE)->get();
-            $tasks_rejected = $tasks->whereDate('created_at', Carbon::today())->where('status', Tasks::REJECTED)->get();
+            $tasks_editing = $tasks->whereDate('created_at', Carbon::today())->where('status', Tasks::EDITING)->orderBy('updated_at', 'DESC')->get();
+            $tasks_testing = $tasks->whereDate('created_at', Carbon::today())->where('status', Tasks::TESTING)->orderBy('updated_at', 'DESC')->get();
+            $tasks_done = $tasks->whereDate('created_at', Carbon::today())->where('status', Tasks::DONE)->orderBy('updated_at', 'DESC')->get();
+            $tasks_rejected = $tasks->whereDate('created_at', Carbon::today())->where('status', Tasks::REJECTED)->orderBy('updated_at', 'DESC')->get();
         }
 
         return view('admin.dashboards.index')->with([
