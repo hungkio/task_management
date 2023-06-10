@@ -49,6 +49,8 @@ class TaskController
         $data = $request->all();
         $data['estimate'] = Admin::ESTIMATE[$data['level']];
         $data['estimate_QA'] = Admin::ESTIMATE_QA[$data['level']];
+        $data['priority'] = Admin::PRIORITY[$data['level']];
+
         $task = Tasks::create($data);
 
         flash()->success(__('Case ":model" đã được tạo thành công !', ['model' => $task->title]));
@@ -76,6 +78,7 @@ class TaskController
         $data = $request->all();
         $data['estimate'] = Admin::ESTIMATE[$data['level']];
         $data['estimate_QA'] = Admin::ESTIMATE_QA[$data['level']];
+        $data['priority'] = Admin::PRIORITY[$data['level']];
 
         // restart start time when change editor
         if ($data['editor_id'] && $data['editor_id'] != $task->editor_id && $data['status'] != Tasks::WAITING && $data['status'] != Tasks::TODO) {

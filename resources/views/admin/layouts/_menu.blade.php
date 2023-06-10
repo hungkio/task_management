@@ -64,7 +64,7 @@
                     <li class="nav-item">
                         <a href="{{ route('admin.pre_tasks.index') }}"
                            class="nav-link {{ request()->routeIs('admin.pre_tasks*') ? 'active' : null }}">
-                            <i class="fal fa-copyright"></i>
+                            <i class="fal fa-sync"></i>
                             <span>
                             {{ __("Danh sách load") }}
                         </span>
