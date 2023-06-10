@@ -60,7 +60,6 @@ class LoginController extends Controller
             foreach ($tasks_doing as $task) {
                 $task->update([
                     'editor_id' => null,
-                    'start_at' => null
                 ]);
             }
         }

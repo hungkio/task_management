@@ -77,6 +77,16 @@ class TaskController
         $data['estimate'] = Admin::ESTIMATE[$data['level']];
         $data['estimate_QA'] = Admin::ESTIMATE_QA[$data['level']];
 
+        // restart start time when change editor
+        if ($data['editor_id'] && $data['editor_id'] != $task->editor_id && $data['status'] != Tasks::WAITING && $data['status'] != Tasks::TODO) {
+            $data['start_at'] = date("Y-m-d H:i");
+        }
+
+        // restart start time when change QA
+        if ($data['QA_id'] && $data['QA_id'] != $task->QA_id && $data['status'] != Tasks::WAITING && $data['status'] != Tasks::TODO) {
+            $data['QA_start'] = date("Y-m-d H:i");
+        }
+
         if (@$data['redo']) {
             $data['redo'] = $task->redo ?? json_encode([]);
         } else {

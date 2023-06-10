@@ -59,27 +59,8 @@
                     <i class="fal fa-bars navbar-nav-link sidebar-control sidebar-main-toggle"
                        title="{{ __('Menu') }}"></i>
                 </li>
-                <li class="nav-item">
-                    <a href="{{ route('admin.dashboards') }}"
-                       class="nav-link {{ request()->routeIs('admin.dashboards*') ? 'active' : null }}">
-                        <i class="fal fa-home"></i>
-                        <span>
-                            {{ __('Dashboard') }}
-                        </span>
-                    </a>
-                </li>
 
                 @can('tasks.view')
-                    <li class="nav-item">
-                        <a href="{{ route('admin.tasks.index') }}"
-                           class="nav-link {{ request()->routeIs('admin.tasks*') ? 'active' : null }}">
-                            <i class="fal fa-copyright"></i>
-                            <span>
-                            {{ __("Danh sách case") }}
-                        </span>
-                        </a>
-                    </li>
-
                     <li class="nav-item">
                         <a href="{{ route('admin.pre_tasks.index') }}"
                            class="nav-link {{ request()->routeIs('admin.pre_tasks*') ? 'active' : null }}">
@@ -89,8 +70,26 @@
                         </span>
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a href="{{ route('admin.tasks.index') }}"
+                           class="nav-link {{ request()->routeIs('admin.tasks*') ? 'active' : null }}">
+                            <i class="fal fa-copyright"></i>
+                            <span>
+                            {{ __("Danh sách case") }}
+                        </span>
+                        </a>
+                    </li>
                 @endcan
 
+                <li class="nav-item">
+                    <a href="{{ route('admin.dashboards') }}"
+                       class="nav-link {{ request()->routeIs('admin.dashboards*') ? 'active' : null }}">
+                        <i class="fal fa-home"></i>
+                        <span>
+                            {{ __('Dashboard') }}
+                        </span>
+                    </a>
+                </li>
             <!-- Report -->
                 <li class="nav-item-header">
                     <div class="text-uppercase font-size-xs line-height-xs">{{ __('Báo cáo') }}</div>
