@@ -120,21 +120,21 @@ class Admin extends Authenticatable implements HasMedia
     ];
 
     const CUSTOMER_LEVEL = [
-        'JD' => 'SE',
-        'TONIKA' => 'SE_DE',
-        'ES' => 'SE',
-        'CH' => 'SE_FL',
-        'AL' => 'SE_PR',
-        'CL' => 'SE',
-        'CBA' => 'SE',
-        'NK' => 'SE_FL',
+        '06. JD' => 'SE',
+        '01. Tonika' => 'SE_DE',
+        '05. ES' => 'SE',
+        '11. CH' => 'SE_FL',
+        '08. AL' => 'SE_PR',
+        '09. CL' => 'SE',
+        '03. CBA' => 'SE',
+        '04. NK' => 'SE_FL',
         'RT' => 'INV',
-        'DCL' => 'SE_FL',
+        '02. DCL' => 'SE_FL',
         'BR-A1' => 'SE_FL',
-        'JG' => 'SE',
-        'RK' => 'SE',
+        '14.JG' => 'SE',
+        '15.RK' => 'SE',
         'MG' => 'SE',
-        'KS' => 'SE_PR',
+        '13.KS' => 'SE_PR',
         'TJ' => 'SE',
     ];
 

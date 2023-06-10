@@ -278,7 +278,7 @@ class TaskController
         $estimate = null;
         $estimate_QA = null;
         foreach (Admin::CUSTOMER_LEVEL as $key => $value) {
-            if (stripos($customer, $key) !== false) {
+            if ($customer == $key) {
                 $level = $value;
                 $estimate = Admin::ESTIMATE[$value];
                 $estimate_QA = Admin::ESTIMATE_QA[$value];
