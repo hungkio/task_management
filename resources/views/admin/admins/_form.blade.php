@@ -16,7 +16,7 @@
                             <div class="collapse show" id="general">
                                 <x-text-field
                                     name="first_name"
-                                    :placeholder="__('Nguyễn')"
+                                    :placeholder="__('Trần')"
                                     :label="__('Họ')"
                                     :value="$admin->first_name"
                                     required
@@ -25,7 +25,7 @@
 
                                 <x-text-field
                                     name="last_name"
-                                    :placeholder="__('Văn Huy')"
+                                    :placeholder="__('Đức Lương')"
                                     :label="__('Tên')"
                                     :value="$admin->last_name"
                                     required
@@ -33,9 +33,9 @@
                                 </x-text-field>
                                 <x-text-field
                                     name="email"
-                                    :placeholder="__('nguyenhuy@gmail.com')"
-                                    :label="__('Email')"
-                                    type="email"
+                                    :placeholder="__('LuongTD01')"
+                                    :label="__('Username')"
+                                    type="text"
                                     :value="$admin->email"
                                     required
                                 >

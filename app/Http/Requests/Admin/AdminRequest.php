@@ -15,7 +15,7 @@ class AdminRequest extends FormRequest
         return [
             'first_name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'email', 'max:255', $this->emailUniqueRule(), 'regex:/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/'],
+            'email' => ['required', 'string', 'max:255', $this->emailUniqueRule()],
             'password' => $this->passwordRule(),
             'roles' => ['required', 'exists:roles,id'],
             'level' => ['required'],

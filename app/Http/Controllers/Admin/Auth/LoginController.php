@@ -50,19 +50,9 @@ class LoginController extends Controller
     public function logout(Request $request)
     {
         $user = auth()->user();
-        $roleName = $user->getRoleNames()[0];
         $user->update([
            'is_online' => 0
         ]);
-
-        if($roleName == 'editor') {
-            $tasks_doing = Tasks::where('editor_id', auth()->id())->whereDate('created_at', Carbon::today())->whereIn('status', [Tasks::EDITING, Tasks::TODO, Tasks::REJECTED, Tasks::TESTING])->get();
-            foreach ($tasks_doing as $task) {
-                $task->update([
-                    'editor_id' => null,
-                ]);
-            }
-        }
 
         $this->guard()->logout();
 
