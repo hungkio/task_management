@@ -73,8 +73,8 @@
   <div class="d-flex mb-4 p-2 bg-white shadow-sm">
     <form method="GET" action="{{route('admin.dashboards')}}">
       @csrf
-      <label class="ml-2" for="filter-by-user">Filter by user:</label>
-      <input type="text" name="filter-by-user">
+      <label class="ml-2" for="filter-by-user">Filter:</label>
+      <input type="text" name="filter-by-user" placeholder="by email or customer" value="{{$input_filter}}">
       <button class="outline-0 border shadow-sm" type="submit">Submit</button>
     </form>
   </div>
