@@ -13,6 +13,7 @@
 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\TaskController;
+use App\Http\Controllers\PreTaskController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\Auth\ConfirmPasswordController;
 use App\Http\Controllers\Admin\Auth\ForgotPasswordController;
@@ -71,7 +72,16 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::put('tasks/{task}', [TaskController::class, 'update'])->name('tasks.update');
             Route::get('tasks/cron', [TaskController::class, 'cron'])->name('tasks.cron');
             Route::post('tasks/import', [TaskController::class, 'import'])->name('tasks.import');
-            Route::post('/tasks/bulk-delete', [TaskController::class, 'bulkDelete'])->name('posts.bulk-delete');
+            Route::post('/tasks/bulk-delete', [TaskController::class, 'bulkDelete'])->name('tasks.bulk-delete');
+
+            //pre task
+            Route::get('pre_tasks', [PreTaskController::class, 'index'])->name('pre_tasks.index');
+            Route::get('pre_tasks/create', [PreTaskController::class, 'create'])->name('pre_tasks.create');
+            Route::post('pre_tasks', [PreTaskController::class, 'store'])->name('pre_tasks.store');
+            Route::get('pre_tasks/{preTask}/edit', [PreTaskController::class, 'edit'])->name('pre_tasks.edit');
+            Route::delete('pre_tasks/{preTask}', [PreTaskController::class, 'destroy'])->name('pre_tasks.destroy');
+            Route::put('pre_tasks/{preTask}', [PreTaskController::class, 'update'])->name('pre_tasks.update');
+            Route::post('/pre_tasks/bulk-delete', [PreTaskController::class, 'bulkDelete'])->name('pre_tasks.bulk-delete');
 
             //reports
             Route::get('report/month', [ReportController::class, 'month'])->name('reports.month');

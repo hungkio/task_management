@@ -56,6 +56,26 @@ Breadcrumbs::for('admin.tasks.edit', function (BreadcrumbsGenerator $trail, \App
     $trail->push(__('Chỉnh sửa'), route('admin.tasks.edit', $task));
 });
 
+// Home > Pre Tasks
+Breadcrumbs::for('admin.pre_tasks.index', function (BreadcrumbsGenerator $trail) {
+    $trail->parent('admin.dashboards');
+    $trail->push(__('Danh sách load'), route('admin.pre_tasks.index'), ['icon' => 'fal fa-copyright']);
+});
+
+// Home > Pre Tasks > Create
+
+Breadcrumbs::for('admin.pre_tasks.create', function (BreadcrumbsGenerator $trail) {
+    $trail->parent('admin.pre_tasks.index');
+    $trail->push(__('Tạo'), route('admin.pre_tasks.create'));
+});
+
+// Home > Pre Tasks > [admin] > Edit
+Breadcrumbs::for('admin.pre_tasks.edit', function (BreadcrumbsGenerator $trail, \App\PreTasks $preTask) {
+    $trail->parent('admin.pre_tasks.index');
+    $trail->push($preTask->name, '#');
+    $trail->push(__('Chỉnh sửa'), route('admin.pre_tasks.edit', $preTask));
+});
+
 
 /*
 |--------------------------------------------------------------------------

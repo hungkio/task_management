@@ -7,6 +7,7 @@ use App\Domain\Admin\Models\Admin;
 use App\Http\Requests\Admin\TaskBulkDeleteRequest;
 use App\Http\Requests\Admin\TaskRequest;
 use App\Imports\TasksImport;
+use App\PreTasks;
 use App\Tasks;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
@@ -276,37 +277,27 @@ class TaskController
         $casePath = str_replace('/1.Working', '', $casePath);
         // set level
         $level = null;
-        $estimate = null;
-        $estimate_QA = null;
         foreach (Admin::CUSTOMER_LEVEL as $key => $value) {
             if ($customer == $key) {
                 $level = $value;
-                $estimate = Admin::ESTIMATE[$value];
-                $estimate_QA = Admin::ESTIMATE_QA[$value];
                 break;
             }
         }
-        $task = Tasks::where('name', $caseName)->whereDate('created_at', Carbon::today())->orderBy('created_at', 'desc')->first();
+        $task = PreTasks::where('name', $caseName)->whereDate('created_at', Carbon::today())->orderBy('created_at', 'desc')->first();
         if ($task) {
             $task->update([
                 'path' => $casePath,
                 'countRecord' => $countRecord,
-//                'case' => $taskName, // không cập nhật tên job
                 'customer' => $customer,
-//                'level' => $level, // không cập nhật lại level
-                'estimate' => $estimate,
-                'estimate_QA' => $estimate_QA,
             ]);
         } else {
-            Tasks::create([
+            PreTasks::create([
                 'name' => $caseName, // tên nhiệm vụ
                 'path' => $casePath,
                 'countRecord' => $countRecord,
                 'case' => $taskName,
                 'customer' => $customer,
                 'level' => $level,
-                'estimate' => $estimate,
-                'estimate_QA' => $estimate_QA,
             ]);
         }
     }
