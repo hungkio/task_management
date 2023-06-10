@@ -37,8 +37,18 @@
                 <label for="">End:</label>
                 <input class="form-control" type="text" value="{{$task->end_at ? date('d/m/Y H:i', strtotime($task->end_at)) : null }}" disabled/>
               </div>
+                <div class="col">
+                    <label for="">Mã sản phẩm:</label>
+                    <input class="form-control" type="text" value="{{ $task->level }}" disabled/>
+                </div>
             </div>
           </div>
+            @if($task->instruction)
+            <div class="form-group">
+                <label for="">Instruction:</label>
+                <input class="form-control" type="text" value="{{$task->instruction}}" name="path" disabled/>
+            </div>
+            @endif
           <div class="form-group">
             <label for="">Path:</label>
             <input class="form-control" type="text" value="{{$task->path}}" name="path" />

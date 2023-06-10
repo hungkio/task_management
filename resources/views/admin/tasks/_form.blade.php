@@ -34,7 +34,14 @@
                                     :value="$task->path"
                                     required
                                 >
-                                    {!! $task->phone ?? null !!}
+                                </x-text-field>
+
+                                <x-text-field
+                                    name="instruction"
+                                    :placeholder="__('Instruction')"
+                                    :label="__('Instruction')"
+                                    :value="$task->instruction"
+                                >
                                 </x-text-field>
 
                                 <x-text-field
