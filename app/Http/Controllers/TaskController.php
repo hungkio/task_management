@@ -300,12 +300,12 @@ class TaskController
             ]);
         } else {
             Tasks::create([
-                'name' => $caseName,
+                'name' => $caseName, // tên nhiệm vụ
                 'path' => $casePath,
                 'countRecord' => $countRecord,
-                'case' => $taskName,
+//                'case' => $taskName, // không cập nhật tên job
                 'customer' => $customer,
-                'level' => $level,
+//                'level' => $level, // không cập nhật lại level
                 'estimate' => $estimate,
                 'estimate_QA' => $estimate_QA,
             ]);
