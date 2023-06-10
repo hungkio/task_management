@@ -21,7 +21,7 @@
                                 <x-text-field
                                     name="name"
                                     :placeholder="__('Tên case')"
-                                    :label="__('Tên case')"
+                                    :label="__('Tên nhiệm vụ')"
                                     :value="$task->name"
                                     required
                                 >
@@ -49,8 +49,8 @@
 
                                 <x-text-field
                                     name="case"
-                                    :placeholder="__('Các case tách phải giống nhau tên case')"
-                                    :label="__('Tên case tách')"
+                                    :placeholder="__('Các case tách phải giống nhau tên job')"
+                                    :label="__('Tên job')"
                                     :value="$task->case"
                                     required
                                 >
