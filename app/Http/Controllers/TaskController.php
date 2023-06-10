@@ -49,7 +49,7 @@ class TaskController
         $data = $request->all();
         $data['estimate'] = Admin::ESTIMATE[$data['level']];
         $data['estimate_QA'] = Admin::ESTIMATE_QA[$data['level']];
-        $data['priority'] = Admin::PRIORITY[$data['level']];
+        $data['priority'] = @Admin::PRIORITY[$data['level']] ?? 0;
 
         $task = Tasks::create($data);
 
@@ -78,7 +78,7 @@ class TaskController
         $data = $request->all();
         $data['estimate'] = Admin::ESTIMATE[$data['level']];
         $data['estimate_QA'] = Admin::ESTIMATE_QA[$data['level']];
-        $data['priority'] = Admin::PRIORITY[$data['level']];
+        $data['priority'] = @Admin::PRIORITY[$data['level']] ?? 0;
 
         // restart start time when change editor
         if ($data['editor_id'] && $data['editor_id'] != $task->editor_id && $data['status'] != Tasks::WAITING && $data['status'] != Tasks::TODO) {

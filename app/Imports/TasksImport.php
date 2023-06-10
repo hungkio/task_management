@@ -21,7 +21,7 @@ class TasksImport implements ToCollection
             $customer = $row[3];
             $level = $row[4];
             $estimate = Admin::ESTIMATE[$level] ?? null;
-            $priority = Admin::PRIORITY[$level] ?? null;
+            $priority = @Admin::PRIORITY[$level] ?? 0;
             $status = 0;
             if (in_array($row[5], Tasks::STATUS)) {
                 $status = array_search($row[5], Tasks::STATUS);
