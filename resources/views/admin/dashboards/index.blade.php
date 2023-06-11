@@ -57,7 +57,12 @@
     .task-column:last-child {
       margin-right: 0;
     }
-
+    .start-task:hover{
+      background-color: #0069d9;
+    }
+    .done-task:hover{
+      background-color: #3a7301;
+    }
     @media (max-width: 1024px) {
       .dashboard {
         width: 1024px;
@@ -113,7 +118,9 @@
                        data-url="{{ route('admin.popup', $task->id) }}"
                        class="card rounded-0 mb-3 border-0 border-start border-primary border-3 shadow"
                        editor-id="{{ $task->editor_id }}"
-                       qa-id="{{ $task->QA_id }}">
+                       qa-id="{{ $task->QA_id }}"
+                       data-editor-check-num="{{ $task->editor_check_num }}"
+                       data-finish-path="{{ $task->finish_path }}">
                     <div class="card-body px-3 py-3">
                       <div class="card-text mb-1">{{$task->name}}</div>
                       @if (@$editor)
@@ -432,7 +439,8 @@
             const formattedStartAt = `${formatedDate}/${formatedMonth}/${startAt.getFullYear()} ${formatedHour}:${formatedMinute}`;
             const newTask = "<div id=" + response.id + " data-toggle='modal' data-url='admin/popup/" + response.id +
               "' class='card rounded-0 mb-3 border-0 border-start border-primary border-3 shadow' editor-id=" +
-              response.editor_id + " qa-id=" + response.QA_id + ">" +
+              response.editor_id + " qa-id=" + response.QA_id + " data-editor-check-num="+response.editor_check_num+
+              " data-finish-path="+response.finish_path+">" +
               "<div class='card-body px-3 py-3'>" +
               "<div class='card-text mb-1'>" + response.name + "</div>" +
               "<div class='card-text mb-1'>" +
@@ -559,13 +567,7 @@
             cancelDrop('#in-progress', message_drop);
           }
 
-          // nếu chưa có editor_check_num or finish_path thì ko kéo dc sang test
-          let editor_check_num = ui.item.data('editor-check-num');
-          let finish_path = ui.item.data('finish-path');
-          if ($(this).attr('id') == 'in-progress' && (editor_check_num == '' || finish_path == '')) {
-            let message_drop = 'Bạn chưa điền số lượng ảnh done hoặc đường dẫn file done'
-            cancelDrop('#in-progress', message_drop);
-          }
+          
 
           // nếu là editor chỉ được kéo từ IP sang test
           if ($(this).attr('id') != 'in-progress' && user_role == 'editor') {
@@ -629,11 +631,20 @@
                 ui.item.find('.status').css("background-color", "#BB0000");
                 ui.item.find('.status').text(status);
               } else {
-                status = 'Testing';
-                removeButton(ui.item.find('.button-box'));
-                updateTaskStatus(taskId, processStatus);
-                ui.item.find('.status').css("background-color", "#ebc334");
-                ui.item.find('.status').text(status);
+                // nếu chưa có editor_check_num or finish_path thì ko kéo dc sang test
+                let editor_check_num = ui.item.attr('data-editor-check-num');
+                let finish_path = ui.item.attr('data-finish-path');
+                if (editor_check_num == '' || finish_path == '') {
+                  let message_drop = 'Bạn chưa điền số lượng ảnh done hoặc đường dẫn file done';
+                  $('#in-progress').sortable('cancel').sortable('cancel');
+                  alert(message_drop);
+                }else{
+                  status = 'Testing';
+                  removeButton(ui.item.find('.button-box'));
+                  updateTaskStatus(taskId, processStatus);
+                  ui.item.find('.status').css("background-color", "#ebc334");
+                  ui.item.find('.status').text(status);
+                }
               }
               break;
             case 'done':
