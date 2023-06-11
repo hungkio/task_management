@@ -16,6 +16,7 @@
             class="form-control{{ $errors->has($name) ? ' border-danger' : null}}"
             placeholder="{{ $placeholder ?? '' }}"
             value="{{ old($name, $value ?? '') }}"
+            @if(@$disabled) disabled @endif
         >
         @isset($icon)
             <div class="form-control-feedback">

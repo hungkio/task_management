@@ -10,7 +10,7 @@ class Tasks extends Model
     public $guarded = [];
     protected $fillable = ['name', 'estimate', 'path', 'countRecord', 'date', 'month', 'case', 'customer', 'status', 'editor_id', 'QA_id', 'admin_id',
         'start_at', 'end_at', 'finish_path', 'QA_check_num', 'QA_note', 'redo', 'redo_note','QA_start','QA_end', 'level', 'estimate_QA', 'editor_check_num',
-        'instruction', 'priority'];
+        'instruction', 'priority', 'dbcheck', 'dbcheck_num'];
     const WAITING = 0; // 0:waiting; 1:editing; 2:testing; 3:done
     const EDITING = 1;
     const TESTING = 2;
@@ -36,5 +36,10 @@ class Tasks extends Model
     public function editor()
     {
         return $this->belongsTo(Admin::class, 'editor_id');
+    }
+
+    public function checker()
+    {
+        return $this->belongsTo(Admin::class, 'dbcheck');
     }
 }

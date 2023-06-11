@@ -83,6 +83,18 @@
                     </li>
                 @endcan
 
+                @can('dbchecks.view')
+                    <li class="nav-item">
+                        <a href="{{ route('admin.dbcheck_tasks.index') }}"
+                           class="nav-link {{ request()->routeIs('admin.dbcheck_tasks*') ? 'active' : null }}">
+                            <i class="fal fa-check-double"></i>
+                            <span>
+                            {{ __("Danh sách DBC") }}
+                        </span>
+                        </a>
+                    </li>
+                @endcan
+
                 @can('dashboards.view')
                     <li class="nav-item">
                         <a href="{{ route('admin.dashboards') }}"

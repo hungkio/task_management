@@ -16,5 +16,6 @@ return [
     "subscribe-email" => 'Đăng ký nhận tin',
     "mail-settings" => 'Chiến dịch gửi mail',
     'tasks' => 'Case',
-    'dashboards' => 'Dashboard'
+    'dashboards' => 'Dashboard',
+    'dbchecks' => 'Double check',
 ];

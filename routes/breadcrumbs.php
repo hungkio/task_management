@@ -56,10 +56,24 @@ Breadcrumbs::for('admin.tasks.edit', function (BreadcrumbsGenerator $trail, \App
     $trail->push(__('Chỉnh sửa'), route('admin.tasks.edit', $task));
 });
 
+// Home > Tasks > [admin] > Clone
 Breadcrumbs::for('admin.tasks.clone', function (BreadcrumbsGenerator $trail, \App\Tasks $task) {
     $trail->parent('admin.tasks.index');
     $trail->push($task->name, '#');
     $trail->push(__('Clone'), route('admin.tasks.clone', $task));
+});
+
+// Home > Tasks > [admin] > Double Check
+Breadcrumbs::for('admin.dbcheck_tasks.index', function (BreadcrumbsGenerator $trail) {
+    $trail->parent('admin.dashboards');
+    $trail->push(__('Danh sách DBC'), route('admin.dbcheck_tasks.index'), ['icon' => 'fal fa-check-double']);
+});
+
+// Home > DBCTasks > [admin] > Edit
+Breadcrumbs::for('admin.dbcheck_tasks.edit', function (BreadcrumbsGenerator $trail, \App\Tasks $task) {
+    $trail->parent('admin.dbcheck_tasks.index');
+    $trail->push($task->name, '#');
+    $trail->push(__('Chỉnh sửa'), route('admin.dbcheck_tasks.edit', $task));
 });
 
 // Home > Pre Tasks

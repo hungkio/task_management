@@ -24,7 +24,7 @@ use App\Http\Controllers\Admin\Auth\VerificationController;
 use App\Http\Controllers\Admin\UploadTinymceController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\ReportController;
-
+use App\Http\Controllers\DBCheckTaskController;
 
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
@@ -75,6 +75,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::post('tasks/import', [TaskController::class, 'import'])->name('tasks.import');
             Route::post('/tasks/bulk-delete', [TaskController::class, 'bulkDelete'])->name('tasks.bulk-delete');
             Route::get('tasks/{task}/clone', [TaskController::class, 'clone'])->name('tasks.clone');
+            Route::get('tasks/{task}/dbcheck', [TaskController::class, 'dbcheck'])->name('tasks.double-check');
 
             //pre task
             Route::get('pre_tasks', [PreTaskController::class, 'index'])->name('pre_tasks.index');
@@ -84,6 +85,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::delete('pre_tasks/{preTask}', [PreTaskController::class, 'destroy'])->name('pre_tasks.destroy');
             Route::put('pre_tasks/{preTask}', [PreTaskController::class, 'update'])->name('pre_tasks.update');
             Route::post('/pre_tasks/bulk-delete', [PreTaskController::class, 'bulkDelete'])->name('pre_tasks.bulk-delete');
+
+            // double check
+            Route::get('dbcheck_tasks', [DBCheckTaskController::class, 'index'])->name('dbcheck_tasks.index');
+            Route::delete('dbcheck_tasks/{task}', [DBCheckTaskController::class, 'destroy'])->name('dbcheck_tasks.destroy');
+            Route::put('dbcheck_tasks/{task}', [DBCheckTaskController::class, 'update'])->name('dbcheck_tasks.update');
+            Route::get('dbcheck_tasks/{task}/edit', [DBCheckTaskController::class, 'edit'])->name('dbcheck_tasks.edit');
 
             //reports
             Route::get('report/month', [ReportController::class, 'month'])->name('reports.month');

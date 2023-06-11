@@ -20,16 +20,12 @@
                 margin-left: .625rem !important;
             }
         }
-        tbody tr td:nth-child(3) {
+        tbody tr td:nth-child(6) {
             min-width: 300px;
             word-break: break-all;
             white-space: normal;
         }
-        tbody tr td:nth-child(2) {
-            min-width: 300px;
-            word-break: break-all;
-            white-space: normal;
-        }
+
     </style>
 @endpush
 
@@ -70,49 +66,20 @@
 @push('js')
     {{$dataTable->scripts()}}
     <script>
-        $(document).on('change', '#select_status', function () {
-            var status = $(this).val();
-            var url = $(this).attr('data-url');
-            confirmAction('Bạn có muốn thay đổi trạng thái ?', function (result) {
-                if (result) {
-                    $.ajax({
-                        url: url,
-                        data: {
-                            'status': status
-                        },
-                        type: 'POST',
-                        dataType: 'json',
-                        success: function (res) {
-                            if (res.status == true) {
-                                showMessage('success', res.message);
-                            } else {
-                                showMessage('error', res.message);
-                            }
-                            window.LaravelDataTables['{{ $dataTable->getTableAttribute('id') }}'].ajax.reload();
-                        },
-                    });
-                } else {
-                    window.LaravelDataTables['{{ $dataTable->getTableAttribute('id') }}'].ajax.reload();
-                }
-            });
-        });
-        @can('tasks.create')
+        @can('products.create')
         $('.buttons-create').removeClass('d-none')
         @endcan
-        @can('tasks.delete')
+        @can('products.delete')
         $('.btn-danger').removeClass('d-none')
         @endcan
-        @can('tasks.update')
+        @can('products.update')
         $('.btn-warning').removeClass('d-none')
-        @endcan
-        @cannot('tasks.create')
-        $('.import').addClass('d-none')
         @endcan
 
         $(function () {
             $('[data-toggle="tooltip"]').tooltip()
 
-            $('#TaskDataTable thead ')
+            $('#DBCheckTaskDataTable thead ')
                 .append('<tr role="row" class="filters"><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr>');
 
             $('.import').click(function () {

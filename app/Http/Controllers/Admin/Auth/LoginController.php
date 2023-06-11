@@ -10,6 +10,7 @@ use Carbon\Carbon;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class LoginController extends Controller
@@ -44,14 +45,25 @@ class LoginController extends Controller
 
     public function redirectTo(): string
     {
-        return route('admin.dashboards');
+        $permissions = Auth::user()->getAllPermissions();
+        $route = route('admin.dashboards');
+        foreach ($permissions as $permission) {
+            if ($permission->name == 'tasks.view') {
+                $route = route('admin.tasks.index');
+            } elseif ($permission->name == 'dashboards.view') {
+                $route = route('admin.dashboards');
+            } elseif ($permission->name == 'dbchecks.view') {
+                $route = route('admin.dbcheck_tasks.index');
+            }
+        }
+        return $route;
     }
 
     public function logout(Request $request)
     {
         $user = auth()->user();
         $user->update([
-           'is_online' => 0
+            'is_online' => 0
         ]);
 
         $this->guard()->logout();

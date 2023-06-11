@@ -3,13 +3,11 @@
 namespace App\DataTables;
 
 use App\DataTables\Core\BaseDatable;
-use App\DataTables\Export\TaskExportHandler;
 use App\Tasks;
-use Carbon\Carbon;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 
-class TaskDataTable extends BaseDatable
+class DBCheckTaskDataTable extends BaseDatable
 {
     /**
      * Build DataTable class.
@@ -22,21 +20,21 @@ class TaskDataTable extends BaseDatable
         return datatables()
             ->eloquent($query)
             ->addIndexColumn()
-            ->editColumn('name', fn(Tasks $task) => $task->name)
-            ->editColumn('case', fn(Tasks $task) => $task->case)
             ->editColumn('customer', fn(Tasks $task) => $task->customer)
             ->editColumn('level', fn(Tasks $task) => $task->level ?? '')
             ->editColumn('countRecord', fn(Tasks $task) => $task->countRecord)
             ->editColumn('status', fn(Tasks $task) => Tasks::STATUS[$task->status])
-            ->editColumn('editor_id', fn(Tasks $task) => $task->editor->email ?? '')
             ->editColumn('QA_id', fn(Tasks $task) => $task->QA->email ?? '')
+            ->editColumn('name', fn(Tasks $task) => $task->name)
+            ->editColumn('dbcheck', fn(Tasks $task) => $task->checker->email ?? '')
+            ->editColumn('dbcheck_num', fn(Tasks $task) => $task->dbcheck_num)
             ->editColumn('updated_at', fn(Tasks $task) => formatDate($task->updated_at, 'd/m/Y H:i:s'))
-            ->addColumn('action', fn(Tasks $task) => view('admin.tasks._tableAction', compact('task')))
+            ->addColumn('action', fn(Tasks $task) => view('admin.dbcheck_tasks._tableAction', compact('task')))
             ->filterColumn('name', function ($query, $keyword) {
                 $query->where('name', 'like', "%$keyword%");
             })
-            ->filterColumn('editor_id', function ($query, $keyword) {
-                $query->whereHas('editor', function ($q) use ($keyword) {
+            ->filterColumn('dbcheck', function ($query, $keyword) {
+                $query->whereHas('dbcheck', function ($q) use ($keyword) {
                     $q->where('email', 'like', "%$keyword%");
                 });
             })
@@ -57,21 +55,20 @@ class TaskDataTable extends BaseDatable
      */
     public function query(Tasks $model)
     {
-        return $model->newQuery();
+        return $model->newQuery()->where('dbcheck', '!=', 0);
     }
 
     protected function getColumns(): array
     {
         return [
-            Column::checkbox(''),
-            Column::make('name')->title(__('Tên nhiệm vụ'))->width('20%'),
-            Column::make('case')->title(__('Tên Jobs')),
             Column::make('customer')->title(__('Mã Khách')),
-            Column::make('level')->title(__('Level AX')),
+            Column::make('level')->title(__('Level AX222')),
             Column::make('countRecord')->title(__('Original')),
             Column::make('status')->title(__('Trạng thái')),
-            Column::make('editor_id')->title(__('Editor')),
             Column::make('QA_id')->title(__('QA')),
+            Column::make('name')->title(__('Tên nhiệm vụ'))->width('20%'),
+            Column::make('dbcheck')->title(__('DBC')),
+            Column::make('dbcheck_num')->title(__('SL DBC')),
             Column::make('updated_at')->title(__('Cập nhật')),
             Column::computed('action')
                 ->title(__('Tác vụ'))
@@ -85,13 +82,8 @@ class TaskDataTable extends BaseDatable
     protected function getTableButton(): array
     {
         return [
-            Button::make('create')->addClass('btn btn-success d-none')->text('<i class="fal fa-plus-circle mr-2"></i>' . __('Tạo mới')),
-            Button::make('export')->addClass('btn btn-primary')->text('<i class="fal fa-download mr-2"></i>' . __('Xuất')),
-            Button::make('print')->addClass('btn bg-primary')->text('<i class="fal fa-print mr-2"></i>' . __('In')),
-            Button::make('selected')->addClass('btn bg-teal-400 import')
-                ->text('<i class="icon-compose mr-2"></i>' . __('Import')
-                ),
-            Button::make('bulkDelete')->addClass('btn btn-danger d-none')->text('<i class="fal fa-trash-alt mr-2"></i>' . __('Xóa')),
+            Button::make('export')->addClass('btn btn-primary')->text('<i class="fal fa-download mr-2"></i>'.__('Xuất')),
+            Button::make('print')->addClass('btn bg-primary')->text('<i class="fal fa-print mr-2"></i>'.__('In')),
         ];
     }
 
@@ -100,9 +92,10 @@ class TaskDataTable extends BaseDatable
         $input = "<input style=\"width: 100%\" type=\"text\" placeholder=\"' + title + '\" />";
         $inputDate = "<input class=\"datepicker\" type=\"date\" placeholder=\"' + title + '\" />";
         $selectStatus = "<input class=\"status_filter\" style=\"display: none\" type=\"text\"/>" . "<select style=\"width: 100%\" class=\"p-0 select_status form-control is-valid\" data-width=\"100%\" aria-invalid=\"false\"> <option value=\"0\" selected=\"\">Waiting</option><option value=\"1\">Editing</option><option value=\"2\">QA Check</option> <option value=\"3\">Done Reject</option> <option value=\"4\">Reject</option> <option value=\"5\">Ready</option> <option value=\"6\">Finish</option> </select>";
+
         return [
             'dom' => '<"dt-buttons-full"B><"datatable-header"l><"datatable-scroll-wrap"t><"datatable-footer"ip>',
-            'order' => [9, 'desc'],
+            'order' => [6, 'desc'],
             "initComplete" => "function () {
                     var api = this.api();
 
@@ -116,14 +109,14 @@ class TaskDataTable extends BaseDatable
                                 $(api.column(colIdx).header()).index()
                             );
                         var title = $(cell).text();
-                        if (colIdx== 0 || colIdx== 2 || colIdx== 5 || colIdx== 10) {
+                        if (colIdx== 1 || colIdx== 2 || colIdx== 7|| colIdx== 9) {
                             $(cell).html('');
                             return;
                         }
 
-                        if (colIdx== 9) {
+                        if (colIdx== 8) {
                             $(cell).html('$inputDate');
-                        } else if (colIdx== 6) {
+                        } else if (colIdx== 3) {
                             $(cell).html('$selectStatus');
                         } else {
                             $(cell).html('$input');
@@ -173,7 +166,7 @@ class TaskDataTable extends BaseDatable
      */
     protected function filename(): string
     {
-        return 'tasks_' . date('YmdHis');
+        return 'dbcheck_tasks_'.date('YmdHis');
     }
 
 //    protected function buildExcelFile()
@@ -192,6 +185,6 @@ class TaskDataTable extends BaseDatable
         $source = app()->call([$this, 'query']);
         $source = $this->applyScopes($source);
         $data = $source->get();
-        return view('admin.tasks.print', compact('data'));
+        return view('admin.pre_tasks.print', compact('data'));
     }
 }

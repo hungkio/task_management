@@ -9,7 +9,8 @@ class AddDoubleCheckToTaksTable extends Migration
     public function up()
     {
         Schema::table('tasks', function (Blueprint $table) {
-            $table->tinyInteger('dbcheck')->default(0);
+            $table->bigInteger('dbcheck')->default(0);
+            $table->integer('dbcheck_num')->default(0);
         });
     }
 
@@ -17,6 +18,7 @@ class AddDoubleCheckToTaksTable extends Migration
     {
         Schema::table('tasks', function (Blueprint $table) {
             $table->dropColumn('dbcheck');
+            $table->dropColumn('dbcheck_num');
         });
     }
 }

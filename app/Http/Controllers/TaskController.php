@@ -126,6 +126,17 @@ class TaskController
         ]);
     }
 
+    public function dbcheck(Tasks $task)
+    {
+        $task->update([
+            'dbcheck' => auth()->id()
+        ]);
+
+        return response()->json([
+            'status' => true,
+            'message' => __('Case :name đã chuyển sang double check !', ['name' => $task->name]),
+        ]);
+    }
 
     public function cron()
     {
