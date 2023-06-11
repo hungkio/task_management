@@ -55,11 +55,6 @@ class DashboardController
                 ->where('status', Tasks::WAITING)
                 ->orderBy('updated_at', 'DESC')->get();
 
-                $tasks_todo = $tasks->whereDate('created_at', Carbon::today())
-                ->where('customer',$inputFilter)
-                ->where('status', Tasks::TODO)
-                ->orderBy('updated_at', 'DESC')->get();
-
                 $tasks_finished = $tasks->whereDate('created_at', Carbon::today())
                 ->where('customer',$inputFilter)
                 ->where('status', Tasks::FINISH)
@@ -67,7 +62,6 @@ class DashboardController
             }
         }else{
             $tasks_waiting = $tasks->whereDate('created_at', Carbon::today())->where('status', Tasks::WAITING)->orderBy('updated_at', 'DESC')->get();
-            $tasks_todo = $tasks->whereDate('created_at', Carbon::today())->where('status', Tasks::TODO)->orderBy('updated_at', 'DESC')->get();
             $tasks_finished = $tasks->whereDate('created_at', Carbon::today())->where('status', Tasks::FINISH)->orderBy('updated_at', 'DESC')->get();
         }
 
