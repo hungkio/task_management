@@ -91,4 +91,9 @@ class TaskPolicy
     {
         //
     }
+
+    public function dashboard(Admin $user)
+    {
+        return $user->hasPermissionTo('dashboards.view');
+    }
 }

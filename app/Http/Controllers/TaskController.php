@@ -13,9 +13,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\View\View;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -103,6 +101,19 @@ class TaskController
         return intended($request, route('admin.tasks.index'));
     }
 
+    public function clone(Tasks $task): View
+    {
+        $this->authorize('update', $task);
+        $QAs = Admin::whereHas('roles', function (Builder $subQuery) {
+            $subQuery->where(config('permission.table_names.roles') . '.name', 'QA');
+        })->get();
+
+        $editors = Admin::whereHas('roles', function (Builder $subQuery) {
+            $subQuery->where(config('permission.table_names.roles') . '.name', 'editor');
+        })->get();
+        return view('admin.tasks.clone', compact('task', 'QAs', 'editors'));
+    }
+
     public function destroy(Tasks $task)
     {
         $this->authorize('delete', $task);
@@ -130,11 +141,6 @@ class TaskController
 //        $currentDay = '06';
 
         $mapCustomer = [
-            '06. JD' => [
-                'Originals',
-                $currentMonthText,
-                "$currentMonthNumber $currentDay"
-            ],
             '01. Tonika' => [
                 'Originals',
                 $currentMonthText,
@@ -160,6 +166,11 @@ class TaskController
                 "",
                 "$currentMonthNumber $currentDay"
             ],
+            '06. JD' => [
+                'Originals',
+                $currentMonthText,
+                "$currentMonthNumber $currentDay"
+            ],
             '08. AL' => [
                 'Originals',
                 $currentMonthText,
@@ -170,7 +181,7 @@ class TaskController
                 "",
                 "$currentMonthNumber $currentDay"
             ],
-            '10.MCC' => [
+            '10. MCC' => [
                 'NEW JOB',
                 $currentMonthText,
                 "$currentMonthNumber $currentDay",
@@ -185,17 +196,17 @@ class TaskController
                 $currentMonthText,
                 "$currentMonthNumber $currentDay",
             ],
-            '13.KS' => [
+            '13. KS' => [
                 'Originals',
                 "",
                 "$currentMonthNumber $currentDay",
             ],
-            '14.JG' => [
+            '14. JG' => [
                 'New Job Judy',
                 "",
                 "$currentMonthNumber $currentDay",
             ],
-            '15.RK' => [
+            '15. RK' => [
                 'Originals',
                 "",
                 "$currentMonthNumber $currentDay",
@@ -205,7 +216,7 @@ class TaskController
                 "",
                 "$currentMonthNumber $currentDay",
             ],
-            '19.MX' => [
+            '19. MX' => [
                 'Originals',
                 "",
                 "$currentMonthNumber $currentDay",

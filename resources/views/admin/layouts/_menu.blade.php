@@ -60,7 +60,7 @@
                        title="{{ __('Menu') }}"></i>
                 </li>
 
-                @can('tasks.view')
+                @can('tasks.create')
                     <li class="nav-item">
                         <a href="{{ route('admin.pre_tasks.index') }}"
                            class="nav-link {{ request()->routeIs('admin.pre_tasks*') ? 'active' : null }}">
@@ -70,6 +70,8 @@
                         </span>
                         </a>
                     </li>
+                @endcan
+                @can('tasks.view')
                     <li class="nav-item">
                         <a href="{{ route('admin.tasks.index') }}"
                            class="nav-link {{ request()->routeIs('admin.tasks*') ? 'active' : null }}">
@@ -81,45 +83,47 @@
                     </li>
                 @endcan
 
-                <li class="nav-item">
-                    <a href="{{ route('admin.dashboards') }}"
-                       class="nav-link {{ request()->routeIs('admin.dashboards*') ? 'active' : null }}">
-                        <i class="fal fa-home"></i>
-                        <span>
+                @can('dashboards.view')
+                    <li class="nav-item">
+                        <a href="{{ route('admin.dashboards') }}"
+                           class="nav-link {{ request()->routeIs('admin.dashboards*') ? 'active' : null }}">
+                            <i class="fal fa-home"></i>
+                            <span>
                             {{ __('Dashboard') }}
                         </span>
-                    </a>
-                </li>
-            <!-- Report -->
-                <li class="nav-item-header">
-                    <div class="text-uppercase font-size-xs line-height-xs">{{ __('Báo cáo') }}</div>
-                    <i class="fal fa-horizontal-rule" title="{{ __('Báo cáo') }}"></i>
-                </li>
-                <li class="nav-item nav-item-submenu {{ request()->routeIs('admin.reports*') ? 'nav-item-expanded nav-item-open' : null }}">
-                    <a href="#" class="nav-link"><i class="fal fa-user"></i> <span>{{ __('Báo cáo') }}</span></a>
-                    <ul class="nav nav-group-sub" data-submenu-title="{{ __('Báo cáo') }}">
-                        @can('roles.view')
+                        </a>
+                    </li>
+                    <!-- Report -->
+                    <li class="nav-item-header">
+                        <div class="text-uppercase font-size-xs line-height-xs">{{ __('Báo cáo') }}</div>
+                        <i class="fal fa-horizontal-rule" title="{{ __('Báo cáo') }}"></i>
+                    </li>
+                    <li class="nav-item nav-item-submenu {{ request()->routeIs('admin.reports*') ? 'nav-item-expanded nav-item-open' : null }}">
+                        <a href="#" class="nav-link"><i class="fal fa-user"></i> <span>{{ __('Báo cáo') }}</span></a>
+                        <ul class="nav nav-group-sub" data-submenu-title="{{ __('Báo cáo') }}">
+                            @can('roles.view')
+                                <li class="nav-item">
+                                    <a href="{{ route('admin.reports.customer') }}"
+                                       class="nav-link @if(request()->routeIs('admin.reports.customer'))active @endif">{{ __('Báo cáo khách hàng') }}</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('admin.reports.employee') }}"
+                                       class="nav-link @if(request()->routeIs('admin.reports.employee'))active @endif">{{ __('Báo cáo nhân viên') }}</a>
+                                </li>
+                            @endcan
                             <li class="nav-item">
-                                <a href="{{ route('admin.reports.customer') }}"
-                                   class="nav-link @if(request()->routeIs('admin.reports.customer'))active @endif">{{ __('Báo cáo khách hàng') }}</a>
+                                <a href="{{ route('admin.reports.month') }}"
+                                   class="nav-link @if(request()->routeIs('admin.reports.month'))active @endif">{{ __('Báo cáo Hot & Bad') }}</a>
                             </li>
                             <li class="nav-item">
-                                <a href="{{ route('admin.reports.employee') }}"
-                                   class="nav-link @if(request()->routeIs('admin.reports.employee'))active @endif">{{ __('Báo cáo nhân viên') }}</a>
+                                <a href="{{ route('admin.reports.salary') }}"
+                                   class="nav-link @if(request()->routeIs('admin.reports.salary'))active @endif">{{ __('Data Lương sp') }}</a>
                             </li>
-                        @endcan
-                        <li class="nav-item">
-                            <a href="{{ route('admin.reports.month') }}"
-                               class="nav-link @if(request()->routeIs('admin.reports.month'))active @endif">{{ __('Báo cáo Hot & Bad') }}</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('admin.reports.salary') }}"
-                               class="nav-link @if(request()->routeIs('admin.reports.salary'))active @endif">{{ __('Data Lương sp') }}</a>
-                        </li>
-                    </ul>
-                </li>
+                        </ul>
+                    </li>
+                @endcan
 
-                <!-- System -->
+            <!-- System -->
                 @canany(['admins.view', 'menus.index', 'log-activities.index', 'admins.view'])
                     <li class="nav-item-header">
                         <div class="text-uppercase font-size-xs line-height-xs">{{ __('Hệ thống') }}</div>

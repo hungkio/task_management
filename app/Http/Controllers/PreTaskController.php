@@ -18,7 +18,7 @@ class PreTaskController
 
     public function index(PreTaskDataTable $dataTable)
     {
-        $this->authorize('view', Tasks::class);
+        $this->authorize('create', Tasks::class);
 
         return $dataTable->render('admin.pre_tasks.index');
     }

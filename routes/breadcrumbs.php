@@ -56,6 +56,12 @@ Breadcrumbs::for('admin.tasks.edit', function (BreadcrumbsGenerator $trail, \App
     $trail->push(__('Chỉnh sửa'), route('admin.tasks.edit', $task));
 });
 
+Breadcrumbs::for('admin.tasks.clone', function (BreadcrumbsGenerator $trail, \App\Tasks $task) {
+    $trail->parent('admin.tasks.index');
+    $trail->push($task->name, '#');
+    $trail->push(__('Clone'), route('admin.tasks.clone', $task));
+});
+
 // Home > Pre Tasks
 Breadcrumbs::for('admin.pre_tasks.index', function (BreadcrumbsGenerator $trail) {
     $trail->parent('admin.dashboards');

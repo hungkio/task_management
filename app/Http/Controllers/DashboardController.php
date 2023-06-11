@@ -15,6 +15,7 @@ class DashboardController
 
     public function index(Tasks $tasks, Request $request)
     {
+        $this->authorize('dashboards.view', Tasks::class);
         $user = auth()->user();
         $user->update([
             'is_online' => 1
@@ -48,9 +49,9 @@ class DashboardController
         $tasks_todo = $query->where('status', Tasks::TODO)->orderBy('updated_at', 'DESC')->get();
         $query = clone $originalQuery;
         $tasks_finished = $query->where('status', Tasks::FINISH)->orderBy('updated_at', 'DESC')->get();
-        
+
         $this->assignEditor();
-        
+
         if ($conditionAssigner) {
             $query = clone $originalQuery;
             $tasks_editing = $query->where($conditionAssigner, $user_id)->where('status', Tasks::EDITING)->orderBy('updated_at', 'DESC')->get();

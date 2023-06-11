@@ -56,7 +56,6 @@ Route::prefix('admin')->name('admin.')->group(function () {
         ->group(function () {
             // dashboard
             Route::get('/', [DashboardController::class, 'index'])->name('dashboards');
-            Route::post('/filter', [DashboardController::class, 'filter'])->name('dashboards.filter');
 
             Route::get('/assign-editor', [DashboardController::class, 'assignEditor'])->name('assign-editor');
             Route::get('/assign-qa/{id}', [DashboardController::class, 'assignQA'])->name('assign-qa');
@@ -75,6 +74,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('tasks/cron', [TaskController::class, 'cron'])->name('tasks.cron');
             Route::post('tasks/import', [TaskController::class, 'import'])->name('tasks.import');
             Route::post('/tasks/bulk-delete', [TaskController::class, 'bulkDelete'])->name('tasks.bulk-delete');
+            Route::get('tasks/{task}/clone', [TaskController::class, 'clone'])->name('tasks.clone');
 
             //pre task
             Route::get('pre_tasks', [PreTaskController::class, 'index'])->name('pre_tasks.index');

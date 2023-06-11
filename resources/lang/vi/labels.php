@@ -15,4 +15,6 @@ return [
     "log-search" => 'Lịch sử tìm kiếm',
     "subscribe-email" => 'Đăng ký nhận tin',
     "mail-settings" => 'Chiến dịch gửi mail',
+    'tasks' => 'Case',
+    'dashboards' => 'Dashboard'
 ];
