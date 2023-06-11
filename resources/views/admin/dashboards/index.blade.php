@@ -80,14 +80,23 @@
 @endpush
 
 @section('page-content')
-  <div id="popupContainer"></div>
-  <section class="dashboard-case">
-    <div class="position-relative">
-      <div class="">
-        <div class="dashboard d-flex justify-content-between">
-          <!-- To do tasks -->
-          <div class="task-column w-100 shadow-sm bg-white">
-            <h5 class="in-progress p-2 text-white">
+<div id="popupContainer"></div>
+
+<section class="dashboard-case">
+  <div class="d-flex mb-4 p-2 bg-white shadow-sm">
+    <form method="GET" action="{{route('admin.dashboards')}}">
+      @csrf
+      <label class="ml-2" for="filter-by-user">Filter:</label>
+      <input type="text" name="filter-by-user" placeholder="by email or customer" value="{{$input_filter}}">
+      <button class="outline-0 border shadow-sm" type="submit">Submit</button>
+    </form>
+  </div>
+  <div class="position-relative">
+    <div class="">
+      <div class="dashboard d-flex justify-content-between">
+        <!-- To do tasks -->
+        <div class="task-column w-100 shadow-sm bg-white">
+          <h5 class="in-progress p-2 text-white">
               In Progress
             </h5>
             <div class="taskList m-2 bg-light flex-grow-1">

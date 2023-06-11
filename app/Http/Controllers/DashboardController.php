@@ -13,7 +13,7 @@ class DashboardController
 {
     use AuthorizesRequests;
 
-    public function index(Tasks $tasks)
+    public function index(Tasks $tasks, Request $request)
     {
         $user = auth()->user();
         $user->update([
@@ -29,24 +29,51 @@ class DashboardController
             $conditionAssigner = 'QA_id';
         }
 
-        $tasks_waiting = $tasks->whereDate('created_at', Carbon::today())->where('status', Tasks::WAITING)->orderBy('updated_at', 'DESC')->get();
-        $tasks_todo = $tasks->whereDate('created_at', Carbon::today())->where('status', Tasks::TODO)->orderBy('updated_at', 'DESC')->get();
-        $tasks_finished = $tasks->whereDate('created_at', Carbon::today())->where('status', Tasks::FINISH)->orderBy('updated_at', 'DESC')->get();
-
-        $this->assignEditor();
-        if ($conditionAssigner) {
-            $tasks_editing = $tasks->where($conditionAssigner, $user_id)->whereDate('created_at', Carbon::today())->where('status', Tasks::EDITING)->orderBy('updated_at', 'DESC')->get();
-            $tasks_testing = $tasks->where($conditionAssigner, $user_id)->whereDate('created_at', Carbon::today())->where('status', Tasks::TESTING)->orderBy('updated_at', 'DESC')->get();
-            $tasks_done = $tasks->where($conditionAssigner, $user_id)->whereDate('created_at', Carbon::today())->where('status', Tasks::DONE)->orderBy('updated_at', 'DESC')->get();
-            $tasks_rejected = $tasks->where($conditionAssigner, $user_id)->whereDate('created_at', Carbon::today())->where('status', Tasks::REJECTED)->orderBy('updated_at', 'DESC')->get();
-            $tasks_todo = $tasks->where($conditionAssigner, $user_id)->whereDate('created_at', Carbon::today())->where('status', Tasks::TODO)->orderBy('updated_at', 'DESC')->get();
-        } else {
-            $tasks_editing = $tasks->whereDate('created_at', Carbon::today())->where('status', Tasks::EDITING)->orderBy('updated_at', 'DESC')->get();
-            $tasks_testing = $tasks->whereDate('created_at', Carbon::today())->where('status', Tasks::TESTING)->orderBy('updated_at', 'DESC')->get();
-            $tasks_done = $tasks->whereDate('created_at', Carbon::today())->where('status', Tasks::DONE)->orderBy('updated_at', 'DESC')->get();
-            $tasks_rejected = $tasks->whereDate('created_at', Carbon::today())->where('status', Tasks::REJECTED)->orderBy('updated_at', 'DESC')->get();
+        $query = $tasks->whereDate('created_at', Carbon::today());
+        $inputFilter = '';
+        if ($request->input('filter-by-user')) {
+            $inputFilter = $request->input('filter-by-user');
+            $userFound = Admin::where('email',$inputFilter)->first();
+            if ($userFound) {
+                $userFoundId = $userFound->id;
+                $query = $query->where('editor_id', $userFoundId)->orWhere('QA_id', $userFoundId);
+            } else {
+                $query = $query->where('customer',$inputFilter);
+            }
         }
 
+        $originalQuery = clone $query;
+        $tasks_waiting = $query->where('status', Tasks::WAITING)->orderBy('updated_at', 'DESC')->get();
+        $query = clone $originalQuery;
+        $tasks_todo = $query->where('status', Tasks::TODO)->orderBy('updated_at', 'DESC')->get();
+        $query = clone $originalQuery;
+        $tasks_finished = $query->where('status', Tasks::FINISH)->orderBy('updated_at', 'DESC')->get();
+        
+        $this->assignEditor();
+        
+        if ($conditionAssigner) {
+            $query = clone $originalQuery;
+            $tasks_editing = $query->where($conditionAssigner, $user_id)->where('status', Tasks::EDITING)->orderBy('updated_at', 'DESC')->get();
+            $query = clone $originalQuery;
+            $tasks_testing = $query->where($conditionAssigner, $user_id)->where('status', Tasks::TESTING)->orderBy('updated_at', 'DESC')->get();
+            $query = clone $originalQuery;
+            $tasks_done = $query->where($conditionAssigner, $user_id)->where('status', Tasks::DONE)->orderBy('updated_at', 'DESC')->get();
+            $query = clone $originalQuery;
+            $tasks_rejected = $query->where($conditionAssigner, $user_id)->where('status', Tasks::REJECTED)->orderBy('updated_at', 'DESC')->get();
+            $query = clone $originalQuery;
+            $tasks_todo = $query->where($conditionAssigner, $user_id)->where('status', Tasks::TODO)->orderBy('updated_at', 'DESC')->get();
+        } else {
+            $query = clone $originalQuery;
+            $tasks_editing = $query->where('status', Tasks::EDITING)->orderBy('updated_at', 'DESC')->get();
+            $query = clone $originalQuery;
+            $tasks_testing = $query->where('status', Tasks::TESTING)->orderBy('updated_at', 'DESC')->get();
+            $query = clone $originalQuery;
+            $tasks_done = $query->where('status', Tasks::DONE)->orderBy('updated_at', 'DESC')->get();
+            $query = clone $originalQuery;
+            $tasks_rejected = $query->where('status', Tasks::REJECTED)->orderBy('updated_at', 'DESC')->get();
+            $query = clone $originalQuery;
+            $tasks_todo = $query->where('status', Tasks::TODO)->orderBy('updated_at', 'DESC')->get();
+        }
         return view('admin.dashboards.index')->with([
             'tasks_waiting' => $tasks_waiting,
             'tasks_editing' => $tasks_editing,
@@ -55,6 +82,7 @@ class DashboardController
             'tasks_rejected' => $tasks_rejected,
             'tasks_todo' => $tasks_todo,
             'tasks_finished' => $tasks_finished,
+            'input_filter' => $inputFilter
         ]);
     }
 
