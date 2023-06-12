@@ -605,6 +605,15 @@
             case 'testing':
               processStatus = 2;
               if ($.trim(ui.item.find('.status').text()) == 'Rejected') {
+                  // nếu chưa có editor_check_num or finish_path thì ko kéo dc sang test
+                  let editor_check_num = ui.item.attr('data-editor-check-num');
+                  let finish_path = ui.item.attr('data-finish-path');
+                  if (editor_check_num == '' || finish_path == '') {
+                      let message_drop = 'Bạn chưa điền số lượng ảnh done hoặc đường dẫn file done';
+                      $('#in-progress').sortable('cancel').sortable('cancel');
+                      alert(message_drop);
+                      break;
+                  }
                 checkOnline(ui.item.attr('qa-id'), function (result) {
                   if (result) {
                     status = 'Reject resolve';
