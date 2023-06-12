@@ -521,10 +521,10 @@
         alert(message_drop);
       }
 
-      function checkRejected() {
+      function findStatus(status) {
         let result = false
         $('#in-progress').children().each(function (index, child) {
-          if ($.trim($(child).find('.status').text()) === 'Rejected') {
+          if ($.trim($(child).find('.status').text()) === status) {
             result = true
             return false
           }
@@ -541,7 +541,7 @@
           taskId = ui.item.attr('id');
 
           // check xem có còn task bug không
-          let hasRejected = checkRejected();
+          let hasRejected = findStatus('Rejected');
           let is_inProgress = checkStatus(taskId) == 'In progress';
           // truyền xuống before stop
           ui.item.data('hasRejected', hasRejected);
@@ -653,7 +653,10 @@
                   updateTaskStatus(taskId, processStatus);
                   ui.item.find('.status').css("background-color", "#ebc334");
                   ui.item.find('.status').text(status);
-                  addNewTask();
+                  
+                  if (checkStatus('To do')) {
+                    addNewTask();
+                  }
                 }
               }
               break;
