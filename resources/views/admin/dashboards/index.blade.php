@@ -653,6 +653,7 @@
                   updateTaskStatus(taskId, processStatus);
                   ui.item.find('.status').css("background-color", "#ebc334");
                   ui.item.find('.status').text(status);
+                  addNewTask();
                 }
               }
               break;
