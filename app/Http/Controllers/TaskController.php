@@ -280,17 +280,19 @@ class TaskController
                                     $childPath = $entry['path_display'];
                                     $caseName = "$customer/$date/$taskName/$recordName/$childName";
                                     $countRecord = count($child_folder);
-                                    if ($customer == '02. DCL') { //change case tách thành tên thư mục bên trong
-                                        $taskName = $recordName;
+                                    $taskName_rename = $taskName;
+                                    if ($customer == '02. DCL' || $customer == '09. CL') { //change case tách thành tên thư mục bên trong
+                                        $taskName_rename = $recordName;
                                     }
-                                    $this->createNewTask($customer, $caseName, $childPath, $countRecord, $taskName);
+                                    $this->createNewTask($customer, $caseName, $childPath, $countRecord, $taskName_rename);
                                 }
                             } else {
                                 $countRecord = count($record_entries);
+                                $taskName_rename = $taskName;
                                 if ($customer == '09. CL') { //change case tách thành tên thư mục bên trong
-                                    $taskName = $recordName;
+                                    $taskName_rename = $recordName;
                                 }
-                                $this->createNewTask($customer, $caseName, $recordPath, $countRecord, $taskName);
+                                $this->createNewTask($customer, $caseName, $recordPath, $countRecord, $taskName_rename);
                             }
                         }
                     } else {
