@@ -38,31 +38,36 @@ class DashboardController
                 $userFoundRole = $userFound->getRoleNames()[0];
                 $userFoundId = $userFound->id;
                 $tasks_waiting = $tasks->whereDate('created_at', Carbon::today())
-                ->where($userFoundRole.'_id',$userFoundId)
-                ->where('status', Tasks::WAITING)
-                ->orderBy('updated_at', 'DESC')->get();
+                    ->where($userFoundRole.'_id',$userFoundId)
+                    ->where('status', Tasks::WAITING)
+                    ->orderBy('updated_at', 'DESC')->get();
                 $tasks_todo = $tasks->whereDate('created_at', Carbon::today())
-                ->where($userFoundRole.'_id',$userFoundId)
-                ->where('status', Tasks::TODO)
-                ->orderBy('updated_at', 'DESC')->get();
+                    ->where($userFoundRole.'_id',$userFoundId)
+                    ->where('status', Tasks::TODO)
+                    ->orderBy('updated_at', 'DESC')->get();
                 $tasks_finished = $tasks->whereDate('created_at', Carbon::today())
-                ->where($userFoundRole.'_id',$userFoundId)
-                ->where('status', Tasks::FINISH)
-                ->orderBy('updated_at', 'DESC')->get();
+                    ->where($userFoundRole.'_id',$userFoundId)
+                    ->where('status', Tasks::FINISH)
+                    ->orderBy('updated_at', 'DESC')->get();
             } else {
                 $tasks_waiting = $tasks->whereDate('created_at', Carbon::today())
-                ->where('customer',$inputFilter)
-                ->where('status', Tasks::WAITING)
-                ->orderBy('updated_at', 'DESC')->get();
+                    ->where('customer',$inputFilter)
+                    ->where('status', Tasks::WAITING)
+                    ->orderBy('updated_at', 'DESC')->get();
 
                 $tasks_finished = $tasks->whereDate('created_at', Carbon::today())
-                ->where('customer',$inputFilter)
-                ->where('status', Tasks::FINISH)
-                ->orderBy('updated_at', 'DESC')->get();
+                    ->where('customer',$inputFilter)
+                    ->where('status', Tasks::FINISH)
+                    ->orderBy('updated_at', 'DESC')->get();
             }
         }else{
-            $tasks_waiting = $tasks->whereDate('created_at', Carbon::today())->where('status', Tasks::WAITING)->orderBy('updated_at', 'DESC')->get();
-            $tasks_finished = $tasks->whereDate('created_at', Carbon::today())->where('status', Tasks::FINISH)->orderBy('updated_at', 'DESC')->get();
+            if ($conditionAssigner) {
+                $tasks_waiting = $tasks->whereDate('created_at', Carbon::today())->where('status', Tasks::WAITING)->orderBy('updated_at', 'DESC')->get();
+                $tasks_finished = $tasks->whereDate('created_at', Carbon::today())->where($conditionAssigner, $user_id)->where('status', Tasks::FINISH)->orderBy('updated_at', 'DESC')->get();
+            } else {
+                $tasks_waiting = $tasks->whereDate('created_at', Carbon::today())->where('status', Tasks::WAITING)->orderBy('updated_at', 'DESC')->get();
+                $tasks_finished = $tasks->whereDate('created_at', Carbon::today())->where('status', Tasks::FINISH)->orderBy('updated_at', 'DESC')->get();
+            }
         }
 
         $this->assignEditor();
@@ -75,64 +80,64 @@ class DashboardController
                     $userFoundRole = $userFound->getRoleNames()[0];
                     $userFoundId = $userFound->id;
                     $tasks_editing = $tasks->whereDate('created_at', Carbon::today())
-                    ->where($conditionAssigner, $user_id)
-                    ->where($userFoundRole.'_id',$userFoundId)
-                    ->where('status', Tasks::EDITING)
-                    ->orderBy('updated_at', 'DESC')->get();
+                        ->where($conditionAssigner, $user_id)
+                        ->where($userFoundRole.'_id',$userFoundId)
+                        ->where('status', Tasks::EDITING)
+                        ->orderBy('updated_at', 'DESC')->get();
 
                     $tasks_testing = $tasks->whereDate('created_at', Carbon::today())
-                    ->where($conditionAssigner, $user_id)
-                    ->where($userFoundRole.'_id',$userFoundId)
-                    ->where('status', Tasks::TESTING)
-                    ->orderBy('updated_at', 'DESC')->get();
+                        ->where($conditionAssigner, $user_id)
+                        ->where($userFoundRole.'_id',$userFoundId)
+                        ->where('status', Tasks::TESTING)
+                        ->orderBy('updated_at', 'DESC')->get();
 
                     $tasks_done = $tasks->whereDate('created_at', Carbon::today())
-                    ->where($conditionAssigner, $user_id)
-                    ->where($userFoundRole.'_id',$userFoundId)
-                    ->where('status', Tasks::DONE)
-                    ->orderBy('updated_at', 'DESC')->get();
+                        ->where($conditionAssigner, $user_id)
+                        ->where($userFoundRole.'_id',$userFoundId)
+                        ->where('status', Tasks::DONE)
+                        ->orderBy('updated_at', 'DESC')->get();
 
                     $tasks_rejected = $tasks->whereDate('created_at', Carbon::today())
-                    ->where($conditionAssigner, $user_id)
-                    ->where($userFoundRole.'_id',$userFoundId)
-                    ->where('status', Tasks::REJECTED)
-                    ->orderBy('updated_at', 'DESC')->get();
+                        ->where($conditionAssigner, $user_id)
+                        ->where($userFoundRole.'_id',$userFoundId)
+                        ->where('status', Tasks::REJECTED)
+                        ->orderBy('updated_at', 'DESC')->get();
 
                     $tasks_todo = $tasks->whereDate('created_at', Carbon::today())
-                    ->where($conditionAssigner, $user_id)
-                    ->where($userFoundRole.'_id',$userFoundId)
-                    ->where('status', Tasks::TODO)
-                    ->orderBy('updated_at', 'DESC')->get();
+                        ->where($conditionAssigner, $user_id)
+                        ->where($userFoundRole.'_id',$userFoundId)
+                        ->where('status', Tasks::TODO)
+                        ->orderBy('updated_at', 'DESC')->get();
                 } else {
                     $tasks_editing = $tasks->whereDate('created_at', Carbon::today())
-                    ->where($conditionAssigner, $user_id)
-                    ->where('customer',$inputFilter)
-                    ->where('status', Tasks::EDITING)
-                    ->orderBy('updated_at', 'DESC')->get();
+                        ->where($conditionAssigner, $user_id)
+                        ->where('customer',$inputFilter)
+                        ->where('status', Tasks::EDITING)
+                        ->orderBy('updated_at', 'DESC')->get();
 
                     $tasks_testing = $tasks->whereDate('created_at', Carbon::today())
-                    ->where($conditionAssigner, $user_id)
-                    ->where('customer',$inputFilter)
-                    ->where('status', Tasks::TESTING)
-                    ->orderBy('updated_at', 'DESC')->get();
+                        ->where($conditionAssigner, $user_id)
+                        ->where('customer',$inputFilter)
+                        ->where('status', Tasks::TESTING)
+                        ->orderBy('updated_at', 'DESC')->get();
 
                     $tasks_done = $tasks->whereDate('created_at', Carbon::today())
-                    ->where($conditionAssigner, $user_id)
-                    ->where('customer',$inputFilter)
-                    ->where('status', Tasks::DONE)
-                    ->orderBy('updated_at', 'DESC')->get();
+                        ->where($conditionAssigner, $user_id)
+                        ->where('customer',$inputFilter)
+                        ->where('status', Tasks::DONE)
+                        ->orderBy('updated_at', 'DESC')->get();
 
                     $tasks_rejected = $tasks->whereDate('created_at', Carbon::today())
-                    ->where($conditionAssigner, $user_id)
-                    ->where('customer',$inputFilter)
-                    ->where('status', Tasks::REJECTED)
-                    ->orderBy('updated_at', 'DESC')->get();
+                        ->where($conditionAssigner, $user_id)
+                        ->where('customer',$inputFilter)
+                        ->where('status', Tasks::REJECTED)
+                        ->orderBy('updated_at', 'DESC')->get();
 
                     $tasks_todo = $tasks->whereDate('created_at', Carbon::today())
-                    ->where($conditionAssigner, $user_id)
-                    ->where('customer',$inputFilter)
-                    ->where('status', Tasks::TODO)
-                    ->orderBy('updated_at', 'DESC')->get();
+                        ->where($conditionAssigner, $user_id)
+                        ->where('customer',$inputFilter)
+                        ->where('status', Tasks::TODO)
+                        ->orderBy('updated_at', 'DESC')->get();
                 }
 
             } else {
@@ -150,55 +155,55 @@ class DashboardController
                     $userFoundRole = $userFound->getRoleNames()[0];
                     $userFoundId = $userFound->id;
                     $tasks_editing = $tasks->whereDate('created_at', Carbon::today())
-                    ->where($userFoundRole.'_id', $userFoundId)
-                    ->where('status', Tasks::EDITING)
-                    ->orderBy('updated_at', 'DESC')->get();
+                        ->where($userFoundRole.'_id', $userFoundId)
+                        ->where('status', Tasks::EDITING)
+                        ->orderBy('updated_at', 'DESC')->get();
 
                     $tasks_testing = $tasks->whereDate('created_at', Carbon::today())
-                    ->where($userFoundRole.'_id', $userFoundId)
-                    ->where('status', Tasks::TESTING)
-                    ->orderBy('updated_at', 'DESC')->get();
+                        ->where($userFoundRole.'_id', $userFoundId)
+                        ->where('status', Tasks::TESTING)
+                        ->orderBy('updated_at', 'DESC')->get();
 
                     $tasks_done = $tasks->whereDate('created_at', Carbon::today())
-                    ->where($userFoundRole.'_id', $userFoundId)
-                    ->where('status', Tasks::DONE)
-                    ->orderBy('updated_at', 'DESC')->get();
+                        ->where($userFoundRole.'_id', $userFoundId)
+                        ->where('status', Tasks::DONE)
+                        ->orderBy('updated_at', 'DESC')->get();
 
                     $tasks_rejected = $tasks->whereDate('created_at', Carbon::today())
-                    ->where($userFoundRole.'_id', $userFoundId)
-                    ->where('status', Tasks::REJECTED)
-                    ->orderBy('updated_at', 'DESC')->get();
+                        ->where($userFoundRole.'_id', $userFoundId)
+                        ->where('status', Tasks::REJECTED)
+                        ->orderBy('updated_at', 'DESC')->get();
 
                     $tasks_todo = $tasks->whereDate('created_at', Carbon::today())
-                    ->where($userFoundRole.'_id', $userFoundId)
-                    ->where('status', Tasks::TODO)
-                    ->orderBy('updated_at', 'DESC')->get();
+                        ->where($userFoundRole.'_id', $userFoundId)
+                        ->where('status', Tasks::TODO)
+                        ->orderBy('updated_at', 'DESC')->get();
 
                 } else {
                     $tasks_editing = $tasks->whereDate('created_at', Carbon::today())
-                    ->where('customer', $inputFilter)
-                    ->where('status', Tasks::EDITING)
-                    ->orderBy('updated_at', 'DESC')->get();
+                        ->where('customer', $inputFilter)
+                        ->where('status', Tasks::EDITING)
+                        ->orderBy('updated_at', 'DESC')->get();
 
                     $tasks_testing = $tasks->whereDate('created_at', Carbon::today())
-                    ->where('customer', $inputFilter)
-                    ->where('status', Tasks::TESTING)
-                    ->orderBy('updated_at', 'DESC')->get();
+                        ->where('customer', $inputFilter)
+                        ->where('status', Tasks::TESTING)
+                        ->orderBy('updated_at', 'DESC')->get();
 
                     $tasks_done = $tasks->whereDate('created_at', Carbon::today())
-                    ->where('customer', $inputFilter)
-                    ->where('status', Tasks::DONE)
-                    ->orderBy('updated_at', 'DESC')->get();
+                        ->where('customer', $inputFilter)
+                        ->where('status', Tasks::DONE)
+                        ->orderBy('updated_at', 'DESC')->get();
 
                     $tasks_rejected = $tasks->whereDate('created_at', Carbon::today())
-                    ->where('customer', $inputFilter)
-                    ->where('status', Tasks::REJECTED)
-                    ->orderBy('updated_at', 'DESC')->get();
+                        ->where('customer', $inputFilter)
+                        ->where('status', Tasks::REJECTED)
+                        ->orderBy('updated_at', 'DESC')->get();
 
                     $tasks_todo = $tasks->whereDate('created_at', Carbon::today())
-                    ->where('customer', $inputFilter)
-                    ->where('status', Tasks::TODO)
-                    ->orderBy('updated_at', 'DESC')->get();
+                        ->where('customer', $inputFilter)
+                        ->where('status', Tasks::TODO)
+                        ->orderBy('updated_at', 'DESC')->get();
                 }
 
             } else {
