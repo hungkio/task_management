@@ -519,6 +519,7 @@
       function cancelDrop(columnId, message_drop) {
         $(columnId).sortable('cancel');
         alert(message_drop);
+        console.log('it worked');
       }
 
       function findStatus(status) {
@@ -608,12 +609,7 @@
                   // nếu chưa có editor_check_num or finish_path thì ko kéo dc sang test
                   let editor_check_num = ui.item.attr('data-editor-check-num');
                   let finish_path = ui.item.attr('data-finish-path');
-                  if (editor_check_num == '' || finish_path == '') {
-                      let message_drop = 'Bạn chưa điền số lượng ảnh done hoặc đường dẫn file done';
-                      $('#in-progress').sortable('cancel').sortable('cancel');
-                      alert(message_drop);
-                      break;
-                  }
+                  validateCheckNumAndPath(editor_check_num, finish_path)
                 checkOnline(ui.item.attr('qa-id'), function (result) {
                   if (result) {
                     status = 'Reject resolve';
@@ -631,8 +627,15 @@
                 alert('Case đã hoàn thành không thể chuyển lại về test.');
               } else if (ui.item.has(".in-progress").length && ui.item.find(".qa-details").find('div').length == 0) {
                 //chỉ trường hợp task in-progress mới append html qaDetails
-                let statusLabel = ui.item.find('.status');
-                assignQA(taskId, statusLabel);
+                let editor_check_num = ui.item.attr('data-editor-check-num');
+                let finish_path = ui.item.attr('data-finish-path');
+                if (editor_check_num == '' || finish_path == '' || editor_check_num == null || finish_path == null) {
+                  let message_drop = 'Bạn chưa điền số lượng ảnh done hoặc đường dẫn file done';
+                  cancelDrop('#in-progress', message_drop);
+                } else {
+                  let statusLabel = ui.item.find('.status');
+                  assignQA(taskId, statusLabel);
+                }
               } else if ($.trim(ui.item.find('.status').text()) == 'No bug left') {
                 status = 'Reject resolve';
                 removeButton(ui.item.find('.button-box'));
@@ -643,10 +646,9 @@
                 // nếu chưa có editor_check_num or finish_path thì ko kéo dc sang test
                 let editor_check_num = ui.item.attr('data-editor-check-num');
                 let finish_path = ui.item.attr('data-finish-path');
-                if (editor_check_num == '' || finish_path == '') {
+                if (editor_check_num == '' || finish_path == '' || editor_check_num == null || finish_path == null) {
                   let message_drop = 'Bạn chưa điền số lượng ảnh done hoặc đường dẫn file done';
-                  $('#in-progress').sortable('cancel').sortable('cancel');
-                  alert(message_drop);
+                  cancelDrop('#in-progress', message_drop);
                 }else{
                   status = 'Testing';
                   removeButton(ui.item.find('.button-box'));
@@ -654,9 +656,7 @@
                   ui.item.find('.status').css("background-color", "#ebc334");
                   ui.item.find('.status').text(status);
                   
-                  if (findStatus('To do')) {
-                    addNewTask();
-                  }
+                  addNewTask();
                 }
               }
               break;
