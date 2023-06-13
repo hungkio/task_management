@@ -63,6 +63,17 @@
     .done-task:hover{
       background-color: #3a7301;
     }
+    .counter{
+      height: 21px;
+      width: 21px;
+      border-radius: 99px;
+      background-color: #BB0000;
+      color: white;
+      text-align: center;
+    }
+    .counter:empty{
+      display: none;
+    }
     @media (max-width: 1024px) {
       .dashboard {
         width: 1024px;
@@ -101,317 +112,326 @@
       <div class="dashboard d-flex justify-content-between">
         <!-- To do tasks -->
         <div class="task-column w-100 shadow-sm bg-white">
-          <h5 class="in-progress p-2 text-white">
+          <div class="in-progress p-2 text-white d-flex justify-content-between">
+            <span>
               In Progress
-            </h5>
-            <div class="taskList m-2 bg-light flex-grow-1">
-              <div id="in-progress" class="sortable h-100 d-flex flex-column">
-                <!-- card -->
-                <!-- render task todo -->
-                @foreach ($tasks_todo as $task)
-                  @php
-                    $editor = App\Domain\Admin\Models\Admin::find($task->editor_id);
-                    $qa = App\Domain\Admin\Models\Admin::find($task->QA_id);
-                  @endphp
-                  <div id={{$task->id}}
-                    data-toggle="modal"
-                       data-url="{{ route('admin.popup', $task->id) }}"
-                       class="card rounded-0 mb-3 border-0 border-start border-primary border-3 shadow"
-                       editor-id="{{ $task->editor_id }}"
-                       qa-id="{{ $task->QA_id }}"
-                       data-editor-check-num="{{ $task->editor_check_num }}"
-                       data-finish-path="{{ $task->finish_path }}">
-                    <div class="card-body px-3 py-3">
-                      <div class="card-text mb-1">{{$task->name}}</div>
-                      @if (@$editor)
+            </span>
+            <span id="in-progress-counter" class="counter"></span>
+          </div>
+          <div class="taskList m-2 bg-light flex-grow-1">
+            <div id="in-progress" class="sortable h-100 d-flex flex-column">
+              <!-- card -->
+              <!-- render task todo -->
+              @foreach ($tasks_todo as $task)
+                @php
+                  $editor = App\Domain\Admin\Models\Admin::find($task->editor_id);
+                  $qa = App\Domain\Admin\Models\Admin::find($task->QA_id);
+                @endphp
+                <div id={{$task->id}}
+                  data-toggle="modal"
+                      data-url="{{ route('admin.popup', $task->id) }}"
+                      class="card rounded-0 mb-3 border-0 border-start border-primary border-3 shadow"
+                      editor-id="{{ $task->editor_id }}"
+                      qa-id="{{ $task->QA_id }}"
+                      data-editor-check-num="{{ $task->editor_check_num }}"
+                      data-finish-path="{{ $task->finish_path }}">
+                  <div class="card-body px-3 py-3">
+                    <div class="card-text mb-1">{{$task->name}}</div>
+                    @if (@$editor)
+                      <div class="card-text mb-1">
+                        <span>Editor: {{$editor->email}}</span>
+                        -
+                        <span
+                          class="start-time">Start: {{ $task->start_at && date('d/m/Y H:i', strtotime($task->start_at)) }}</span>
+                      </div>
+                    @endif
+                    <div class="qa-details">
+                      @if (@$qa)
                         <div class="card-text mb-1">
-                          <span>Editor: {{$editor->email}}</span>
+                          <span>QA: {{ $qa->email }}</span>
                           -
-                          <span
-                            class="start-time">Start: {{ $task->start_at && date('d/m/Y H:i', strtotime($task->start_at)) }}</span>
+                          <span>Start: {{ date('d/m/Y H:i', strtotime($task->QA_start)) }}</span>
+                        </div>
+                        <div class="card-text mb-1">QA checked: {{$task->QA_check_num}}</div>
+                      @endif
+                    </div>
+                    <div class="button-box d-flex justify-content-between">
+                      <div
+                        class="status px-2 rounded in-progress d-inline-block p-1 fw-semibold text-white project-name">
+                        To do
+                      </div>
+                      @if ($task->instruction)
+                        <div class="px-2 rounded btn-warning d-inline-block p-1 fw-semibold text-white project-name">
+                          Instruction
                         </div>
                       @endif
-                      <div class="qa-details">
-                        @if (@$qa)
-                          <div class="card-text mb-1">
-                            <span>QA: {{ $qa->email }}</span>
-                            -
-                            <span>Start: {{ date('d/m/Y H:i', strtotime($task->QA_start)) }}</span>
-                          </div>
-                          <div class="card-text mb-1">QA checked: {{$task->QA_check_num}}</div>
-                        @endif
+                      <button
+                        class="start-task px-2 text-white border-0 rounded outline-0 d-inline-block in-progress">Start
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              @endforeach
+            <!-- render task editing -->
+              @foreach ($tasks_editing as $task)
+                @php
+                  $editor = App\Domain\Admin\Models\Admin::find($task->editor_id);
+                  $qa = App\Domain\Admin\Models\Admin::find($task->QA_id);
+                @endphp
+                <div id={{$task->id}}
+                  data-toggle="modal"
+                      data-url="{{ route('admin.popup', $task->id) }}"
+                      class="card rounded-0 mb-3 border-0 border-start border-primary border-3 shadow"
+                      editor-id="{{ $task->editor_id }}"
+                      data-editor-check-num="{{ $task->editor_check_num }}"
+                      data-finish-path="{{ $task->finish_path }}"
+                      qa-id="{{ $task->QA_id }}">
+                  <div class="card-body px-3 py-3">
+                    <div class="card-text mb-1">{{$task->name}}</div>
+                    @if (@$editor)
+                      <div class="card-text mb-1">
+                        <span>Editor: {{$editor->email}}</span>
+                        -
+                        <span>Start: {{ date('d/m/Y H:i', strtotime($task->start_at)) }}</span>
                       </div>
-                      <div class="button-box d-flex justify-content-between">
+                    @endif
+                    <div class="qa-details">
+                      @if (@$qa)
+                        <div class="card-text mb-1">
+                          <span>QA: {{ $qa->email }}</span>
+                          -
+                          <span>Start: {{ date('d/m/Y H:i', strtotime($task->QA_start)) }}</span>
+                        </div>
+                        <div class="card-text mb-1">QA checked: {{$task->QA_check_num}}</div>
+                      @endif
+                    </div>
+                    <div class="button-box d-flex justify-content-between">
+                      <div
+                        class="status px-2 rounded in-progress d-inline-block p-1 fw-semibold text-white project-name">
+                        In progress
+                      </div>
+                      @if ($task->instruction)
                         <div
-                          class="status px-2 rounded in-progress d-inline-block p-1 fw-semibold text-white project-name">
-                          To do
-                        </div>
-                        @if ($task->instruction)
-                          <div class="px-2 rounded btn-warning d-inline-block p-1 fw-semibold text-white project-name">
-                            Instruction
-                          </div>
-                        @endif
-                        <button
-                          class="start-task px-2 text-white border-0 rounded outline-0 d-inline-block in-progress">Start
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                @endforeach
-              <!-- render task editing -->
-                @foreach ($tasks_editing as $task)
-                  @php
-                    $editor = App\Domain\Admin\Models\Admin::find($task->editor_id);
-                    $qa = App\Domain\Admin\Models\Admin::find($task->QA_id);
-                  @endphp
-                  <div id={{$task->id}}
-                    data-toggle="modal"
-                       data-url="{{ route('admin.popup', $task->id) }}"
-                       class="card rounded-0 mb-3 border-0 border-start border-primary border-3 shadow"
-                       editor-id="{{ $task->editor_id }}"
-                       data-editor-check-num="{{ $task->editor_check_num }}"
-                       data-finish-path="{{ $task->finish_path }}"
-                       qa-id="{{ $task->QA_id }}">
-                    <div class="card-body px-3 py-3">
-                      <div class="card-text mb-1">{{$task->name}}</div>
-                      @if (@$editor)
-                        <div class="card-text mb-1">
-                          <span>Editor: {{$editor->email}}</span>
-                          -
-                          <span>Start: {{ date('d/m/Y H:i', strtotime($task->start_at)) }}</span>
+                          class=" px-2 rounded btn-warning d-inline-block p-1 fw-semibold text-white project-name">
+                          Instruction
                         </div>
                       @endif
-                      <div class="qa-details">
-                        @if (@$qa)
-                          <div class="card-text mb-1">
-                            <span>QA: {{ $qa->email }}</span>
-                            -
-                            <span>Start: {{ date('d/m/Y H:i', strtotime($task->QA_start)) }}</span>
-                          </div>
-                          <div class="card-text mb-1">QA checked: {{$task->QA_check_num}}</div>
-                        @endif
-                      </div>
-                      <div class="button-box d-flex justify-content-between">
-                        <div
-                          class="status px-2 rounded in-progress d-inline-block p-1 fw-semibold text-white project-name">
-                          In progress
-                        </div>
-                        @if ($task->instruction)
-                          <div
-                            class=" px-2 rounded btn-warning d-inline-block p-1 fw-semibold text-white project-name">
-                            Instruction
-                          </div>
-                        @endif
-                      </div>
                     </div>
                   </div>
-                @endforeach
-              <!-- render task bug -->
-                @foreach ($tasks_rejected as $task)
-                  @php
-                    $editor = App\Domain\Admin\Models\Admin::find($task->editor_id);
-                    $qa = App\Domain\Admin\Models\Admin::find($task->QA_id);
-                  @endphp
-                  <div id={{$task->id}}
-                    data-toggle="modal"
-                       data-url="{{ route('admin.popup', $task->id) }}"
-                       class="card rounded-0 mb-3 border-0 border-start border-primary border-3 shadow"
-                       editor-id="{{ $task->editor_id }}"
-                       data-editor-check-num="{{ $task->editor_check_num }}"
-                       data-finish-path="{{ $task->finish_path }}"
-                       qa-id="{{ $task->QA_id }}">
-                    <div class="card-body px-3 py-3">
-                      <div class="card-text mb-1">{{$task->name}}</div>
-                      @if (@$editor)
+                </div>
+              @endforeach
+            <!-- render task bug -->
+              @foreach ($tasks_rejected as $task)
+                @php
+                  $editor = App\Domain\Admin\Models\Admin::find($task->editor_id);
+                  $qa = App\Domain\Admin\Models\Admin::find($task->QA_id);
+                @endphp
+                <div id={{$task->id}}
+                  data-toggle="modal"
+                      data-url="{{ route('admin.popup', $task->id) }}"
+                      class="card rounded-0 mb-3 border-0 border-start border-primary border-3 shadow"
+                      editor-id="{{ $task->editor_id }}"
+                      data-editor-check-num="{{ $task->editor_check_num }}"
+                      data-finish-path="{{ $task->finish_path }}"
+                      qa-id="{{ $task->QA_id }}">
+                  <div class="card-body px-3 py-3">
+                    <div class="card-text mb-1">{{$task->name}}</div>
+                    @if (@$editor)
+                      <div class="card-text mb-1">
+                        <span>Editor: {{$editor->email}}</span>
+                        -
+                        <span>Start: {{ date('d/m/Y H:i', strtotime($task->start_at)) }}</span>
+                      </div>
+                    @endif
+                    <div class="qa-details">
+                      @if (@$qa)
                         <div class="card-text mb-1">
-                          <span>Editor: {{$editor->email}}</span>
+                          <span>QA: {{ $qa->email }}</span>
                           -
-                          <span>Start: {{ date('d/m/Y H:i', strtotime($task->start_at)) }}</span>
+                          <span>Start: {{ date('d/m/Y H:i', strtotime($task->QA_start)) }}</span>
+                        </div>
+                        <div class="card-text mb-1">QA checked: {{$task->QA_check_num}}</div>
+                      @endif
+                    </div>
+                    <div class="button-box d-flex justify-content-between">
+                      <div class="status px-2 rounded bug d-inline-block p-1 fw-semibold text-white project-name">
+                        Rejected
+                      </div>
+                      @if ($task->instruction)
+                        <div class=" px-2 rounded btn-warning d-inline-block p-1 fw-semibold text-white project-name">
+                          Instruction
                         </div>
                       @endif
-                      <div class="qa-details">
-                        @if (@$qa)
-                          <div class="card-text mb-1">
-                            <span>QA: {{ $qa->email }}</span>
-                            -
-                            <span>Start: {{ date('d/m/Y H:i', strtotime($task->QA_start)) }}</span>
-                          </div>
-                          <div class="card-text mb-1">QA checked: {{$task->QA_check_num}}</div>
-                        @endif
-                      </div>
-                      <div class="button-box d-flex justify-content-between">
-                        <div class="status px-2 rounded bug d-inline-block p-1 fw-semibold text-white project-name">
-                          Rejected
-                        </div>
-                        @if ($task->instruction)
-                          <div class=" px-2 rounded btn-warning d-inline-block p-1 fw-semibold text-white project-name">
-                            Instruction
-                          </div>
-                        @endif
-                      </div>
                     </div>
                   </div>
-                @endforeach
-              </div>
+                </div>
+              @endforeach
             </div>
           </div>
-          <!-- To do tasks -->
-          <div class="task-column w-100 shadow-sm bg-white">
-            <h5 class="testing p-2 text-white">
+        </div>
+        <!-- Testing tasks -->
+        <div class="task-column w-100 shadow-sm bg-white">
+          <div class="testing p-2 text-white d-flex justify-content-between">
+            <span>
               Testing
-            </h5>
-            <div class="taskList m-2 bg-light flex-grow-1">
-              <div id="testing" class="sortable d-flex flex-column h-100">
-                <!-- card -->
-                @foreach ($tasks_testing as $task)
-                  @php
-                    $editor = App\Domain\Admin\Models\Admin::find($task->editor_id);
-                    $qa = App\Domain\Admin\Models\Admin::find($task->QA_id);
-                  @endphp
-                  <div id={{$task->id}}
-                    data-toggle="modal"
-                       data-url="{{ route('admin.popup', $task->id) }}"
-                       class="card rounded-0 mb-3 border-0 border-start border-primary border-3 shadow"
-                       editor-id="{{ $task->editor_id }}"
-                       data-editor-check-num="{{ $task->editor_check_num }}"
-                       data-finish-path="{{ $task->finish_path }}"
-                       qa-id="{{ $task->QA_id }}">
-                    <div class="card-body px-3 py-3">
-                      <div class="card-text mb-1">{{$task->name}}</div>
-                      @if (@$editor)
+            </span>
+            <span id="testing-counter" class="counter"></span>
+          </div>
+          <div class="taskList m-2 bg-light flex-grow-1">
+            <div id="testing" class="sortable d-flex flex-column h-100">
+              <!-- card -->
+              @foreach ($tasks_testing as $task)
+                @php
+                  $editor = App\Domain\Admin\Models\Admin::find($task->editor_id);
+                  $qa = App\Domain\Admin\Models\Admin::find($task->QA_id);
+                @endphp
+                <div id={{$task->id}}
+                  data-toggle="modal"
+                      data-url="{{ route('admin.popup', $task->id) }}"
+                      class="card rounded-0 mb-3 border-0 border-start border-primary border-3 shadow"
+                      editor-id="{{ $task->editor_id }}"
+                      data-editor-check-num="{{ $task->editor_check_num }}"
+                      data-finish-path="{{ $task->finish_path }}"
+                      qa-id="{{ $task->QA_id }}">
+                  <div class="card-body px-3 py-3">
+                    <div class="card-text mb-1">{{$task->name}}</div>
+                    @if (@$editor)
+                      <div class="card-text mb-1">
+                        <span>Editor: {{$editor->email}}</span>
+                        -
+                        <span>Start: {{ date('d/m/Y H:i', strtotime($task->start_at)) }}</span>
+                      </div>
+                    @endif
+                    <div class="qa-details">
+                      @if (@$qa)
                         <div class="card-text mb-1">
-                          <span>Editor: {{$editor->email}}</span>
+                          <span>QA: {{ $qa->email }}</span>
                           -
-                          <span>Start: {{ date('d/m/Y H:i', strtotime($task->start_at)) }}</span>
+                          <span>Start: {{ date('d/m/Y H:i', strtotime($task->QA_start)) }}</span>
+                        </div>
+                        <div class="card-text mb-1">QA checked: {{$task->QA_check_num}}</div>
+                      @endif
+                    </div>
+                    <div class="button-box d-flex justify-content-between">
+                      <div
+                        class="status px-2 rounded {{$task->QA_check_num ? 'bug' : 'testing'}} d-inline-block p-1 fw-semibold text-white project-name">
+                        @if ($task->QA_check_num)
+                          Reject resolve
+                        @else
+                          Testing
+                        @endif
+                      </div>
+                      @if ($task->instruction)
+                        <div class=" px-2 rounded btn-warning d-inline-block p-1 fw-semibold text-white project-name">
+                          Instruction
                         </div>
                       @endif
-                      <div class="qa-details">
-                        @if (@$qa)
-                          <div class="card-text mb-1">
-                            <span>QA: {{ $qa->email }}</span>
-                            -
-                            <span>Start: {{ date('d/m/Y H:i', strtotime($task->QA_start)) }}</span>
-                          </div>
-                          <div class="card-text mb-1">QA checked: {{$task->QA_check_num}}</div>
-                        @endif
-                      </div>
-                      <div class="button-box d-flex justify-content-between">
-                        <div
-                          class="status px-2 rounded {{$task->QA_check_num ? 'bug' : 'testing'}} d-inline-block p-1 fw-semibold text-white project-name">
-                          @if ($task->QA_check_num)
-                            Reject resolve
-                          @else
-                            Testing
-                          @endif
-                        </div>
-                        @if ($task->instruction)
-                          <div class=" px-2 rounded btn-warning d-inline-block p-1 fw-semibold text-white project-name">
-                            Instruction
-                          </div>
-                        @endif
-                      </div>
                     </div>
                   </div>
-                @endforeach
+                </div>
+              @endforeach
 
-              </div>
             </div>
           </div>
-          <!-- tasks completed -->
-          <div class="task-column w-100 shadow-sm bg-white">
-            <h5 class="done p-2 text-white">
+        </div>
+        <!-- tasks completed -->
+        <div class="task-column w-100 shadow-sm bg-white">
+          <div class="done p-2 text-white d-flex justify-content-between">
+            <span>
               Done
-            </h5>
-            <div class="taskList m-2 bg-light flex-grow-1">
-              <div id="done" class="sortable d-flex flex-column h-100">
-                <!-- card -->
-                @foreach ($tasks_done as $task)
-                  @php
-                    $editor = App\Domain\Admin\Models\Admin::find($task->editor_id);
-                    $qa = App\Domain\Admin\Models\Admin::find($task->QA_id);
-                  @endphp
-                  <div id={{$task->id}}
-                    data-toggle="modal"
-                       data-url="{{ route('admin.popup', $task->id) }}"
-                       class="card rounded-0 mb-3 border-0 border-start border-primary border-3 shadow"
-                       editor-id="{{ $task->editor_id }}"
-                       data-editor-check-num="{{ $task->editor_check_num }}"
-                       data-finish-path="{{ $task->finish_path }}"
-                       qa-id="{{ $task->QA_id }}">
-                    <div class="card-body px-3 py-3">
-                      <div class="card-text mb-1">{{$task->name}}</div>
-                      @if (@$editor)
+            </span>
+            <span id="done-counter" class="counter"></span>
+          </div>
+          <div class="taskList m-2 bg-light flex-grow-1">
+            <div id="done" class="sortable d-flex flex-column h-100">
+              <!-- card -->
+              @foreach ($tasks_done as $task)
+                @php
+                  $editor = App\Domain\Admin\Models\Admin::find($task->editor_id);
+                  $qa = App\Domain\Admin\Models\Admin::find($task->QA_id);
+                @endphp
+                <div id={{$task->id}}
+                  data-toggle="modal"
+                      data-url="{{ route('admin.popup', $task->id) }}"
+                      class="card rounded-0 mb-3 border-0 border-start border-primary border-3 shadow"
+                      editor-id="{{ $task->editor_id }}"
+                      data-editor-check-num="{{ $task->editor_check_num }}"
+                      data-finish-path="{{ $task->finish_path }}"
+                      qa-id="{{ $task->QA_id }}">
+                  <div class="card-body px-3 py-3">
+                    <div class="card-text mb-1">{{$task->name}}</div>
+                    @if (@$editor)
+                      <div class="card-text mb-1">
+                        <span>Editor: {{$editor->email}}</span>
+                        -
+                        <span>Start: {{ date('d/m/Y H:i', strtotime($task->start_at)) }}</span>
+                      </div>
+                    @endif
+                    <div class="qa-details">
+                      @if (@$qa)
                         <div class="card-text mb-1">
-                          <span>Editor: {{$editor->email}}</span>
+                          <span>QA: {{ $qa->email }}</span>
                           -
-                          <span>Start: {{ date('d/m/Y H:i', strtotime($task->start_at)) }}</span>
+                          <span>Start: {{ date('d/m/Y H:i', strtotime($task->QA_start)) }}</span>
                         </div>
+                        <div class="card-text mb-1">QA checked: {{$task->QA_check_num}}</div>
                       @endif
-                      <div class="qa-details">
-                        @if (@$qa)
-                          <div class="card-text mb-1">
-                            <span>QA: {{ $qa->email }}</span>
-                            -
-                            <span>Start: {{ date('d/m/Y H:i', strtotime($task->QA_start)) }}</span>
-                          </div>
-                          <div class="card-text mb-1">QA checked: {{$task->QA_check_num}}</div>
-                        @endif
+                    </div>
+                    <div class="button-box d-flex justify-content-between">
+                      <div class="status px-2 rounded done d-inline-block p-1 fw-semibold text-white project-name">
+                        No bug left
                       </div>
-                      <div class="button-box d-flex justify-content-between">
-                        <div class="status px-2 rounded done d-inline-block p-1 fw-semibold text-white project-name">
-                          No bug left
-                        </div>
-                        <button class="done-task px-2 text-white border-0 rounded outline-0 d-inline-block done">
-                          Finish
-                        </button>
-                      </div>
+                      <button class="done-task px-2 text-white border-0 rounded outline-0 d-inline-block done">
+                        Finish
+                      </button>
                     </div>
                   </div>
-                @endforeach
+                </div>
+              @endforeach
 
-                @foreach ($tasks_finished as $task)
-                  @php
-                    $editor = App\Domain\Admin\Models\Admin::find($task->editor_id);
-                    $qa = App\Domain\Admin\Models\Admin::find($task->QA_id);
-                  @endphp
-                  <div id={{$task->id}}
-                    data-toggle="modal"
-                       data-url="{{ route('admin.popup', $task->id) }}"
-                       class="card rounded-0 mb-3 border-0 border-start border-primary border-3 shadow"
-                       editor-id="{{ $task->editor_id }}"
-                       data-editor-check-num="{{ $task->editor_check_num }}"
-                       data-finish-path="{{ $task->finish_path }}"
-                       qa-id="{{ $task->QA_id }}">
-                    <div class="card-body px-3 py-3">
-                      <div class="card-text mb-1">{{$task->name}}</div>
-                      @if (@$editor)
-                        <div class="card-text mb-1">
-                          <span>Editor: {{$editor->email}}</span>
-                          -
-                          <span>Start: {{ date('d/m/Y H:i', strtotime($task->start_at)) }}</span>
-                        </div>
-                      @endif
-                      <div class="qa-details">
-                        @if (@$qa)
-                          <div class="card-text mb-1">
-                            <span>QA: {{ $qa->email }}</span>
-                            -
-                            <span>Start: {{ date('d/m/Y H:i', strtotime($task->QA_start)) }}</span>
-                          </div>
-                          <div class="card-text mb-1">QA checked: {{$task->QA_check_num}}</div>
-                        @endif
+              @foreach ($tasks_finished as $task)
+                @php
+                  $editor = App\Domain\Admin\Models\Admin::find($task->editor_id);
+                  $qa = App\Domain\Admin\Models\Admin::find($task->QA_id);
+                @endphp
+                <div id={{$task->id}}
+                  data-toggle="modal"
+                      data-url="{{ route('admin.popup', $task->id) }}"
+                      class="card rounded-0 mb-3 border-0 border-start border-primary border-3 shadow"
+                      editor-id="{{ $task->editor_id }}"
+                      data-editor-check-num="{{ $task->editor_check_num }}"
+                      data-finish-path="{{ $task->finish_path }}"
+                      qa-id="{{ $task->QA_id }}">
+                  <div class="card-body px-3 py-3">
+                    <div class="card-text mb-1">{{$task->name}}</div>
+                    @if (@$editor)
+                      <div class="card-text mb-1">
+                        <span>Editor: {{$editor->email}}</span>
+                        -
+                        <span>Start: {{ date('d/m/Y H:i', strtotime($task->start_at)) }}</span>
                       </div>
-                      <div class="button-box d-flex justify-content-between">
-                        <div class="status px-2 rounded done d-inline-block p-1 fw-semibold text-white project-name">
-                          Finished
+                    @endif
+                    <div class="qa-details">
+                      @if (@$qa)
+                        <div class="card-text mb-1">
+                          <span>QA: {{ $qa->email }}</span>
+                          -
+                          <span>Start: {{ date('d/m/Y H:i', strtotime($task->QA_start)) }}</span>
                         </div>
+                        <div class="card-text mb-1">QA checked: {{$task->QA_check_num}}</div>
+                      @endif
+                    </div>
+                    <div class="button-box d-flex justify-content-between">
+                      <div class="status px-2 rounded done d-inline-block p-1 fw-semibold text-white project-name">
+                        Finished
                       </div>
                     </div>
                   </div>
-                @endforeach
-              </div>
+                </div>
+              @endforeach
             </div>
           </div>
+        </div>
         </div>
       </div>
     </div>
@@ -422,7 +442,22 @@
   <script>
     $(document).ready(function () {
       const user_role = '{{ auth()->user()->getRoleNames()[0] }}';
+      
+      function taskCounter() {
+        let inProgress = '#in-progress';
+        let testing = '#testing';
+        let done = '#done';
 
+        let columnIds = [inProgress, testing, done];
+        columnIds.forEach(columnId => {
+          taskAmount = $(columnId).children().length;
+          if(taskAmount > 0){
+            $(columnId + '-counter').text(taskAmount);
+          }
+        });
+      }
+      taskCounter();
+      
       function addNewTask() {
         $.ajax({
           url: "{{ route('admin.assign-editor')}}",
@@ -602,6 +637,9 @@
                   alert('Editor hiện tại đang không online. Liên hệ với admin để chuyển task sang Editor khác.')
                 }
               });
+
+              taskCounter();
+
               break;
             case 'testing':
               processStatus = 2;
@@ -609,19 +647,23 @@
                   // nếu chưa có editor_check_num or finish_path thì ko kéo dc sang test
                   let editor_check_num = ui.item.attr('data-editor-check-num');
                   let finish_path = ui.item.attr('data-finish-path');
-                  validateCheckNumAndPath(editor_check_num, finish_path)
-                checkOnline(ui.item.attr('qa-id'), function (result) {
-                  if (result) {
-                    status = 'Reject resolve';
-                    ui.item.find('.status').css("background-color", "#BB0000")
-                    removeButton(ui.item.find('.button-box'));
-                    updateTaskStatus(taskId, processStatus);
-                    ui.item.find('.status').text(status);
-                  } else {
-                    $('#in-progress').sortable('cancel').sortable('cancel');
-                    alert('QA hiện tại đang không online. Liên hệ với admin để chuyển task sang Editor khác.')
+                  if (editor_check_num == '' || finish_path == '') {
+                    let message_drop = 'Bạn chưa điền số lượng ảnh done hoặc đường dẫn file done';
+                    cancelDrop('#in-progress', message_drop);
+                  }else{
+                    checkOnline(ui.item.attr('qa-id'), function (result) {
+                      if (result) {
+                        status = 'Reject resolve';
+                        ui.item.find('.status').css("background-color", "#BB0000")
+                        removeButton(ui.item.find('.button-box'));
+                        updateTaskStatus(taskId, processStatus);
+                        ui.item.find('.status').text(status);
+                      } else {
+                        $('#in-progress').sortable('cancel').sortable('cancel');
+                        alert('QA hiện tại đang không online. Liên hệ với admin để chuyển task sang Editor khác.')
+                      }
+                    });
                   }
-                });
               } else if ($.trim(ui.item.find('.status').text()) == 'Finished') {
                 $('#done').sortable('cancel').sortable('cancel');
                 alert('Case đã hoàn thành không thể chuyển lại về test.');
@@ -659,6 +701,7 @@
                   addNewTask();
                 }
               }
+              taskCounter();
               break;
             case 'done':
               processStatus = 3;
@@ -672,7 +715,7 @@
                 updateTaskStatus(taskId, processStatus);
                 ui.item.find('.status').text(status);
               }
-            default:
+              taskCounter();
               break;
           }
 
