@@ -161,6 +161,15 @@
                                 </x-text-field>
 
                                 <x-text-field
+                                    name="dbcheck"
+                                    :placeholder="__('DBC')"
+                                    :label="__('DBC')"
+                                    :value="$task->checker->email ?? ''"
+                                    :disabled="1"
+                                >
+                                </x-text-field>
+
+                                <x-text-field
                                     name="dbcheck_num"
                                     :placeholder="__('Số lượng DBC')"
                                     :label="__('Số lượng DBC')"

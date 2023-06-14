@@ -36,13 +36,14 @@
                                 >
                                 </x-text-field>
 
-                                <x-text-field
+                                <x-textarea-field
                                     name="instruction"
                                     :placeholder="__('Instruction')"
                                     :label="__('Instruction')"
                                     :value="$task->instruction"
+                                    class="wysiwyg"
                                 >
-                                </x-text-field>
+                                </x-textarea-field>
 
                                 <x-text-field
                                     name="countRecord"
@@ -77,7 +78,7 @@
                                         <span class="text-danger">*</span> {{ __('Level khách') }}
                                     </label>
                                     <div class="col-lg-9">
-                                        <select name="level" class="form-control" data-width="100%">
+                                        <select name="level" class="form-control select2" data-width="100%">
                                             <option value=""
                                                     @if(!@$task->level) selected @endif>
                                                 Chưa chọn level
@@ -103,7 +104,7 @@
                                         <span class="text-danger">*</span> {{ __('Trạng thái') }}
                                     </label>
                                     <div class="col-lg-9">
-                                        <select name="status" class="form-control" data-width="100%">
+                                        <select name="status" class="form-control select2" data-width="100%">
                                             @foreach(\App\Tasks::STATUS as $key => $status)
                                                 <option value="{{ $key }}"
                                                         @if($key == @$task->status) selected @endif>
@@ -125,7 +126,7 @@
                                         {{ __('Editor') }}
                                     </label>
                                     <div class="col-lg-9">
-                                        <select name="editor_id" class="form-control" data-width="100%">
+                                        <select name="editor_id" class="form-control select2" data-width="100%">
                                             <option value=""
                                                     @if(!@$task->editor_id) selected @endif>
                                                 Chưa assign
@@ -160,7 +161,7 @@
                                         {{ __('QA') }}
                                     </label>
                                     <div class="col-lg-9">
-                                        <select name="QA_id" class="form-control" data-width="100%">
+                                        <select name="QA_id" class="form-control select2" data-width="100%">
                                             <option value=""
                                                     @if(!@$task->QA_id) selected @endif>
                                                 Chưa assign
@@ -174,6 +175,32 @@
                                         </select>
                                         <div class="clearfix"></div>
                                         @error('QA_id')
+                                        <span class="form-text text-danger">
+                                                {{ $message }}
+                                            </span>
+                                        @enderror
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="select-taxon" class="col-lg-2 text-lg-right col-form-label">
+                                        {{ __('DBC') }}
+                                    </label>
+                                    <div class="col-lg-9">
+                                        <select name="dbcheck" class="form-control select2" data-width="100%">
+                                            <option value=""
+                                                    @if(!@$task->dbcheck) selected @endif>
+                                                Chọn người DBC
+                                            </option>
+                                            @foreach($dbcs as $dbc)
+                                                <option value="{{ $dbc->id }}"
+                                                        @if($dbc->id == $task->dbcheck) selected @endif>
+                                                    {{ $dbc->email}}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        <div class="clearfix"></div>
+                                        @error('dbcheck')
                                         <span class="form-text text-danger">
                                                 {{ $message }}
                                             </span>

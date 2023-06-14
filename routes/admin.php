@@ -51,6 +51,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/croncase', function () {
         \Illuminate\Support\Facades\Artisan::call('case:get');
     });
+    Route::get('storage', function (){
+        \Illuminate\Support\Facades\Artisan::call('storage:link');
+        echo 'storage linked';
+    });
     // Route Dashboards
     Route::middleware('auth')
         ->group(function () {

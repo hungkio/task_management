@@ -38,7 +38,9 @@ class TaskController
         $editors = Admin::whereHas('roles', function (Builder $subQuery) {
             $subQuery->where(config('permission.table_names.roles') . '.name', 'editor');
         })->get();
-        return view('admin.tasks.create', compact('QAs', 'editors'));
+
+        $dbcs = Admin::whereIn('email', Admin::DBC_PEOPLE)->get();
+        return view('admin.tasks.create', compact('QAs', 'editors', 'dbcs'));
     }
 
     public function store(TaskRequest $request)
@@ -66,7 +68,10 @@ class TaskController
         $editors = Admin::whereHas('roles', function (Builder $subQuery) {
             $subQuery->where(config('permission.table_names.roles') . '.name', 'editor');
         })->get();
-        return view('admin.tasks.edit', compact('task', 'QAs', 'editors'));
+
+        $dbcs = Admin::whereIn('email', Admin::DBC_PEOPLE)->get();
+
+        return view('admin.tasks.edit', compact('task', 'QAs', 'editors', 'dbcs'));
     }
 
     public function update(Tasks $task, TaskRequest $request)

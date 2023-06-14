@@ -30,7 +30,7 @@ class TaskDataTable extends BaseDatable
             ->editColumn('status', fn(Tasks $task) => Tasks::STATUS[$task->status])
             ->editColumn('editor_id', fn(Tasks $task) => $task->editor->email ?? '')
             ->editColumn('QA_id', fn(Tasks $task) => $task->QA->email ?? '')
-            ->editColumn('updated_at', fn(Tasks $task) => formatDate($task->updated_at, 'd/m/Y H:i:s'))
+            ->editColumn('created_at', fn(Tasks $task) => formatDate($task->created_at, 'd/m/Y H:i:s'))
             ->addColumn('action', fn(Tasks $task) => view('admin.tasks._tableAction', compact('task')))
             ->filterColumn('name', function ($query, $keyword) {
                 $query->where('name', 'like', "%$keyword%");
@@ -72,7 +72,7 @@ class TaskDataTable extends BaseDatable
             Column::make('status')->title(__('Trạng thái')),
             Column::make('editor_id')->title(__('Editor')),
             Column::make('QA_id')->title(__('QA')),
-            Column::make('updated_at')->title(__('Cập nhật')),
+            Column::make('created_at')->title(__('Thời gian tạo')),
             Column::computed('action')
                 ->title(__('Tác vụ'))
                 ->exportable(false)
@@ -99,7 +99,7 @@ class TaskDataTable extends BaseDatable
     {
         $input = "<input style=\"width: 100%\" type=\"text\" placeholder=\"' + title + '\" />";
         $inputDate = "<input class=\"datepicker\" type=\"date\" placeholder=\"' + title + '\" />";
-        $selectStatus = "<input class=\"status_filter\" style=\"display: none\" type=\"text\"/>" . "<select style=\"width: 100%\" class=\"p-0 select_status form-control is-valid\" data-width=\"100%\" aria-invalid=\"false\"> <option value=\"0\" selected=\"\">Waiting</option><option value=\"1\">Editing</option><option value=\"2\">QA Check</option> <option value=\"3\">Done Reject</option> <option value=\"4\">Reject</option> <option value=\"5\">Ready</option> <option value=\"6\">Finish</option> </select>";
+        $selectStatus = "<input class=\"status_filter\" style=\"display: none\" type=\"text\"/>" . "<select style=\"width: 100%\" class=\"p-0 select_status form-control is-valid\" data-width=\"100%\" aria-invalid=\"false\"><option value=\"\" selected=\"\">Trạng thái</option> <option value=\"0\" >Waiting</option><option value=\"1\">Editing</option><option value=\"2\">QA Check</option> <option value=\"3\">Done Reject</option> <option value=\"4\">Reject</option> <option value=\"5\">Ready</option> <option value=\"6\">Finish</option> </select>";
         return [
             'dom' => '<"dt-buttons-full"B><"datatable-header"l><"datatable-scroll-wrap"t><"datatable-footer"ip>',
             'order' => [9, 'desc'],

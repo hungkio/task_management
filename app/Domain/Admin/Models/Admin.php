@@ -185,6 +185,11 @@ class Admin extends Authenticatable implements HasMedia
         'EXT' => 0,
     ];
 
+    // double check people
+    const DBC_PEOPLE = [
+        'Luongtd', 'Longpt', 'room', 'hunghv'
+    ];
+
     public function registerMediaCollections(): void
     {
         $this

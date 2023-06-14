@@ -34,7 +34,7 @@ class DBCheckTaskDataTable extends BaseDatable
                 $query->where('name', 'like', "%$keyword%");
             })
             ->filterColumn('dbcheck', function ($query, $keyword) {
-                $query->whereHas('dbcheck', function ($q) use ($keyword) {
+                $query->whereHas('checker', function ($q) use ($keyword) {
                     $q->where('email', 'like', "%$keyword%");
                 });
             })
@@ -55,6 +55,10 @@ class DBCheckTaskDataTable extends BaseDatable
      */
     public function query(Tasks $model)
     {
+        $user = auth()->user();
+        if (!$user->hasRole('superadmin')) {
+            return $model->newQuery()->where('dbcheck', '!=', 0)->where('dbcheck', auth()->id());
+        }
         return $model->newQuery()->where('dbcheck', '!=', 0);
     }
 
@@ -91,7 +95,7 @@ class DBCheckTaskDataTable extends BaseDatable
     {
         $input = "<input style=\"width: 100%\" type=\"text\" placeholder=\"' + title + '\" />";
         $inputDate = "<input class=\"datepicker\" type=\"date\" placeholder=\"' + title + '\" />";
-        $selectStatus = "<input class=\"status_filter\" style=\"display: none\" type=\"text\"/>" . "<select style=\"width: 100%\" class=\"p-0 select_status form-control is-valid\" data-width=\"100%\" aria-invalid=\"false\"> <option value=\"0\" selected=\"\">Waiting</option><option value=\"1\">Editing</option><option value=\"2\">QA Check</option> <option value=\"3\">Done Reject</option> <option value=\"4\">Reject</option> <option value=\"5\">Ready</option> <option value=\"6\">Finish</option> </select>";
+        $selectStatus = "<input class=\"status_filter\" style=\"display: none\" type=\"text\"/>" . "<select style=\"width: 100%\" class=\"p-0 select_status form-control is-valid\" data-width=\"100%\" aria-invalid=\"false\"><option value=\"\" selected=\"\">Trạng thái</option> <option value=\"0\" >Waiting</option><option value=\"1\">Editing</option><option value=\"2\">QA Check</option> <option value=\"3\">Done Reject</option> <option value=\"4\">Reject</option> <option value=\"5\">Ready</option> <option value=\"6\">Finish</option> </select>";
 
         return [
             'dom' => '<"dt-buttons-full"B><"datatable-header"l><"datatable-scroll-wrap"t><"datatable-footer"ip>',

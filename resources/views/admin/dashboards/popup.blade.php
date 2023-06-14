@@ -46,7 +46,7 @@
             @if($task->instruction)
             <div class="form-group">
                 <label for="">Instruction:</label>
-                <input class="form-control" type="text" value="{{$task->instruction}}" name="path" disabled/>
+                {!! $task->instruction !!}
             </div>
             @endif
           <div class="form-group">

@@ -13,12 +13,16 @@
         'task' => $task ?? new \App\Tasks,
         'QAs' => $QAs,
         'editors' => $editors,
+        'dbcs' => $dbcs,
         'method' => 'PUT'
     ])
 @stop
 @push('js')
     <script>
         $('.form-check-input-styled').uniform();
+        $('.select2').select2({
+            placeholder: "{{ __('-- Vui lòng chọn --') }}",
+        });
     </script>
     <script src="{{ asset('backend/js/editor-admin.js') }}"></script>
     {!! JsValidator::formRequest('App\Http\Requests\Admin\TaskRequest', '#post-form'); !!}

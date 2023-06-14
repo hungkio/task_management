@@ -10,11 +10,11 @@
         <a href="javascript:void(0)" data-url="{{ route('admin.tasks.destroy', $task->id) }}"
            class="item-action js-delete btn-danger" title="{{ __('Xóa') }}"><i class="fal fa-trash-alt"></i></a>
     @endcan
-    @if($task->dbcheck == 0)
-        <button class="item-action btn-warning dbcheck border-0" onclick="add_dbcheck('{{ route('admin.tasks.double-check', $task->id) }}')"
-                title="{{ __('Double Check') }}"><i
-                class="fal fa-check-double"></i></button>
-    @endif
+{{--    @if($task->dbcheck == 0)--}}
+{{--        <button class="item-action btn-warning dbcheck border-0" onclick="add_dbcheck('{{ route('admin.tasks.double-check', $task->id) }}')"--}}
+{{--                title="{{ __('Double Check') }}"><i--}}
+{{--                class="fal fa-check-double"></i></button>--}}
+{{--    @endif--}}
 </div>
 <script>
     function add_dbcheck(url) {
