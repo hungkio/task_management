@@ -381,6 +381,11 @@
                       <div class="status px-2 rounded done d-inline-block p-1 fw-semibold text-white project-name">
                         No bug left
                       </div>
+                        @if ($task->instruction)
+                            <div class="px-2 rounded btn-warning d-inline-block p-1 fw-semibold text-white project-name">
+                                Instruction
+                            </div>
+                        @endif
                       <button class="done-task px-2 text-white border-0 rounded outline-0 d-inline-block done">
                         Finish
                       </button>
@@ -422,6 +427,11 @@
                       @endif
                     </div>
                     <div class="button-box d-flex justify-content-between">
+                        @if ($task->instruction)
+                            <div class="px-2 rounded btn-warning d-inline-block p-1 fw-semibold text-white project-name">
+                                Instruction
+                            </div>
+                        @endif
                       <div class="status px-2 rounded done d-inline-block p-1 fw-semibold text-white project-name">
                         Finished
                       </div>
@@ -442,7 +452,7 @@
   <script>
     $(document).ready(function () {
       const user_role = '{{ auth()->user()->getRoleNames()[0] }}';
-      
+
       function taskCounter() {
         let inProgress = '#in-progress';
         let testing = '#testing';
@@ -459,7 +469,7 @@
         });
       }
       taskCounter();
-      
+
       function addNewTask() {
         $.ajax({
           url: "{{ route('admin.assign-editor')}}",
@@ -605,7 +615,7 @@
             cancelDrop('#in-progress', message_drop);
           }
 
-          
+
 
           // nếu là editor chỉ được kéo từ IP sang test
           if ($(this).attr('id') != 'in-progress' && user_role == 'editor') {
@@ -699,7 +709,7 @@
                   updateTaskStatus(taskId, processStatus);
                   ui.item.find('.status').css("background-color", "#ebc334");
                   ui.item.find('.status').text(status);
-                  
+
                   addNewTask();
                 }
               }
