@@ -453,6 +453,8 @@
           taskAmount = $(columnId).children().length;
           if(taskAmount > 0){
             $(columnId + '-counter').text(taskAmount);
+          }else{
+            $(columnId + '-counter').text('');
           }
         });
       }
