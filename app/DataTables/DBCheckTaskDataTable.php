@@ -26,7 +26,7 @@ class DBCheckTaskDataTable extends BaseDatable
             ->editColumn('status', fn(Tasks $task) => Tasks::STATUS[$task->status])
             ->editColumn('QA_id', fn(Tasks $task) => $task->QA->email ?? '')
             ->editColumn('name', fn(Tasks $task) => $task->name)
-            ->editColumn('dbcheck', fn(Tasks $task) => $task->checker->email ?? '')
+            ->editColumn('dbcheck', fn(Tasks $task) => $task->checker->id == 1 ? "" : ($task->checker->email ?? ''))
             ->editColumn('dbcheck_num', fn(Tasks $task) => $task->dbcheck_num)
             ->editColumn('updated_at', fn(Tasks $task) => formatDate($task->updated_at, 'd/m/Y H:i:s'))
             ->addColumn('action', fn(Tasks $task) => view('admin.dbcheck_tasks._tableAction', compact('task')))
@@ -57,7 +57,7 @@ class DBCheckTaskDataTable extends BaseDatable
     {
         $user = auth()->user();
         if (!$user->hasRole('superadmin')) {
-            return $model->newQuery()->where('dbcheck', '!=', 0)->where('dbcheck', auth()->id());
+            return $model->newQuery()->where('dbcheck', auth()->id())->orWhere('QA_id', auth()->id())->where('dbcheck', '!=', 0);
         }
         return $model->newQuery()->where('dbcheck', '!=', 0);
     }

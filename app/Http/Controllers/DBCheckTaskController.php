@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\DBCheckTaskDataTable;
+use App\Domain\Admin\Models\Admin;
 use App\Tasks;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
@@ -44,6 +45,8 @@ class DBCheckTaskController
 
     public function edit(Tasks $task): View
     {
-        return view('admin.dbcheck_tasks.edit', compact('task'));
+        $dbcs = Admin::whereIn('email', Admin::DBC_PEOPLE)->get();
+
+        return view('admin.dbcheck_tasks.edit', compact('task', 'dbcs'));
     }
 }

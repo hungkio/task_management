@@ -22,6 +22,7 @@
         $('.form-check-input-styled').uniform();
         $('.select2').select2({
             placeholder: "{{ __('-- Vui lòng chọn --') }}",
+            allowClear: true
         });
     </script>
     <script src="{{ asset('backend/js/editor-admin.js') }}"></script>

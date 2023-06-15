@@ -26,6 +26,7 @@
             })
             $('.select2').select2({
                 placeholder: "{{ __('-- Vui lòng chọn --') }}",
+                allowClear: true
             });
         })
     </script>

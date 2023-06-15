@@ -116,7 +116,10 @@ class TaskController
         $editors = Admin::whereHas('roles', function (Builder $subQuery) {
             $subQuery->where(config('permission.table_names.roles') . '.name', 'editor');
         })->get();
-        return view('admin.tasks.clone', compact('task', 'QAs', 'editors'));
+
+        $dbcs = Admin::whereIn('email', Admin::DBC_PEOPLE)->get();
+
+        return view('admin.tasks.clone', compact('task', 'QAs', 'editors', 'dbcs'));
     }
 
     public function destroy(Tasks $task)

@@ -167,10 +167,10 @@ class Admin extends Authenticatable implements HasMedia
 
     const PRIORITY = [
         'SE_FL' => 5,
+        'SE_TW' => 5,
         'SE_DE' => 4,
         'SE' => 3,
-        'INV' => 3,
-        'SE_TW' => 2,
+        'INV' => 2,
         'DTD' => 2,
         'AV' => 2,
         'DBAV' => 2,
@@ -200,7 +200,7 @@ class Admin extends Authenticatable implements HasMedia
 
     public function QATasks()
     {
-        return $this->hasMany(Tasks::class, 'QA_id')->whereDate('created_at', Carbon::today());
+        return $this->hasMany(Tasks::class, 'QA_id')->whereDate('created_at', Carbon::today())->whereIn('status', [Tasks::TESTING, Tasks::REJECTED]);
     }
 
     public function QAMonthTasks()

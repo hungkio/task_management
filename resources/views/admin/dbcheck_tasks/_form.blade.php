@@ -156,18 +156,35 @@
                                     :placeholder="__('QA ghi chú')"
                                     :label="__('QA ghi chú')"
                                     :value="$task->QA_note"
-                                    :disabled="1"
                                 >
                                 </x-text-field>
 
-                                <x-text-field
-                                    name="dbcheck"
-                                    :placeholder="__('DBC')"
-                                    :label="__('DBC')"
-                                    :value="$task->checker->email ?? ''"
-                                    :disabled="1"
-                                >
-                                </x-text-field>
+                                <div class="form-group row">
+                                    <label for="select-taxon" class="col-lg-2 text-lg-right col-form-label">
+                                        {{ __('DBC') }}
+                                    </label>
+                                    <div class="col-lg-9">
+                                        <select name="dbcheck" class="form-control select2" data-width="100%"
+                                                @if(auth()->id() != 1 && $task->dbcheck != 1 && $task->dbcheck != auth()->id()) disabled @endif>
+                                            <option value=""
+                                                    @if(!@$task->dbcheck) selected @endif>
+                                                Chọn người DBC
+                                            </option>
+                                            @foreach($dbcs as $dbc)
+                                                <option value="{{ $dbc->id }}" @if(auth()->id() != 1 && $task->dbcheck != 1 && $dbc->id != auth()->id()) disabled @endif
+                                                        @if($dbc->id == $task->dbcheck) selected @endif>
+                                                    {{ $dbc->email}}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        <div class="clearfix"></div>
+                                        @error('dbcheck')
+                                        <span class="form-text text-danger">
+                                                {{ $message }}
+                                            </span>
+                                        @enderror
+                                    </div>
+                                </div>
 
                                 <x-text-field
                                     name="dbcheck_num"
