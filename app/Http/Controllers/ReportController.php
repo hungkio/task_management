@@ -66,8 +66,8 @@ class ReportController
                 ->orderBy('date')
                 ->get([
                     DB::raw('DATE( created_at ) as date'),
-                    DB::raw('sum(estimate) AS "count"'),
-                    DB::raw('sum(estimate_QA) AS "count_QA"'),
+                    DB::raw('sum(estimate*countRecord) AS "count"'),
+                    DB::raw('sum(estimate_QA*countRecord) AS "count_QA"'),
                 ]);
 
             // mapping data
