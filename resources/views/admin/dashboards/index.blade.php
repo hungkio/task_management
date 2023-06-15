@@ -643,6 +643,8 @@
                     status = 'Rejected';
                     updateTaskStatus(taskId, processStatus);
                     ui.item.find('.status').text(status);
+                    taskCounter();
+
                   }
                 } else {
                   $('#testing').sortable('cancel').sortable('cancel');
@@ -650,7 +652,6 @@
                 }
               });
 
-              taskCounter();
 
               break;
             case 'testing':
