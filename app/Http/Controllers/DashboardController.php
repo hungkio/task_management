@@ -277,9 +277,20 @@ class DashboardController
             $QA = Admin::where('id', $task->QA_id)->where('is_online', 1)->first();
         }else {
             // have lowest number of task
-            $QA = Admin::with(['roles'])->withCount('QATasks')->whereHas('roles', function (Builder $subQuery) {
+            $QAs = Admin::with(['roles'])->withCount('QATasks')->whereHas('roles', function (Builder $subQuery) {
                 $subQuery->where(config('permission.table_names.roles').'.name', 'QA');
-            })->where('is_online', 1)->orderBy('q_a_tasks_count')->first();
+            })->where('is_online', 1)->orderBy('q_a_tasks_count')->get();
+            $QA = null;
+            // check QA level
+            foreach ($QAs as $qa) {
+                if ($qa->level) {
+                    $levels = explode(',', $qa->level);
+                    if (in_array($task->level, $levels)) {
+                        $QA = $qa;
+                        break;
+                    }
+                }
+            }
         }
         if ($QA) {
             $task->update([
