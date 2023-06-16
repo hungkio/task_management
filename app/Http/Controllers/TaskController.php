@@ -51,6 +51,14 @@ class TaskController
         $data['estimate_QA'] = Admin::ESTIMATE_QA[$data['level']];
         $data['priority'] = @Admin::PRIORITY[$data['level']] ?? 0;
 
+        if ($data['editor_id']) {
+            $data['start_at'] = date("Y-m-d H:i");
+        }
+
+        if ($data['QA_id']) {
+            $data['QA_start'] = date("Y-m-d H:i");
+        }
+
         $task = Tasks::create($data);
 
         flash()->success(__('Case ":model" đã được tạo thành công !', ['model' => $task->title]));
@@ -84,12 +92,12 @@ class TaskController
         $data['priority'] = @Admin::PRIORITY[$data['level']] ?? 0;
 
         // restart start time when change editor
-        if ($data['editor_id'] && $data['editor_id'] != $task->editor_id && $data['status'] != Tasks::WAITING && $data['status'] != Tasks::TODO) {
+        if ($data['editor_id'] && $data['editor_id'] != $task->editor_id) {
             $data['start_at'] = date("Y-m-d H:i");
         }
 
         // restart start time when change QA
-        if ($data['QA_id'] && $data['QA_id'] != $task->QA_id && $data['status'] != Tasks::WAITING && $data['status'] != Tasks::TODO) {
+        if ($data['QA_id'] && $data['QA_id'] != $task->QA_id) {
             $data['QA_start'] = date("Y-m-d H:i");
         }
 
