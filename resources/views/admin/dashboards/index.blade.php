@@ -546,7 +546,7 @@
             } else {
               // nếu chạy vào đây tức là không có QA nào online
               const columnId = '#testing'
-              const message_drop = 'Hiện tại không có QA nào online. Hãy liên hệ với admin để tìm cách giải quyết.'
+              const message_drop = 'Hiện tại không có QA nào online hoặc phù hợp. Hãy liên hệ với admin để tìm cách giải quyết.'
               $('#in-progress').sortable('cancel').sortable('cancel');
               alert(message_drop);
               statusLabel.text('In progress');
