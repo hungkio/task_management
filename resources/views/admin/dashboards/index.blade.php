@@ -24,10 +24,11 @@
       animation: all 0.5s;
     }
 
-    .in-progress {
+    .in-progress,
+    .to-do,
+    .start-task {
       background-color: #1890ff;
     }
-
     .testing {
       background-color: #ebc334;
     }
@@ -36,7 +37,8 @@
       background-color: #BB0000;
     }
 
-    .done {
+    .done,
+    .no-bug {
       background-color: #458B00;
     }
 
@@ -64,12 +66,7 @@
       background-color: #3a7301;
     }
     .counter{
-      height: 21px;
-      width: 21px;
-      border-radius: 99px;
-      background-color: #BB0000;
       color: white;
-      text-align: center;
     }
     .counter:empty{
       display: none;
@@ -157,7 +154,7 @@
                     </div>
                     <div class="button-box d-flex justify-content-between">
                       <div
-                        class="status px-2 rounded in-progress d-inline-block p-1 fw-semibold text-white project-name">
+                        class="status px-2 rounded to-do d-inline-block p-1 fw-semibold text-white project-name">
                         To do
                       </div>
                       @if ($task->instruction)
@@ -166,7 +163,7 @@
                         </div>
                       @endif
                       <button
-                        class="start-task px-2 text-white border-0 rounded outline-0 d-inline-block in-progress">Start
+                        class="start-task px-2 text-white border-0 rounded outline-0 d-inline-block">Start
                       </button>
                     </div>
                   </div>
@@ -378,7 +375,7 @@
                       @endif
                     </div>
                     <div class="button-box d-flex justify-content-between">
-                      <div class="status px-2 rounded done d-inline-block p-1 fw-semibold text-white project-name">
+                      <div class="status px-2 no-bug rounded d-inline-block p-1 fw-semibold text-white project-name">
                         No bug left
                       </div>
                         @if ($task->instruction)
@@ -454,17 +451,18 @@
       const user_role = '{{ auth()->user()->getRoleNames()[0] }}';
 
       function taskCounter() {
-        let inProgress = '#in-progress';
-        let testing = '#testing';
-        let done = '#done';
+        let inProgress = 'in-progress';
+        let testing = 'testing';
+        let done = 'done';
 
         let columnIds = [inProgress, testing, done];
         columnIds.forEach(columnId => {
-          taskAmount = $(columnId).children().length;
-          if(taskAmount > 0){
-            $(columnId + '-counter').text(taskAmount);
+          total = $('#'+columnId).children().length;
+          taskAmount = $('#'+columnId).find('.'+columnId).length;
+          if(total > 0){
+            $('#'+columnId + '-counter').text(taskAmount+'/'+total);
           }else{
-            $(columnId + '-counter').text('');
+            $('#'+columnId + '-counter').text('');
           }
         });
       }
@@ -497,15 +495,16 @@
               "</div>" +
               "<div class='qa-details'></div>" +
               "<div class='d-flex justify-content-between'>" +
-              "<div class='status px-2 rounded in-progress d-inline-block p-1 fw-semibold text-white project-name'>" +
+              "<div class='status px-2 rounded to-do d-inline-block p-1 fw-semibold text-white project-name'>" +
               "To do" +
               "</div>" +
-              "<button class='start-task px-2 text-white border-0 rounded outline-0 d-inline-block in-progress'>Start</button>" +
+              "<button class='start-task px-2 text-white border-0 rounded outline-0 d-inline-block'>Start</button>" +
               "</div>" +
               "</div>" +
               "</div>"
             if (response.name) {
               $('#in-progress').append(newTask);
+              taskCounter();
             }
           },
           error: function (xhr) {
@@ -541,7 +540,9 @@
               $('#' + taskId).find('.qa-details').append(qaDetails);
               $('#' + taskId).attr('qa-id', response.QA.id);
               statusLabel.text('Testing');
-              statusLabel.css("background-color", "#ebc334");
+              statusLabel.addClass('testing');
+              statusLabel.removeClass('in-progress');
+              taskCounter();
             } else {
               // nếu chạy vào đây tức là không có QA nào online
               const columnId = '#testing'
@@ -549,7 +550,8 @@
               $('#in-progress').sortable('cancel').sortable('cancel');
               alert(message_drop);
               statusLabel.text('In progress');
-              statusLabel.css("background-color", "#1890ff");
+              statusLabel.addClass('in-progress');
+              statusLabel.removeClass('testing');
             }
           },
           error: function (xhr) {
@@ -639,12 +641,12 @@
                     alert('Case đã hoàn thành không thể chuyển lại về edit.');
                     $('#done').sortable('cancel').sortable('cancel');
                   } else {
-                    ui.item.find('.status').css("background-color", "#BB0000");
+                    ui.item.find('.status').addClass('bug');
+                    ui.item.find('.status').removeClass('done');
                     status = 'Rejected';
                     updateTaskStatus(taskId, processStatus);
                     ui.item.find('.status').text(status);
                     taskCounter();
-
                   }
                 } else {
                   $('#testing').sortable('cancel').sortable('cancel');
@@ -667,7 +669,8 @@
                     checkOnline(ui.item.attr('qa-id'), function (result) {
                       if (result) {
                         status = 'Reject resolve';
-                        ui.item.find('.status').css("background-color", "#BB0000")
+                        ui.item.find('.status').addClass('bug');
+                        ui.item.find('.status').removeClass('testing');
                         removeButton(ui.item.find('.button-box'));
                         updateTaskStatus(taskId, processStatus);
                         ui.item.find('.status').text(status);
@@ -695,7 +698,7 @@
                 status = 'Reject resolve';
                 removeButton(ui.item.find('.button-box'));
                 updateTaskStatus(taskId, processStatus);
-                ui.item.find('.status').css("background-color", "#BB0000");
+                ui.item.find('.status').addClass('bug');
                 ui.item.find('.status').text(status);
               } else {
                 // nếu chưa có editor_check_num or finish_path thì ko kéo dc sang test
@@ -708,10 +711,12 @@
                   status = 'Testing';
                   removeButton(ui.item.find('.button-box'));
                   updateTaskStatus(taskId, processStatus);
-                  ui.item.find('.status').css("background-color", "#ebc334");
+                  ui.item.find('.status').addClass('testing');
+                  ui.item.find('.status').removeClass('in-progress');
                   ui.item.find('.status').text(status);
-
+                  console.log('run here');
                   addNewTask();
+                  taskCounter();
                 }
               }
               taskCounter();
@@ -723,7 +728,8 @@
                 $('#in-progress').sortable('cancel');
               } else {
                 status = 'No bug left';
-                ui.item.find('.status').css("background-color", "#458B00")
+                ui.item.find('.status').addClass('no-bug');
+                ui.item.find('.status').removeClass('testing');
                 qaToDone(ui.item.find('.button-box'));
                 updateTaskStatus(taskId, processStatus);
                 ui.item.find('.status').text(status);
@@ -780,8 +786,11 @@
         let formated_time = 'Start: ' + formatedDate + '/' + formatedMonth + '/' + currentTime.getFullYear() + ' ' + formatedHour + ':' + formatedMinute;
         updateTaskStatus(this_id, 1, saveStartAt);
         $(this).siblings('.status').text('In progress');
+        $(this).siblings('.status').removeClass('to-do');
+        $(this).siblings('.status').addClass('in-progress');
         $(this).parents().siblings('.card-text').find('.start-time').text(formated_time);
         $(this).remove();
+        taskCounter();
       })
 
       //finish task
