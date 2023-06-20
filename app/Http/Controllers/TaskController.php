@@ -308,6 +308,10 @@ class TaskController
                                 if ($customer == '09. CL') { //change case tách thành tên thư mục bên trong
                                     $taskName_rename = $recordName;
                                 }
+                                if ($customer == '02. DCL' && $taskName_rename == 'dan') { //change case tách thành tên thư mục bên trong
+                                    $taskName_rename = $recordName;
+                                }
+
                                 $this->createNewTask($customer, $caseName, $recordPath, $countRecord, $taskName_rename);
                             }
                         }
