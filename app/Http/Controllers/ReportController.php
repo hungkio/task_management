@@ -239,7 +239,8 @@ class ReportController
 
         if ($currentRoleName == "editor") {
             foreach ($qualities as $key => &$quantity) {
-                $quantity = round($quantity/$salaries[$key]['countRecord'], 2);
+                $average = round($quantity*60/$salaries[$key]['countRecord'], 2);
+                $quantity = gmdate("H:i:s", $average);;
             }
         } else {
             $qualities = [];

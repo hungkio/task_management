@@ -18,6 +18,7 @@
     </thead>
     <tbody>
     @if(!empty($salaries))
+        @php($sum = 0)
         @foreach($salaries as $key => $salary)
             <tr>
                 <td class="border text-center">{{ $key }}</td>
@@ -25,7 +26,12 @@
                 <td class="border text-center">{{ number_format($salary['unitCost']) }}</td>
                 <td class="border text-center">{{ number_format($salary['cost']) }}</td>
             </tr>
+            @php($sum += $salary['cost'])
         @endforeach
+        <tr>
+            <td class="border text-center" colspan="3">Tổng</td>
+            <td class="border text-center">{{ number_format($sum) }}</td>
+        </tr>
     @endif
     </tbody>
 </table>

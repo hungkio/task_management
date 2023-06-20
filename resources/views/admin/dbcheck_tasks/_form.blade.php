@@ -159,6 +159,14 @@
                                 >
                                 </x-text-field>
 
+                                <x-text-field
+                                    name="instruction"
+                                    :placeholder="__('Instruction')"
+                                    :label="__('Instruction')"
+                                    :value="$task->instruction"
+                                >
+                                </x-text-field>
+
                                 <div class="form-group row">
                                     <label for="select-taxon" class="col-lg-2 text-lg-right col-form-label">
                                         {{ __('DBC') }}

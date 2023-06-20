@@ -170,6 +170,7 @@ class Admin extends Authenticatable implements HasMedia
         'SE_TW' => 5,
         'SE_DE' => 4,
         'SE' => 3,
+        'SE_PR' => 3,
         'INV' => 2,
         'DTD' => 2,
         'AV' => 2,

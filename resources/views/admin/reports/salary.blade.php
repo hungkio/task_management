@@ -20,6 +20,18 @@
                 margin-left: .625rem !important;
             }
         }
+
+        .full tbody tr td:nth-child(5) {
+            min-width: 300px;
+            word-break: break-all;
+            white-space: normal;
+        }
+
+        .full tbody tr td:nth-child(6) {
+            min-width: 300px;
+            word-break: break-all;
+            white-space: normal;
+        }
     </style>
 @endpush
 
@@ -56,9 +68,6 @@
         <thead>
         <tr class="border">
             <th class="border bg-blue text-center">
-                <div class="relative"><span class="colHeader">ID</span></div>
-            </th>
-            <th class="border bg-blue text-center">
                 <div class="relative"><span class="colHeader">N/T</span></div>
             </th>
             <th class="border bg-blue text-center">
@@ -71,7 +80,10 @@
                 <div class="relative"><span class="colHeader">Num</span></div>
             </th>
             <th class="border bg-blue text-center">
-                <div class="relative"><span class="colHeader">Tên công việc</span></div>
+                <div class="relative"><span class="colHeader">Tên nhiệm vụ</span></div>
+            </th>
+            <th class="border bg-blue text-center">
+                <div class="relative"><span class="colHeader">Tên job</span></div>
             </th>
             <th class="border bg-blue text-center">
                 <div class="relative"><span class="colHeader">Người thực hiện</span></div>
@@ -83,7 +95,10 @@
                 <div class="relative"><span class="colHeader">Kết quả QA</span></div>
             </th>
             <th class="border bg-blue text-center">
-                <div class="relative"><span class="colHeader">Tổng số giờ ghi nhận</span></div>
+                <div class="relative"><span class="colHeader">Instruction</span></div>
+            </th>
+            <th class="border bg-blue text-center">
+                <div class="relative"><span class="colHeader">Tổng số phút ghi nhận</span></div>
             </th>
             <th class="border bg-blue text-center">
                 <div class="relative"><span class="colHeader">Phút/ 1 ảnh</span></div>
@@ -94,15 +109,16 @@
         @if(!empty($tasks))
             @foreach($tasks as $key => $task)
                 <tr>
-                    <td class="border text-center">{{ $task->id }}</td>
                     <td class="border text-center">{{ formatDate($task->created_at) }}</td>
                     <td class="border text-center">{{ $task->customer }}</td>
                     <td class="border text-center">{{ $task->level }}</td>
                     <td class="border text-center">{{ $task->countRecord }}</td>
                     <td class="border text-center">{{ $task->name }}</td>
+                    <td class="border text-center">{{ $task->case }}</td>
                     <td class="border text-center">{{ $task->editor->email ?? '' }}</td>
                     <td class="border text-center">{{ $task->QA->email ?? '' }}</td>
                     <td class="border text-center">{{ $task->QA_check_num }}</td>
+                    <td class="border text-center">{!! $task->instruction  !!} </td>
                     <td class="border text-center">{{ $task->timespent }}</td>
                     <td class="border text-center">{{ $task->average }}</td>
                 </tr>
