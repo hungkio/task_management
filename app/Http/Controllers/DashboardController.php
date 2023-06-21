@@ -339,7 +339,7 @@ class DashboardController
             unset($inputData['redo']);
         }
         $task->update($inputData);
-        return redirect()->route('admin.dashboards');
+        return back();
     }
     public function getUser($id)
     {

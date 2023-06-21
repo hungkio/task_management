@@ -26,6 +26,7 @@ class DBCheckTaskDataTable extends BaseDatable
             ->editColumn('status', fn(Tasks $task) => Tasks::STATUS[$task->status])
             ->editColumn('QA_id', fn(Tasks $task) => $task->QA->email ?? '')
             ->editColumn('name', fn(Tasks $task) => $task->name)
+            ->editColumn('instruction', fn(Tasks $task) => $task->instruction)
             ->editColumn('dbcheck', fn(Tasks $task) => $task->checker->id == 1 ? "" : ($task->checker->email ?? ''))
             ->editColumn('dbcheck_num', fn(Tasks $task) => $task->dbcheck_num)
             ->editColumn('updated_at', fn(Tasks $task) => formatDate($task->updated_at, 'd/m/Y H:i:s'))
@@ -44,7 +45,7 @@ class DBCheckTaskDataTable extends BaseDatable
                 });
             })
             ->orderColumn('name', 'name $1')
-            ->rawColumns(['action', 'name', 'status']);
+            ->rawColumns(['action', 'name', 'status', 'instruction']);
     }
 
     /**
@@ -71,6 +72,7 @@ class DBCheckTaskDataTable extends BaseDatable
             Column::make('status')->title(__('Trạng thái')),
             Column::make('QA_id')->title(__('QA')),
             Column::make('name')->title(__('Tên nhiệm vụ'))->width('20%'),
+            Column::make('instruction')->title(__('Instruction')),
             Column::make('dbcheck')->title(__('DBC')),
             Column::make('dbcheck_num')->title(__('SL DBC')),
             Column::make('updated_at')->title(__('Cập nhật')),
@@ -99,7 +101,7 @@ class DBCheckTaskDataTable extends BaseDatable
 
         return [
             'dom' => '<"dt-buttons-full"B><"datatable-header"l><"datatable-scroll-wrap"t><"datatable-footer"ip>',
-            'order' => [6, 'desc'],
+            'order' => [9, 'desc'],
             "initComplete" => "function () {
                     var api = this.api();
 
@@ -113,12 +115,12 @@ class DBCheckTaskDataTable extends BaseDatable
                                 $(api.column(colIdx).header()).index()
                             );
                         var title = $(cell).text();
-                        if (colIdx== 1 || colIdx== 2 || colIdx== 7|| colIdx== 9) {
+                        if (colIdx== 1 || colIdx== 2 || colIdx== 8|| colIdx== 10) {
                             $(cell).html('');
                             return;
                         }
 
-                        if (colIdx== 8) {
+                        if (colIdx== 9) {
                             $(cell).html('$inputDate');
                         } else if (colIdx== 3) {
                             $(cell).html('$selectStatus');

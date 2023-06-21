@@ -22,12 +22,12 @@
         }
         tbody tr td:nth-child(5) {
             min-width: 300px;
-            word-break: break-all;
+            word-break: break-word;
             white-space: normal;
         }
         tbody tr td:nth-child(6) {
             min-width: 300px;
-            word-break: break-all;
+            word-break: break-word;
             white-space: normal;
         }
     </style>

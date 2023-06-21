@@ -23,13 +23,19 @@
 
         .full tbody tr td:nth-child(5) {
             min-width: 300px;
-            word-break: break-all;
+            word-break: break-word;
             white-space: normal;
         }
 
         .full tbody tr td:nth-child(6) {
             min-width: 300px;
-            word-break: break-all;
+            word-break: break-word;
+            white-space: normal;
+        }
+
+        .full tbody tr td:nth-child(10) {
+            min-width: 100px;
+            word-break: break-word;
             white-space: normal;
         }
     </style>
@@ -52,7 +58,8 @@
             </select>
         </div>
     </div>
-    <button class="dt-button buttons-collection buttons-export btn btn-primary" onclick="exportMultipleTable(['salary', 'quality', 'deadline'], 'ReportSalary');"
+    <button class="dt-button buttons-collection buttons-export btn btn-primary"
+            onclick="exportMultipleTable(['salary', 'quality', 'deadline'], 'ReportSalary');"
             type="button" aria-haspopup="true"><span><i class="fal fa-download mr-2"></i>Xuất</span>
     </button>
     <div class="row ml-0 salary_report">
@@ -61,7 +68,8 @@
 
     <iframe id="txtArea1" style="display:none"></iframe>
     {{--Full--}}
-    <button class="dt-button buttons-collection buttons-export btn btn-primary  mt-3" onclick="exportMultipleTable(['full'], 'ReportAllCase');"
+    <button class="dt-button buttons-collection buttons-export btn btn-primary  mt-3"
+            onclick="exportMultipleTable(['full'], 'ReportAllCase');"
             type="button" aria-haspopup="true"><span><i class="fal fa-download mr-2"></i>Xuất</span>
     </button>
     <table class="full w-100" style="display: table;" id="full">
@@ -95,7 +103,10 @@
                 <div class="relative"><span class="colHeader">Kết quả QA</span></div>
             </th>
             <th class="border bg-blue text-center">
-                <div class="relative"><span class="colHeader">Instruction</span></div>
+                <div class="relative"><span class="colHeader">QA ghi chú</span></div>
+            </th>
+            <th class="border bg-blue text-center">
+                <div class="relative"><span class="colHeader">Bad</span></div>
             </th>
             <th class="border bg-blue text-center">
                 <div class="relative"><span class="colHeader">Tổng số phút ghi nhận</span></div>
@@ -118,7 +129,14 @@
                     <td class="border text-center">{{ $task->editor->email ?? '' }}</td>
                     <td class="border text-center">{{ $task->QA->email ?? '' }}</td>
                     <td class="border text-center">{{ $task->QA_check_num }}</td>
-                    <td class="border text-center">{!! $task->instruction  !!} </td>
+                    <td class="border text-center">{{ $task->QA_note }}</td>
+                    <td class="border text-center">
+                        @if($task->redo_note)
+                            @foreach(\App\Domain\Admin\Models\Admin::BAD as $bad)
+                                @if($bad == @$task->redo_note) {{ $bad }} @endif
+                            @endforeach
+                        @endif
+                    </td>
                     <td class="border text-center">{{ $task->timespent }}</td>
                     <td class="border text-center">{{ $task->average }}</td>
                 </tr>

@@ -40,6 +40,17 @@ class TasksImport implements ToCollection
             })->where("email", $QAName)->first();
             $countRecord = $row[8];
             $casePath = $row[9];
+
+            $start_at = null;
+            if ($editor) {
+                $start_at = date("Y-m-d H:i");
+            }
+
+            $QA_start = null;
+            if ($QA) {
+                $data['QA_start'] = date("Y-m-d H:i");
+            }
+
             Tasks::updateOrCreate([
                 'name' => $caseName,
                 'created_at' => Tasks::whereDate('created_at', Carbon::today())->first()->created_at ?? null
@@ -55,6 +66,8 @@ class TasksImport implements ToCollection
                 'editor_id' => $editor->id ?? '',
                 'QA_id' => $QA->id ?? '',
                 'priority' => $priority,
+                'start_at' => $start_at,
+                'QA_start' => $QA_start,
             ]);
         }
     }

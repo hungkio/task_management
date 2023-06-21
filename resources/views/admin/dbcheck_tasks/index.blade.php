@@ -22,10 +22,14 @@
         }
         tbody tr td:nth-child(6) {
             min-width: 300px;
-            word-break: break-all;
+            word-break: break-word;
             white-space: normal;
         }
-
+        tbody tr td:nth-child(7) {
+            min-width: 300px;
+            word-break: break-word;
+            white-space: normal;
+        }
     </style>
 @endpush
 
@@ -80,7 +84,7 @@
             $('[data-toggle="tooltip"]').tooltip()
 
             $('#DBCheckTaskDataTable thead ')
-                .append('<tr role="row" class="filters"><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr>');
+                .append('<tr role="row" class="filters"><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr>');
 
             $('.import').click(function () {
                 $('#exampleModal').modal('show')

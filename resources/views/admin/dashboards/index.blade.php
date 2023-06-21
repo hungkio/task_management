@@ -100,7 +100,7 @@
     <form method="GET" action="{{route('admin.dashboards')}}">
       @csrf
       <label class="ml-2" for="filter-by-user">Filter:</label>
-      <input type="text" name="filter-by-user" placeholder="by email or customer" value="{{$input_filter}}">
+      <input type="text" name="filter-by-user" placeholder="username or customer" value="{{$input_filter}}">
       <button class="outline-0 border shadow-sm" type="submit">Submit</button>
     </form>
   </div>
@@ -162,6 +162,11 @@
                           Instruction
                         </div>
                       @endif
+                        @if ($task->redo)
+                            <div class="px-2 rounded btn-danger d-inline-block p-1 fw-semibold text-white project-name">
+                                Redo
+                            </div>
+                        @endif
                       <button
                         class="start-task px-2 text-white border-0 rounded outline-0 d-inline-block">Start
                       </button>
@@ -213,6 +218,11 @@
                           Instruction
                         </div>
                       @endif
+                        @if ($task->redo)
+                            <div class="px-2 rounded btn-danger d-inline-block p-1 fw-semibold text-white project-name">
+                                Redo
+                            </div>
+                        @endif
                     </div>
                   </div>
                 </div>
@@ -259,6 +269,11 @@
                           Instruction
                         </div>
                       @endif
+                        @if ($task->redo)
+                            <div class="px-2 rounded btn-danger d-inline-block p-1 fw-semibold text-white project-name">
+                                Redo
+                            </div>
+                        @endif
                     </div>
                   </div>
                 </div>
@@ -323,6 +338,11 @@
                           Instruction
                         </div>
                       @endif
+                        @if ($task->redo)
+                            <div class="px-2 rounded btn-danger d-inline-block p-1 fw-semibold text-white project-name">
+                                Redo
+                            </div>
+                        @endif
                     </div>
                   </div>
                 </div>
@@ -383,6 +403,11 @@
                                 Instruction
                             </div>
                         @endif
+                        @if ($task->redo)
+                            <div class="px-2 rounded btn-danger d-inline-block p-1 fw-semibold text-white project-name">
+                                Redo
+                            </div>
+                        @endif
                       <button class="done-task px-2 text-white border-0 rounded outline-0 d-inline-block done">
                         Finish
                       </button>
@@ -429,6 +454,11 @@
                                 Instruction
                             </div>
                         @endif
+                            @if ($task->redo)
+                                <div class="px-2 rounded btn-danger d-inline-block p-1 fw-semibold text-white project-name">
+                                    Redo
+                                </div>
+                            @endif
                       <div class="status px-2 rounded done d-inline-block p-1 fw-semibold text-white project-name">
                         Finished
                       </div>
