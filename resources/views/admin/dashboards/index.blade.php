@@ -121,8 +121,8 @@
               <!-- render task todo -->
               @foreach ($tasks_todo as $task)
                 @php
-                  $editor = App\Domain\Admin\Models\Admin::find($task->editor_id);
-                  $qa = App\Domain\Admin\Models\Admin::find($task->QA_id);
+                  $editor = $task->editor;
+                  $qa = $task->QA;
                 @endphp
                 <div id={{$task->id}}
                   data-toggle="modal"
@@ -177,8 +177,8 @@
             <!-- render task editing -->
               @foreach ($tasks_editing as $task)
                 @php
-                  $editor = App\Domain\Admin\Models\Admin::find($task->editor_id);
-                  $qa = App\Domain\Admin\Models\Admin::find($task->QA_id);
+                  $editor = $task->editor;
+                  $qa = $task->QA;
                 @endphp
                 <div id={{$task->id}}
                   data-toggle="modal"
@@ -230,8 +230,8 @@
             <!-- render task bug -->
               @foreach ($tasks_rejected as $task)
                 @php
-                  $editor = App\Domain\Admin\Models\Admin::find($task->editor_id);
-                  $qa = App\Domain\Admin\Models\Admin::find($task->QA_id);
+                  $editor = $task->editor;
+                  $qa = $task->QA;
                 @endphp
                 <div id={{$task->id}}
                   data-toggle="modal"
@@ -294,8 +294,8 @@
               <!-- card -->
               @foreach ($tasks_testing as $task)
                 @php
-                  $editor = App\Domain\Admin\Models\Admin::find($task->editor_id);
-                  $qa = App\Domain\Admin\Models\Admin::find($task->QA_id);
+                  $editor = $task->editor;
+                  $qa = $task->QA;
                 @endphp
                 <div id={{$task->id}}
                   data-toggle="modal"
@@ -364,8 +364,8 @@
               <!-- card -->
               @foreach ($tasks_done as $task)
                 @php
-                  $editor = App\Domain\Admin\Models\Admin::find($task->editor_id);
-                  $qa = App\Domain\Admin\Models\Admin::find($task->QA_id);
+                  $editor = $task->editor;
+                  $qa = $task->QA;
                 @endphp
                 <div id={{$task->id}}
                   data-toggle="modal"
@@ -418,8 +418,8 @@
 
               @foreach ($tasks_finished as $task)
                 @php
-                  $editor = App\Domain\Admin\Models\Admin::find($task->editor_id);
-                  $qa = App\Domain\Admin\Models\Admin::find($task->QA_id);
+                  $editor = $task->editor;
+                  $qa = $task->QA;
                 @endphp
                 <div id={{$task->id}}
                   data-toggle="modal"
