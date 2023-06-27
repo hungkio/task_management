@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Domain\Admin\Models\Admin;
+use App\Repositories\DashboardRepository;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -13,208 +14,89 @@ class DashboardController
 {
     use AuthorizesRequests;
 
+    private $repository;
+
+    public function __construct(DashboardRepository $dashboardRepository)
+    {
+        $this->repository = $dashboardRepository;
+    }
+
     public function index(Tasks $tasks, Request $request)
     {
         $this->authorize('dashboards.view', Tasks::class);
+        $inputFilter = $request->input('filter-by-user');
+        $userFound = null;
+        $conditionFinish = [];
+        $conditionWait = [];
+        $condition = [];
         $user = auth()->user();
-        $user->update([
-            'is_online' => 1
-        ]);
         $roleName = $user->getRoleNames()[0];
-        $user_id = auth()->id();
+        $user_id = $user->id;
         $conditionAssigner = "";
 
-        if($roleName == 'editor') {
+        if ($roleName == 'editor') {
             $conditionAssigner = "editor_id";
         } else if ($roleName == 'QA') {
             $conditionAssigner = 'QA_id';
         }
 
-        $inputFilter = '';
-        if ($request->input('filter-by-user')) {
-            $inputFilter = $request->input('filter-by-user');
-            $userFound = Admin::where('email',$inputFilter)->first();
+        if ($inputFilter) {
+            $userFound = Admin::where('email', $inputFilter)->first();
+        }
+
+        $user->update([
+            'is_online' => 1
+        ]);
+
+        if ($inputFilter) {
+            $conditionFinish = ['customer' => $inputFilter];
             if ($userFound) {
                 $userFoundRole = $userFound->getRoleNames()[0];
                 $userFoundId = $userFound->id;
-                $tasks_waiting = $tasks->whereDate('created_at', Carbon::today())
-                    ->where($userFoundRole.'_id',$userFoundId)
-                    ->where('status', Tasks::WAITING)
-                    ->orderBy('updated_at', 'DESC')->get();
-                $tasks_todo = $tasks->whereDate('created_at', Carbon::today())
-                    ->where($userFoundRole.'_id',$userFoundId)
-                    ->where('status', Tasks::TODO)
-                    ->orderBy('updated_at', 'DESC')->get();
-                $tasks_finished = $tasks->whereDate('created_at', Carbon::today())
-                    ->where($userFoundRole.'_id',$userFoundId)
-                    ->where('status', Tasks::FINISH)
-                    ->orderBy('updated_at', 'DESC')->get();
+                $conditionWait = [$userFoundRole . '_id' => $userFoundId];
             } else {
-                $tasks_waiting = $tasks->whereDate('created_at', Carbon::today())
-                    ->where('customer',$inputFilter)
-                    ->where('status', Tasks::WAITING)
-                    ->orderBy('updated_at', 'DESC')->get();
-
-                $tasks_finished = $tasks->whereDate('created_at', Carbon::today())
-                    ->where('customer',$inputFilter)
-                    ->where('status', Tasks::FINISH)
-                    ->orderBy('updated_at', 'DESC')->get();
+                $conditionWait = ['customer' => $inputFilter];
             }
-        }else{
+        } else {
             if ($conditionAssigner) {
-                $tasks_waiting = $tasks->whereDate('created_at', Carbon::today())->where('status', Tasks::WAITING)->orderBy('updated_at', 'DESC')->get();
-                $tasks_finished = $tasks->whereDate('created_at', Carbon::today())->where($conditionAssigner, $user_id)->where('status', Tasks::FINISH)->orderBy('updated_at', 'DESC')->get();
-            } else {
-                $tasks_waiting = $tasks->whereDate('created_at', Carbon::today())->where('status', Tasks::WAITING)->orderBy('updated_at', 'DESC')->get();
-                $tasks_finished = $tasks->whereDate('created_at', Carbon::today())->where('status', Tasks::FINISH)->orderBy('updated_at', 'DESC')->get();
+                $conditionFinish = [$conditionAssigner => $user_id];
             }
         }
 
         $this->assignEditor();
 
         if ($conditionAssigner) {
-            if ($request->input('filter-by-user')) {
-                $inputFilter = $request->input('filter-by-user');
-                $userFound = Admin::where('email',$inputFilter)->first();
+            if ($inputFilter) {
                 if ($userFound) {
                     $userFoundRole = $userFound->getRoleNames()[0];
                     $userFoundId = $userFound->id;
-                    $tasks_editing = $tasks->whereDate('created_at', Carbon::today())
-                        ->where($conditionAssigner, $user_id)
-                        ->where($userFoundRole.'_id',$userFoundId)
-                        ->where('status', Tasks::EDITING)
-                        ->orderBy('updated_at', 'DESC')->get();
-
-                    $tasks_testing = $tasks->whereDate('created_at', Carbon::today())
-                        ->where($conditionAssigner, $user_id)
-                        ->where($userFoundRole.'_id',$userFoundId)
-                        ->where('status', Tasks::TESTING)
-                        ->orderBy('updated_at', 'DESC')->get();
-
-                    $tasks_done = $tasks->whereDate('created_at', Carbon::today())
-                        ->where($conditionAssigner, $user_id)
-                        ->where($userFoundRole.'_id',$userFoundId)
-                        ->where('status', Tasks::DONE)
-                        ->orderBy('updated_at', 'DESC')->get();
-
-                    $tasks_rejected = $tasks->whereDate('created_at', Carbon::today())
-                        ->where($conditionAssigner, $user_id)
-                        ->where($userFoundRole.'_id',$userFoundId)
-                        ->where('status', Tasks::REJECTED)
-                        ->orderBy('updated_at', 'DESC')->get();
-
-                    $tasks_todo = $tasks->whereDate('created_at', Carbon::today())
-                        ->where($conditionAssigner, $user_id)
-                        ->where($userFoundRole.'_id',$userFoundId)
-                        ->where('status', Tasks::TODO)
-                        ->orderBy('updated_at', 'DESC')->get();
+                    $condition = [$conditionAssigner => $user_id, $userFoundRole . '_id' => $userFoundId];
                 } else {
-                    $tasks_editing = $tasks->whereDate('created_at', Carbon::today())
-                        ->where($conditionAssigner, $user_id)
-                        ->where('customer',$inputFilter)
-                        ->where('status', Tasks::EDITING)
-                        ->orderBy('updated_at', 'DESC')->get();
-
-                    $tasks_testing = $tasks->whereDate('created_at', Carbon::today())
-                        ->where($conditionAssigner, $user_id)
-                        ->where('customer',$inputFilter)
-                        ->where('status', Tasks::TESTING)
-                        ->orderBy('updated_at', 'DESC')->get();
-
-                    $tasks_done = $tasks->whereDate('created_at', Carbon::today())
-                        ->where($conditionAssigner, $user_id)
-                        ->where('customer',$inputFilter)
-                        ->where('status', Tasks::DONE)
-                        ->orderBy('updated_at', 'DESC')->get();
-
-                    $tasks_rejected = $tasks->whereDate('created_at', Carbon::today())
-                        ->where($conditionAssigner, $user_id)
-                        ->where('customer',$inputFilter)
-                        ->where('status', Tasks::REJECTED)
-                        ->orderBy('updated_at', 'DESC')->get();
-
-                    $tasks_todo = $tasks->whereDate('created_at', Carbon::today())
-                        ->where($conditionAssigner, $user_id)
-                        ->where('customer',$inputFilter)
-                        ->where('status', Tasks::TODO)
-                        ->orderBy('updated_at', 'DESC')->get();
+                    $condition = [$conditionAssigner => $user_id, 'customer' => $inputFilter];
                 }
-
             } else {
-                $tasks_editing = $tasks->whereDate('created_at', Carbon::today())->where($conditionAssigner, $user_id)->where('status', Tasks::EDITING)->orderBy('updated_at', 'DESC')->get();
-                $tasks_testing = $tasks->whereDate('created_at', Carbon::today())->where($conditionAssigner, $user_id)->where('status', Tasks::TESTING)->orderBy('updated_at', 'DESC')->get();
-                $tasks_done = $tasks->whereDate('created_at', Carbon::today())->where($conditionAssigner, $user_id)->where('status', Tasks::DONE)->orderBy('updated_at', 'DESC')->get();
-                $tasks_rejected = $tasks->whereDate('created_at', Carbon::today())->where($conditionAssigner, $user_id)->where('status', Tasks::REJECTED)->orderBy('updated_at', 'DESC')->get();
-                $tasks_todo = $tasks->whereDate('created_at', Carbon::today())->where($conditionAssigner, $user_id)->where('status', Tasks::TODO)->orderBy('updated_at', 'DESC')->get();
+                $condition = [$conditionAssigner => $user_id];
             }
         } else {
-            if ($request->input('filter-by-user')) {
-                $inputFilter = $request->input('filter-by-user');
-                $userFound = Admin::where('email',$inputFilter)->first();
+            if ($inputFilter) {
                 if ($userFound) {
                     $userFoundRole = $userFound->getRoleNames()[0];
                     $userFoundId = $userFound->id;
-                    $tasks_editing = $tasks->whereDate('created_at', Carbon::today())
-                        ->where($userFoundRole.'_id', $userFoundId)
-                        ->where('status', Tasks::EDITING)
-                        ->orderBy('updated_at', 'DESC')->get();
-
-                    $tasks_testing = $tasks->whereDate('created_at', Carbon::today())
-                        ->where($userFoundRole.'_id', $userFoundId)
-                        ->where('status', Tasks::TESTING)
-                        ->orderBy('updated_at', 'DESC')->get();
-
-                    $tasks_done = $tasks->whereDate('created_at', Carbon::today())
-                        ->where($userFoundRole.'_id', $userFoundId)
-                        ->where('status', Tasks::DONE)
-                        ->orderBy('updated_at', 'DESC')->get();
-
-                    $tasks_rejected = $tasks->whereDate('created_at', Carbon::today())
-                        ->where($userFoundRole.'_id', $userFoundId)
-                        ->where('status', Tasks::REJECTED)
-                        ->orderBy('updated_at', 'DESC')->get();
-
-                    $tasks_todo = $tasks->whereDate('created_at', Carbon::today())
-                        ->where($userFoundRole.'_id', $userFoundId)
-                        ->where('status', Tasks::TODO)
-                        ->orderBy('updated_at', 'DESC')->get();
-
+                    $condition = [$userFoundRole . '_id' => $userFoundId];
                 } else {
-                    $tasks_editing = $tasks->whereDate('created_at', Carbon::today())
-                        ->where('customer', $inputFilter)
-                        ->where('status', Tasks::EDITING)
-                        ->orderBy('updated_at', 'DESC')->get();
-
-                    $tasks_testing = $tasks->whereDate('created_at', Carbon::today())
-                        ->where('customer', $inputFilter)
-                        ->where('status', Tasks::TESTING)
-                        ->orderBy('updated_at', 'DESC')->get();
-
-                    $tasks_done = $tasks->whereDate('created_at', Carbon::today())
-                        ->where('customer', $inputFilter)
-                        ->where('status', Tasks::DONE)
-                        ->orderBy('updated_at', 'DESC')->get();
-
-                    $tasks_rejected = $tasks->whereDate('created_at', Carbon::today())
-                        ->where('customer', $inputFilter)
-                        ->where('status', Tasks::REJECTED)
-                        ->orderBy('updated_at', 'DESC')->get();
-
-                    $tasks_todo = $tasks->whereDate('created_at', Carbon::today())
-                        ->where('customer', $inputFilter)
-                        ->where('status', Tasks::TODO)
-                        ->orderBy('updated_at', 'DESC')->get();
+                    $condition = ['customer' => $inputFilter];
                 }
-
-            } else {
-                $tasks_editing = $tasks->whereDate('created_at', Carbon::today())->where('status', Tasks::EDITING)->orderBy('updated_at', 'DESC')->get();
-                $tasks_testing = $tasks->whereDate('created_at', Carbon::today())->where('status', Tasks::TESTING)->orderBy('updated_at', 'DESC')->get();
-                $tasks_done = $tasks->whereDate('created_at', Carbon::today())->where('status', Tasks::DONE)->orderBy('updated_at', 'DESC')->get();
-                $tasks_rejected = $tasks->whereDate('created_at', Carbon::today())->where('status', Tasks::REJECTED)->orderBy('updated_at', 'DESC')->get();
-                $tasks_todo = $tasks->whereDate('created_at', Carbon::today())->where('status', Tasks::TODO)->orderBy('updated_at', 'DESC')->get();
             }
-
         }
+
+        $tasks_editing = $this->repository->getTasks(Tasks::EDITING, $condition);
+        $tasks_testing = $this->repository->getTasks(Tasks::TESTING, $condition);
+        $tasks_done = $this->repository->getTasks(Tasks::DONE, $condition);
+        $tasks_rejected = $this->repository->getTasks(Tasks::REJECTED, $condition);
+        $tasks_todo = $this->repository->getTasks(Tasks::TODO, $condition);
+        $tasks_finished = $this->repository->getTodayTasks(Tasks::FINISH, $conditionFinish);
+        $tasks_waiting = $this->repository->getTasks(Tasks::WAITING, $conditionWait);
+
         return view('admin.dashboards.index')->with([
             'tasks_waiting' => $tasks_waiting,
             'tasks_editing' => $tasks_editing,
@@ -239,9 +121,9 @@ class DashboardController
         $tasks_editing = $tasks->whereDate('created_at', Carbon::today())->where('status', Tasks::WAITING)->whereNotNull('level')->whereNotNull('estimate')->orderBy('priority', 'DESC')->get();
 
         $today = Carbon::today()->format("Y-m-d");
-        $from = strtotime($today . ' 07:00:00');
-        $to = strtotime($today . ' 23:59:00');
-        if(time() >= $from && time() <= $to) { // in working time
+//        $from = strtotime($today . ' 07:00:00');
+//        $to = strtotime($today . ' 23:59:00');
+//        if (time() >= $from && time() <= $to) { // in working time
             if ($roleName == 'editor' && $tasks_ready->isEmpty() && $tasks_rejected->isEmpty()) {
                 foreach ($tasks_editing as $key => $value) {
                     if (!str_contains($user->level, $value->level)) {
@@ -253,7 +135,7 @@ class DashboardController
                         if (in_array($user_id, $black_list)) {
                             $tasks_editing->forget($key);
                         }
-                    }else {
+                    } else {
                         break;
                     }
                 }
@@ -266,7 +148,7 @@ class DashboardController
                     return $tasks_editing;
                 }
             }
-        }
+//        }
 
     }
 
@@ -275,10 +157,10 @@ class DashboardController
         $task = Tasks::findOrFail($taskId);
         if ($task->QA_id) {
             $QA = Admin::where('id', $task->QA_id)->where('is_online', 1)->first();
-        }else {
+        } else {
             // have lowest number of task
             $QAs = Admin::with(['roles'])->withCount('QATasks')->whereHas('roles', function (Builder $subQuery) {
-                $subQuery->where(config('permission.table_names.roles').'.name', 'QA');
+                $subQuery->where(config('permission.table_names.roles') . '.name', 'QA');
             })->where('is_online', 1)->orderBy('q_a_tasks_count')->get();
             $QA = null;
             // check QA level
@@ -320,7 +202,7 @@ class DashboardController
         ]);
     }
 
-    public function savePopup(Request $request ,$id)
+    public function savePopup(Request $request, $id)
     {
         $task = Tasks::find($id);
         $inputData = $request->all();
@@ -328,7 +210,7 @@ class DashboardController
             if ($task->redo) {
                 $black_list = json_decode($task->redo);
                 $black_list = array_merge($black_list, [$task->editor_id]);
-            }else {
+            } else {
                 $black_list = [$task->editor_id];
             }
             $task->update([
@@ -341,6 +223,7 @@ class DashboardController
         $task->update($inputData);
         return back();
     }
+
     public function getUser($id)
     {
         $user = Admin::find($id);
