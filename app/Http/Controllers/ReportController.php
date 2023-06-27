@@ -164,7 +164,7 @@ class ReportController
                 $time_spent = $end_at->diffInMinutes($start_at);
             }
             $task->timespent = $time_spent;
-            $task->average = $task->estimate ? round($time_spent/$task->estimate, 2) : 0;
+            $task->average = $task->estimate ? gmdate("H:i:s", round($time_spent/$task->estimate, 2)) : 0;
         }
 
         // năng lực
@@ -240,7 +240,7 @@ class ReportController
         if ($currentRoleName == "editor") {
             foreach ($qualities as $key => &$quantity) {
                 $average = round($quantity*60/$salaries[$key]['countRecord'], 2);
-                $quantity = gmdate("H:i:s", $average);;
+                $quantity = gmdate("H:i:s", $average);
             }
         } else {
             $qualities = [];

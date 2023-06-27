@@ -167,6 +167,12 @@ class TaskController
 //        $currentMonthNumber = '06';
 //        $currentDay = '06';
 
+//        example:
+//        '01. Tonika' => [      // folder name of customer
+//            'Originals',       // folder name NEWS or Originals
+//            $currentMonthText, // folder name of month: July, September
+//            ""                 // folder name of day : 06 27
+//        ]
         $mapCustomer = [
             '01. Tonika' => [
                 'Originals',
