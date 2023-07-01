@@ -144,13 +144,15 @@ class ReportController
             } else {
                 $conditionAssigner = 'QA_id';
             }
-            $tasks = Tasks::where($conditionAssigner, $user_id)->whereMonth('created_at', Carbon::today())
-                ->whereDate('created_at', '!=', Carbon::today())
+            $tasks = Tasks::where($conditionAssigner, $user_id)
+                ->whereDate('created_at', '>=', Carbon::today()->subDay(45))
+                ->whereDate('created_at', '<', Carbon::today())
                 ->selectRaw('*, datediff(start_at, end_at) as time_real')
                 ->orderBy('created_at', 'desc')->get();
 
         } else {
-            $tasks = Tasks::whereMonth('created_at', Carbon::today())->whereDate('created_at', '!=', Carbon::today())
+            $tasks = Tasks::whereDate('created_at', '>=', Carbon::today()->subDay(45))
+                ->whereDate('created_at', '<', Carbon::today())
                 ->orderBy('created_at', 'desc')->get();
             $users = Admin::with(['QAMonthTasks', 'EditorMonthTasks'])->whereHas('roles', function (Builder $subQuery) {
                 $subQuery->whereIn(config('permission.table_names.roles') . '.name', ['QA', 'editor']);

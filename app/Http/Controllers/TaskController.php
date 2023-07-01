@@ -145,7 +145,8 @@ class TaskController
     public function dbcheck(Tasks $task)
     {
         $task->update([
-            'dbcheck' => auth()->id()
+//            'dbcheck' => auth()->id()
+            'dbcheck' => 1
         ]);
 
         return response()->json([
