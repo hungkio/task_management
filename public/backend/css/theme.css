@@ -798,3 +798,11 @@ a.text-primary:focus, a.text-primary:hover{
         text-align: center;
     }
 }
+.btn-purple {
+    background: #983efb;
+}
+.btn-purple:hover {
+    background: #6716bf;
+    opacity: 0.9;
+    transition: .1s;
+}

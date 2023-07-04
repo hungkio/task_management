@@ -170,12 +170,14 @@ class ReportController
         }
 
         // năng lực
-        list($salaries, $qualities, $deadline) = $this->getUserSalaries($salaries_id);
+        $salaries = [];
+        $qualities = [];
+        $deadline = [];
 
         return view('admin.reports.salary', compact('tasks', 'users', 'salaries', 'qualities', 'deadline'));
     }
 
-    public function getUserSalaries($user_id)
+    public function getUserSalaries($user_id, $start, $end)
     {
         $user = Admin::find($user_id);
         if (!$user) {
@@ -192,7 +194,8 @@ class ReportController
         } else {
             $conditionAssigner = 'QA_id';
         }
-        $tasks = Tasks::where($conditionAssigner, $user->id)->whereMonth('created_at', Carbon::today())
+        $tasks = Tasks::where($conditionAssigner, $user->id)->whereDate('created_at', '>=', $start)
+            ->whereDate('created_at', '<=', $end)
             ->selectRaw('*, datediff(start_at, end_at) as time_real')
             ->orderBy('created_at', 'desc')->get();
 
@@ -250,10 +253,13 @@ class ReportController
         return [$salaries, $qualities, [$on_time, $late]];
     }
 
-    public function user_salary($user_id)
+    public function user_salary(Request $request)
     {
+        $user_id = $request->user_id;
+        $date = $request->time;
+        list($start, $end) = explode(' - ', $date);
         try {
-            list($salaries, $qualities, $deadline) = $this->getUserSalaries($user_id);
+            list($salaries, $qualities, $deadline) = $this->getUserSalaries($user_id, $start, $end);
             return view('admin.reports.sub_salary', compact('salaries', 'qualities', 'deadline'))->render();
         } catch (\Exception $exception) {
             return response()->json([

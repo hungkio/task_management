@@ -43,7 +43,7 @@
 
 @section('page-content')
     <div class="form-group row ml-0">
-        <div class="col-lg-9 pl-0">
+        <div class="col-lg-2 pl-0">
             <select name="user_report" class="form-control w-auto" data-width="100%">
                 <option value="">
                     Lựa chọn user
@@ -56,6 +56,10 @@
                     @endforeach
                 @endif
             </select>
+        </div>
+        <div class="col-lg-3">
+            <label class="mb-0 mr-2 lead" for="date">Lọc theo ngày:</label>
+            <input type="text" class="datepicker daterange-basic" name="date">
         </div>
     </div>
     <button class="dt-button buttons-collection buttons-export btn btn-primary"
@@ -148,22 +152,45 @@
 @stop
 
 @push('js')
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
     <script>
+        function getUserSalary(user_id, time) {
+            $.ajax({
+                type: 'get',
+                data: {
+                  user_id : user_id,
+                  time: time
+                },
+                url: '{{ route("admin.reports.user_salary") }}',
+                success: function (res) {
+                    if (res.status == 'error') {
+                        showMessage('error', res.message)
+                    } else {
+                        $('.salary_report').html(res)
+                    }
+                }
+            })
+        }
         $(function () {
+            $('.datepicker').daterangepicker({
+                locale: {
+                    format: 'YYYY/MM/DD'
+                }
+            });
+            $('.datepicker').on('change', function() {
+                let user_id =$('select[name="user_report"]').val()
+                let time = $(this).val()
+                if (user_id && time) {
+                    getUserSalary(user_id, time)
+                }
+            })
             $('select[name="user_report"]').change(function () {
                 let user_id = $(this).val()
-                if (user_id) {
-                    $.ajax({
-                        type: 'get',
-                        url: '{{ route("admin.reports.user_salary") }}/' + user_id,
-                        success: function (res) {
-                            if (res.status == 'error') {
-                                showMessage('error', res.message)
-                            } else {
-                                $('.salary_report').html(res)
-                            }
-                        }
-                    })
+                let time = $('.datepicker').val()
+                if (user_id && time) {
+                    getUserSalary(user_id, time)
                 }
             })
         })

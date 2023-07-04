@@ -167,6 +167,11 @@
                                 Redo
                             </div>
                         @endif
+                        @if ($task->redo_note)
+                            <div class="px-2 rounded btn-purple d-inline-block p-1 fw-semibold text-white project-name">
+                                Bad
+                            </div>
+                        @endif
                       <button
                         class="start-task px-2 text-white border-0 rounded outline-0 d-inline-block">Start
                       </button>
@@ -223,6 +228,11 @@
                                 Redo
                             </div>
                         @endif
+                        @if ($task->redo_note)
+                            <div class="px-2 rounded btn-purple d-inline-block p-1 fw-semibold text-white project-name">
+                                Bad
+                            </div>
+                        @endif
                     </div>
                   </div>
                 </div>
@@ -272,6 +282,11 @@
                         @if ($task->redo)
                             <div class="px-2 rounded btn-danger d-inline-block p-1 fw-semibold text-white project-name">
                                 Redo
+                            </div>
+                        @endif
+                        @if ($task->redo_note)
+                            <div class="px-2 rounded btn-purple d-inline-block p-1 fw-semibold text-white project-name">
+                                Bad
                             </div>
                         @endif
                     </div>
@@ -343,6 +358,11 @@
                                 Redo
                             </div>
                         @endif
+                        @if ($task->redo_note)
+                            <div class="px-2 rounded btn-purple d-inline-block p-1 fw-semibold text-white project-name">
+                                Bad
+                            </div>
+                        @endif
                     </div>
                   </div>
                 </div>
@@ -408,6 +428,11 @@
                                 Redo
                             </div>
                         @endif
+                        @if ($task->redo_note)
+                            <div class="px-2 rounded btn-purple d-inline-block p-1 fw-semibold text-white project-name">
+                                Bad
+                            </div>
+                        @endif
                       <button class="done-task px-2 text-white border-0 rounded outline-0 d-inline-block done">
                         Finish
                       </button>
@@ -457,6 +482,11 @@
                             @if ($task->redo)
                                 <div class="px-2 rounded btn-danger d-inline-block p-1 fw-semibold text-white project-name">
                                     Redo
+                                </div>
+                            @endif
+                            @if ($task->redo_note)
+                                <div class="px-2 rounded btn-purple d-inline-block p-1 fw-semibold text-white project-name">
+                                    Bad
                                 </div>
                             @endif
                       <div class="status px-2 rounded done d-inline-block p-1 fw-semibold text-white project-name">
