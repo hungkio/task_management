@@ -162,7 +162,7 @@ class Admin extends Authenticatable implements HasMedia
         'FLB' => [0,0,400000],
         'FLP' => [0,0,500000],
         'Floor' => [0,0,0],
-        'Basic_rt' => [10000,0,0]
+        'Basic_rt' => [10000,1000,0],
     ];
 
     const PRIORITY = [
@@ -175,6 +175,7 @@ class Admin extends Authenticatable implements HasMedia
         'DTD' => 2,
         'AV' => 2,
         'DBAV' => 2,
+        'Basic_rt' => 2,
         'VT' => 1,
         'VTP' => 1,
         'VTP360' => 1,

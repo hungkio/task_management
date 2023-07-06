@@ -211,22 +211,22 @@ class ReportController
                 $time_spent = $end_at->diffInMinutes($start_at);
             }
 
-            if ($time_spent - ($task->estimate * $task->countRecord) <= 0) {
+            if ($time_spent - ($task->estimate * $task->editor_check_num) <= 0) {
                 $on_time++;
             } else {
                 $late++;
             }
 
             if (array_key_exists($task->level, $salaries)) {
-                $salaries[$task->level] += $task->countRecord;
+                $salaries[$task->level] += $task->editor_check_num;
                 $qualities[$task->level] += $time_spent;
             } else {
-                $salaries[$task->level] = $task->countRecord;
+                $salaries[$task->level] = $task->editor_check_num;
                 $qualities[$task->level] = $time_spent;
             }
         }
 
-        foreach ($salaries as $ax => $countRecord) {
+        foreach ($salaries as $ax => $editor_check_num) {
             $costRole = 0; //editor
             if ($currentRoleName == 'QA') {
                 $costRole = 1;
@@ -235,15 +235,15 @@ class ReportController
             }
             $cost = Admin::COST[$ax][$costRole];
             $salaries[$ax] = [
-                'cost' => $cost*$countRecord,
-                'countRecord' => $countRecord,
+                'cost' => $cost*$editor_check_num,
+                'editor_check_num' => $editor_check_num,
                 'unitCost' => $cost,
             ];
         }
 
         if ($currentRoleName == "editor") {
             foreach ($qualities as $key => &$quantity) {
-                $average = round($quantity*60/$salaries[$key]['countRecord'], 2);
+                $average = $salaries[$key]['editor_check_num'] ? round($quantity*60/$salaries[$key]['editor_check_num'], 2) : 0;
                 $quantity = gmdate("H:i:s", $average);
             }
         } else {

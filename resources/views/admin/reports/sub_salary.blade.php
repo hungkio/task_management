@@ -22,7 +22,7 @@
         @foreach($salaries as $key => $salary)
             <tr>
                 <td class="border text-center">{{ $key }}</td>
-                <td class="border text-center">{{ $salary['countRecord'] }}</td>
+                <td class="border text-center">{{ $salary['editor_check_num'] }}</td>
                 <td class="border text-center">{{ number_format($salary['unitCost']) }}</td>
                 <td class="border text-center">{{ number_format($salary['cost']) }}</td>
             </tr>
