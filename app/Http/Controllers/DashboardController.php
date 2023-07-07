@@ -125,8 +125,9 @@ class DashboardController
 //        $to = strtotime($today . ' 23:59:00');
 //        if (time() >= $from && time() <= $to) { // in working time
             if ($roleName == 'editor' && $tasks_ready->isEmpty() && $tasks_rejected->isEmpty()) {
+                $user_level = $user->level ? explode(',', $user->level) : [];
                 foreach ($tasks_editing as $key => $value) {
-                    if (!str_contains($user->level, $value->level)) {
+                    if (!in_array($value->level, $user_level)) {
                         $tasks_editing->forget($key);
                         continue;
                     }
