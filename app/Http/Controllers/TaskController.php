@@ -177,7 +177,7 @@ class TaskController
         $mapCustomer = [
             '01. Tonika' => [
                 'Originals',
-                $currentMonthText,
+                "", // $currentMonthText
                 ""
             ],
             '02. DCL' => [
@@ -204,6 +204,11 @@ class TaskController
                 'Originals',
                 $currentMonthText,
                 "$currentMonthNumber $currentDay"
+            ],
+            '07. RT' => [
+                'Originals',
+                "",
+                ""
             ],
             '08. AL' => [
                 'Originals',
@@ -286,6 +291,9 @@ class TaskController
 
                     if ($taskRecord && $taskRecord[0]['.tag'] == 'folder') {
                         foreach ($taskRecord as $record) {
+                            if ($record['name'] == 'Edited' || $record['name'] == 'Done') {
+                                continue;
+                            }
                             if ($record['.tag'] != 'folder') {
                                 continue;
                             }
