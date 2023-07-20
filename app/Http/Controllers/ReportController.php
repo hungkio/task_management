@@ -166,7 +166,7 @@ class ReportController
                 $time_spent = $end_at->diffInMinutes($start_at);
             }
             $task->timespent = $time_spent;
-            $task->average = $task->estimate ? gmdate("H:i:s", round($time_spent/$task->estimate, 2)) : 0;
+            $task->average = $task->editor_check_num ? gmdate("H:i:s", round($time_spent/$task->editor_check_num, 2)) : 0;
         }
 
         // năng lực
