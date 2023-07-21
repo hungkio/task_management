@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Domain\Admin\Models\Admin;
+use App\Exports\UsersSalary;
 use App\Tasks;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
@@ -131,10 +132,8 @@ class ReportController
         $current_user = auth()->user();
         $currentRoleName = $current_user->getRoleNames()[0];
         $user_id = auth()->id();
-        $salaries_id = null; // for salary and quality
 
         if ($currentRoleName == 'editor' || $currentRoleName == 'QA') {
-            $salaries_id = $user_id;
             $users = Admin::with(['QAMonthTasks', 'EditorMonthTasks'])->where('id', $user_id)->whereHas('roles', function (Builder $subQuery) {
                 $subQuery->whereIn(config('permission.table_names.roles') . '.name', ['QA', 'editor']);
             })->get();
@@ -144,14 +143,13 @@ class ReportController
             } else {
                 $conditionAssigner = 'QA_id';
             }
-            $tasks = Tasks::where($conditionAssigner, $user_id)
+            $tasks = Tasks::with(['QA', 'editor'])->where($conditionAssigner, $user_id)
                 ->whereDate('created_at', '>=', Carbon::today()->subDay(45))
                 ->whereDate('created_at', '<=', Carbon::today())
-                ->selectRaw('*, datediff(start_at, end_at) as time_real')
                 ->orderBy('created_at', 'desc')->get();
 
         } else {
-            $tasks = Tasks::whereDate('created_at', '>=', Carbon::today()->subDay(45))
+            $tasks = Tasks::with(['QA', 'editor'])->whereDate('created_at', '>=', Carbon::today()->subDay(45))
                 ->whereDate('created_at', '<=', Carbon::today())
                 ->orderBy('created_at', 'desc')->get();
             $users = Admin::with(['QAMonthTasks', 'EditorMonthTasks'])->whereHas('roles', function (Builder $subQuery) {
@@ -196,7 +194,6 @@ class ReportController
         }
         $tasks = Tasks::where($conditionAssigner, $user->id)->whereDate('created_at', '>=', $start)
             ->whereDate('created_at', '<=', $end)
-            ->selectRaw('*, datediff(start_at, end_at) as time_real')
             ->orderBy('created_at', 'desc')->get();
 
         foreach ($tasks as $task) {
@@ -211,7 +208,13 @@ class ReportController
                 $time_spent = $end_at->diffInMinutes($start_at);
             }
 
-            if ($time_spent - ($task->estimate * $task->editor_check_num) <= 0) {
+            if ($currentRoleName == 'editor') {
+                $estimate = $task->estimate;
+            } else {
+                $estimate = $task->estimate_QA;
+            }
+
+            if ($time_spent - ($estimate * $task->editor_check_num) <= 0) {
                 $on_time++;
             } else {
                 $late++;
@@ -364,5 +367,13 @@ class ReportController
         }
 
         return view('admin.reports.section.customer-table',compact('data'))->render();
+    }
+
+    public function all_user_salary(Request $request)
+    {
+        $date = $request->time;
+        list($start, $end) = explode(' - ', $date);
+
+        return (new UsersSalary($start, $end))->download('Users_Salary.xlsx');
     }
 }

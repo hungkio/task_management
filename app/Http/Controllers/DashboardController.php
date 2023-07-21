@@ -124,31 +124,31 @@ class DashboardController
 //        $from = strtotime($today . ' 07:00:00');
 //        $to = strtotime($today . ' 23:59:00');
 //        if (time() >= $from && time() <= $to) { // in working time
-            if ($roleName == 'editor' && $tasks_ready->isEmpty() && $tasks_rejected->isEmpty()) {
-                $user_level = $user->level ? explode(',', $user->level) : [];
-                foreach ($tasks_editing as $key => $value) {
-                    if (!in_array($value->level, $user_level)) {
-                        $tasks_editing->forget($key);
-                        continue;
-                    }
-                    if ($value->redo) {
-                        $black_list = json_decode($value->redo);
-                        if (in_array($user_id, $black_list)) {
-                            $tasks_editing->forget($key);
-                        }
-                    } else {
-                        break;
-                    }
+        if ($roleName == 'editor' && $tasks_ready->isEmpty() && $tasks_rejected->isEmpty()) {
+            $user_level = $user->level ? explode(',', $user->level) : [];
+            foreach ($tasks_editing as $key => $value) {
+                if (!in_array($value->level, $user_level)) {
+                    $tasks_editing->forget($key);
+                    continue;
                 }
-                if (!$tasks_editing->isEmpty()) {
-                    $tasks_editing = $tasks_editing->first();
-                    $tasks_editing->update([
-                        'editor_id' => $user_id,
-                        'status' => Tasks::TODO,
-                    ]);
-                    return $tasks_editing;
+                if ($value->redo) {
+                    $black_list = json_decode($value->redo);
+                    if (in_array($user_id, $black_list)) {
+                        $tasks_editing->forget($key);
+                    }
+                } else {
+                    break;
                 }
             }
+            if (!$tasks_editing->isEmpty()) {
+                $tasks_editing = $tasks_editing->first();
+                $tasks_editing->update([
+                    'editor_id' => $user_id,
+                    'status' => Tasks::TODO,
+                ]);
+                return $tasks_editing;
+            }
+        }
 //        }
 
     }
@@ -176,10 +176,16 @@ class DashboardController
             }
         }
         if ($QA) {
+            if ($task->status == Tasks::EDITING) {
+                $endTime = date("Y-m-d H:i");
+                $task->update([
+                    'end_at' => $endTime
+                ]);
+            }
             $task->update([
                 'QA_id' => $QA->id,
                 'status' => Tasks::TESTING,
-                'QA_start' => date("Y-m-d H:i")
+                'QA_start' => date("Y-m-d H:i"),
             ]);
         }
         return [
@@ -241,11 +247,16 @@ class DashboardController
         }
 
         $task = Tasks::findOrFail($taskId);
+        if ($processStatus == Tasks::TESTING && $task->status == Tasks::EDITING) {
+            $endTime = date("Y-m-d H:i");
+            $task->update([
+                'end_at' => $endTime
+            ]);
+        }
         $task->status = $processStatus;
         if ($processStatus == Tasks::DONE) {
             $endTime = date("Y-m-d H:i");
             $task->update([
-                'end_at' => $endTime,
                 'QA_end' => $endTime
             ]);
         }

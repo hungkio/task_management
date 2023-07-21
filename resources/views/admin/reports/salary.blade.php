@@ -66,6 +66,11 @@
             onclick="exportMultipleTable(['salary', 'quality', 'deadline'], 'ReportSalary');"
             type="button" aria-haspopup="true"><span><i class="fal fa-download mr-2"></i>Xuất</span>
     </button>
+    <button class="dt-button buttons-collection buttons-export-all btn btn-primary"
+            type="button" aria-haspopup="true"><span><i class="fal fa-download mr-2"></i>Xuất tất cả user</span>
+    </button>
+    <a class="all_user_salary d-none" data-href="{{ route('admin.reports.all_user_salary') }}" target="_blank"></a>
+
     <div class="row ml-0 salary_report">
         @include('admin.reports.sub_salary', ['salaries' => $salaries, 'qualities' => $qualities])
     </div>
@@ -180,7 +185,7 @@
                 }
             });
             $('.datepicker').on('change', function() {
-                let user_id =$('select[name="user_report"]').val()
+                let user_id = $('select[name="user_report"]').val()
                 let time = $(this).val()
                 if (user_id && time) {
                     getUserSalary(user_id, time)
@@ -191,6 +196,14 @@
                 let time = $('.datepicker').val()
                 if (user_id && time) {
                     getUserSalary(user_id, time)
+                }
+            })
+            $('.buttons-export-all').click(function () {
+                let time = $('.datepicker').val()
+                if (time) {
+                    let href = $('.all_user_salary').data('href')
+                    $('.all_user_salary').attr('href', href + '/?time=' + encodeURIComponent(time))
+                    $('.all_user_salary')[0].click()
                 }
             })
         })

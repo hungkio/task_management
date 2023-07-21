@@ -103,6 +103,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::post('report/filter-by-date', [ReportController::class, 'getTasksByDate'])->name('reports.filter-by-date');
             Route::get('report/salary', [ReportController::class, 'salary'])->name('reports.salary');
             Route::get('report/user_salary', [ReportController::class, 'user_salary'])->name('reports.user_salary');
+            Route::get('report/user_salary/all', [ReportController::class, 'all_user_salary'])->name('reports.all_user_salary');
 
             //Upload Tinymce
             Route::post('uploads-tinymce', UploadTinymceController::class)->name('public.upload-tinymce');
