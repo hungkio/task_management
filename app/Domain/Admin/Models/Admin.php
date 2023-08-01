@@ -81,9 +81,9 @@ class Admin extends Authenticatable implements HasMedia
 
     const ESTIMATE_QA = [
         'INV' => 0.5,
-        'SE' => 1.5,
-        'SE_DE' => 1.5,
-        'SE_PR' => 2.5,
+        'SE' => 2,
+        'SE_DE' => 2,
+        'SE_PR' => 3,
         'SE_FL' => 3,
         'SE_TW' => 5,
         'DTD' => 10,
@@ -93,7 +93,7 @@ class Admin extends Authenticatable implements HasMedia
         'EXT' => 60,
         'PANO' => 5,
         'HEN' => 15,
-        'HI_END' => 7.5,
+        'HI_END' => 8,
         'VT' => 90,
         'VTP' => 150,
         'VTP360' => 150,
@@ -101,7 +101,7 @@ class Admin extends Authenticatable implements HasMedia
         'FLB' => 90,
         'FLP' => 150,
         'Floor' => 30,
-        'Basic_rt' => 0.5
+        'Basic_rt' => 5
     ];
 
     const BAD = [

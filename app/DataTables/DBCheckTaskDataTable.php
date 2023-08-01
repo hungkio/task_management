@@ -67,7 +67,7 @@ class DBCheckTaskDataTable extends BaseDatable
     {
         return [
             Column::make('customer')->title(__('Mã Khách')),
-            Column::make('level')->title(__('Level AX222')),
+            Column::make('level')->title(__('Level AX')),
             Column::make('countRecord')->title(__('Original')),
             Column::make('status')->title(__('Trạng thái')),
             Column::make('QA_id')->title(__('QA')),
