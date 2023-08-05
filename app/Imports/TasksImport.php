@@ -40,6 +40,7 @@ class TasksImport implements ToCollection
             })->where("email", $QAName)->first();
             $countRecord = $row[8];
             $casePath = $row[9];
+            $instruction = $row[11];
 
             $start_at = null;
             if ($editor) {
@@ -68,6 +69,7 @@ class TasksImport implements ToCollection
                 'priority' => $priority,
                 'start_at' => $start_at,
                 'QA_start' => $QA_start,
+                'instruction' => $instruction,
             ]);
         }
     }
