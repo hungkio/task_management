@@ -380,7 +380,7 @@ class TaskController
             Excel::import(new TasksImport, $request->file);
             flash()->success(__('Đã import danh sách case!'));
         } catch (\Exception $exception) {
-            flash()->success($exception->getMessage());
+            flash()->error($exception->getMessage());
         }
 
         return back();

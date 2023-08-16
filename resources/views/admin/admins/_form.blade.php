@@ -54,6 +54,28 @@
 
                                 <div class="form-group row">
                                     <label for="select-taxon" class="col-lg-2 text-lg-right col-form-label">
+                                        <span class="text-danger">*</span> {{ __('Khóa task') }}
+                                    </label>
+                                    <div class="col-lg-9">
+                                        <select name="lock_task" class="form-control select2" data-width="100%">
+                                            <option value="0" @if($admin->lock_task == 0) selected @endif>
+                                                Không khóa task
+                                            </option>
+                                            <option value="1" @if($admin->lock_task == 1) selected @endif>
+                                                Khóa task
+                                            </option>
+                                        </select>
+                                        <div class="clearfix"></div>
+                                        @error('level')
+                                        <span class="form-text text-danger">
+                                                {{ $message }}
+                                            </span>
+                                        @enderror
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="select-taxon" class="col-lg-2 text-lg-right col-form-label">
                                         <span class="text-danger">*</span> {{ __('Cấp độ') }}
                                     </label>
                                     <div class="col-lg-9">
@@ -79,7 +101,8 @@
                                         Là CTV:
                                     </label>
                                     <div class="col-lg-9">
-                                        <input autocomplete="new-password" type="checkbox" name="is_ctv" id="is_ctv"  @if($admin->is_ctv) checked @endif>
+                                        <input autocomplete="new-password" type="checkbox" name="is_ctv" id="is_ctv"
+                                               @if($admin->is_ctv) checked @endif>
                                     </div>
                                 </div>
                             </div>

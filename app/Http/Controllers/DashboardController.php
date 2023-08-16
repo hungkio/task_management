@@ -124,7 +124,7 @@ class DashboardController
 //        $from = strtotime($today . ' 07:00:00');
 //        $to = strtotime($today . ' 23:59:00');
 //        if (time() >= $from && time() <= $to) { // in working time
-        if ($roleName == 'editor' && $tasks_ready->isEmpty() && $tasks_rejected->isEmpty()) {
+        if ($user->lock_task == 0 && $roleName == 'editor' && $tasks_ready->isEmpty() && $tasks_rejected->isEmpty()) {
             $user_level = $user->level ? explode(',', $user->level) : [];
             foreach ($tasks_editing as $key => $value) {
                 if (!in_array($value->level, $user_level)) {
@@ -162,7 +162,7 @@ class DashboardController
             // have lowest number of task
             $QAs = Admin::with(['roles'])->withCount('QATasks')->whereHas('roles', function (Builder $subQuery) {
                 $subQuery->where(config('permission.table_names.roles') . '.name', 'QA');
-            })->where('is_online', 1)->orderBy('q_a_tasks_count')->get();
+            })->where('is_online', 1)->where('lock_task', 0)->orderBy('q_a_tasks_count')->get();
             $QA = null;
             // check QA level
             foreach ($QAs as $qa) {

@@ -20,6 +20,7 @@ class AdminData extends DataTransferObject
     public string $roles;
     public string $level;
     public int $is_ctv;
+    public string $lock_task;
 
     public static function fromRequest(AdminRequest $request): AdminData
     {
@@ -31,6 +32,7 @@ class AdminData extends DataTransferObject
             'roles' => $request->input('roles'),
             'level' => implode(',', $request->input('level')),
             'is_ctv' => ($request->input('is_ctv') == 'on') ? 1 : 0,
+            'lock_task' => $request->input('lock_task'),
         ]);
     }
 }

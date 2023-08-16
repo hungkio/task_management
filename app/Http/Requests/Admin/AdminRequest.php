@@ -19,6 +19,7 @@ class AdminRequest extends FormRequest
             'password' => $this->passwordRule(),
             'roles' => ['required', 'exists:roles,id'],
             'level' => ['required'],
+            'lock_task' => ['required'],
         ];
     }
 

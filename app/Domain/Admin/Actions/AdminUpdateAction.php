@@ -19,6 +19,7 @@ class AdminUpdateAction
             $admin->email = $adminData->email;
             $admin->level = $adminData->level;
             $admin->is_ctv = $adminData->is_ctv;
+            $admin->lock_task = $adminData->lock_task;
             if (! empty($adminData->password)) {
                 $admin->password = Hash::make($adminData->password);
             }
