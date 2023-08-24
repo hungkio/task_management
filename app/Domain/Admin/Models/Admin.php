@@ -105,7 +105,7 @@ class Admin extends Authenticatable implements HasMedia
     ];
 
     const BAD = [
-        'BAD_QUY TRÌNH','BAD_MÀU SẮC', 'BAD_ÁNH SÁNG','BAD_THÁI ĐỘ','BAD_KH','BAD_STYLES','BAD_SKY,TV','EXCELLENT!'
+        'BAD_QUY TRÌNH','BAD_MÀU SẮC', 'BAD_ÁNH SÁNG','BAD_THÁI ĐỘ','BAD_KH','BAD_STYLES','BAD_SKY,TV','EXCELLENT!','JOB_KHÔNG_ĐẠT_CHẤT_LƯỢNG'
     ];
 
     const BAD_FEE = [

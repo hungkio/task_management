@@ -196,9 +196,14 @@ class ReportController
             ->whereDate('created_at', '<=', $end)
             ->orderBy('created_at', 'desc')->get();
 
+        $count = count($tasks);
+        $excellent = 0;
         foreach ($tasks as $task) {
             if (!$task->level) {
                 continue;
+            }
+            if ($task->excellent) {
+                $excellent++;
             }
 
             $time_spent = 0;
@@ -253,7 +258,7 @@ class ReportController
             $qualities = [];
         }
 
-        return [$salaries, $qualities, [$on_time, $late]];
+        return [$salaries, $qualities, [$on_time, $late, $count ? round($excellent/$count, 2)*100 : 0]];
     }
 
     public function user_salary(Request $request)

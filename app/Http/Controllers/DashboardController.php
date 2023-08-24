@@ -254,6 +254,10 @@ class DashboardController
             ]);
         }
         $task->status = $processStatus;
+        if ($processStatus == Tasks::REJECTED) {
+            $task->excellent = Tasks::NOT_EXCELLENT;
+        }
+
         if ($processStatus == Tasks::DONE) {
             $endTime = date("Y-m-d H:i");
             $task->update([

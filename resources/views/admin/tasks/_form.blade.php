@@ -230,7 +230,8 @@
                                         Redo:
                                     </label>
                                     <div class="col-lg-9">
-                                        <input autocomplete="new-password" type="checkbox" name="redo" id="redo" @if($task->redo) checked @endif>
+                                        <input autocomplete="new-password" type="checkbox" name="redo" id="redo"
+                                               @if($task->redo) checked @endif>
                                     </div>
                                 </div>
 
@@ -261,6 +262,30 @@
                                         </select>
                                         <div class="clearfix"></div>
                                         @error('redo_note')
+                                        <span class="form-text text-danger">
+                                                {{ $message }}
+                                            </span>
+                                        @enderror
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="select-taxon" class="col-lg-2 text-lg-right col-form-label">
+                                        {{ __('Excellent') }}
+                                    </label>
+                                    <div class="col-lg-9">
+                                        <select name="excellent" class="form-control" data-width="100%">
+                                            <option value="{{ \App\Tasks::EXCELLENT }}"
+                                                    @if(\App\Tasks::EXCELLENT == @$task->excellent) selected @endif>
+                                                {{ 'EXCELLENT' }}
+                                            </option>
+                                            <option value="{{ \App\Tasks::NOT_EXCELLENT }}"
+                                                    @if(\App\Tasks::NOT_EXCELLENT == @$task->excellent) selected @endif>
+                                                {{ 'NOT EXCELLENT' }}
+                                            </option>
+                                        </select>
+                                        <div class="clearfix"></div>
+                                        @error('excellent')
                                         <span class="form-text text-danger">
                                                 {{ $message }}
                                             </span>

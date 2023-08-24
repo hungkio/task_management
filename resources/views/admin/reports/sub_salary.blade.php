@@ -91,5 +91,9 @@
         <td class="border text-center">Hoàn thành muộn</td>
         <td class="border text-center">{{ @$deadline[1] }}</td>
     </tr>
+    <tr>
+        <td class="border text-center">Tỷ lệ Excellent</td>
+        <td class="border text-center">{{ @$deadline[2] ? $deadline[2] . "%" : "" }}</td>
+    </tr>
     </tbody>
 </table>
