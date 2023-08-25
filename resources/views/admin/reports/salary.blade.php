@@ -123,6 +123,9 @@
             <th class="border bg-blue text-center">
                 <div class="relative"><span class="colHeader">Phút/ 1 ảnh</span></div>
             </th>
+            <th class="border bg-blue text-center">
+                <div class="relative"><span class="colHeader">Excellent</span></div>
+            </th>
         </tr>
         </thead>
         <tbody>
@@ -148,6 +151,7 @@
                     </td>
                     <td class="border text-center">{{ $task->timespent }}</td>
                     <td class="border text-center">{{ $task->average }}</td>
+                    <td class="border text-center">{{ $task->excellent ? "Excellent" : "" }}</td>
                 </tr>
             @endforeach
         @endif
