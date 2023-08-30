@@ -429,8 +429,13 @@
                             </div>
                         @endif
                         @if ($task->redo_note)
-                            <div class="px-2 rounded btn-purple d-inline-block p-1 fw-semibold text-white project-name">
+                            <div class="px-2 rounded btn-danger d-inline-block p-1 fw-semibold text-white project-name">
                                 Bad
+                            </div>
+                        @endif
+                        @if ($task->excellent)
+                            <div class="px-2 rounded btn-purple d-inline-block p-1 fw-semibold text-white project-name">
+                                Excellent
                             </div>
                         @endif
                       <button class="done-task px-2 text-white border-0 rounded outline-0 d-inline-block done">
@@ -485,8 +490,13 @@
                                 </div>
                             @endif
                             @if ($task->redo_note)
-                                <div class="px-2 rounded btn-purple d-inline-block p-1 fw-semibold text-white project-name">
+                                <div class="px-2 rounded btn-danger d-inline-block p-1 fw-semibold text-white project-name">
                                     Bad
+                                </div>
+                            @endif
+                            @if ($task->excellent)
+                                <div class="px-2 rounded btn-purple d-inline-block p-1 fw-semibold text-white project-name">
+                                    Excellent
                                 </div>
                             @endif
                       <div class="status px-2 rounded done d-inline-block p-1 fw-semibold text-white project-name">
