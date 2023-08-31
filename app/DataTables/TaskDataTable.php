@@ -31,6 +31,7 @@ class TaskDataTable extends BaseDatable
             ->editColumn('editor_id', fn(Tasks $task) => $task->editor->email ?? '')
             ->editColumn('QA_id', fn(Tasks $task) => $task->QA->email ?? '')
             ->editColumn('created_at', fn(Tasks $task) => formatDate($task->created_at, 'd/m/Y H:i:s'))
+            ->editColumn('start_at', fn(Tasks $task) => $task->start_at ? formatDate($task->start_at, 'd/m/Y H:i:s') : "")
             ->addColumn('action', fn(Tasks $task) => view('admin.tasks._tableAction', compact('task')))
             ->filterColumn('name', function ($query, $keyword) {
                 $query->where('name', 'like', "%$keyword%");
@@ -73,6 +74,7 @@ class TaskDataTable extends BaseDatable
             Column::make('editor_id')->title(__('Editor')),
             Column::make('QA_id')->title(__('QA')),
             Column::make('created_at')->title(__('Thời gian tạo')),
+            Column::make('start_at')->title(__('Thời gian bắt đầu')),
             Column::computed('action')
                 ->title(__('Tác vụ'))
                 ->exportable(false)
@@ -116,12 +118,12 @@ class TaskDataTable extends BaseDatable
                                 $(api.column(colIdx).header()).index()
                             );
                         var title = $(cell).text();
-                        if (colIdx== 0 || colIdx== 2 || colIdx== 5 || colIdx== 10) {
+                        if (colIdx== 0 || colIdx== 2 || colIdx== 5 || colIdx== 11) {
                             $(cell).html('');
                             return;
                         }
 
-                        if (colIdx== 9) {
+                        if (colIdx== 9 || colIdx== 10) {
                             $(cell).html('$inputDate');
                         } else if (colIdx== 6) {
                             $(cell).html('$selectStatus');

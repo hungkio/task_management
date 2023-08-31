@@ -113,7 +113,7 @@
             $('[data-toggle="tooltip"]').tooltip()
 
             $('#TaskDataTable thead ')
-                .append('<tr role="row" class="filters"><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr>');
+                .append('<tr role="row" class="filters"><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr>');
 
             $('.import').click(function () {
                 $('#exampleModal').modal('show')
