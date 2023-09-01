@@ -55,6 +55,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
         \Illuminate\Support\Facades\Artisan::call('storage:link');
         echo 'storage linked';
     });
+
+    Route::get('clear_cache', function (){
+        \Illuminate\Support\Facades\Artisan::call(' config:cache');
+        echo 'Configuration cleared and cached';
+    });
     // Route Dashboards
     Route::middleware('auth')
         ->group(function () {
