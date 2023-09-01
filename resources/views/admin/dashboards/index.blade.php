@@ -89,6 +89,9 @@
         margin-left: .625rem !important;
       }
     }
+      .modal-content img {
+          max-width: 100%;
+      }
   </style>
 @endpush
 
