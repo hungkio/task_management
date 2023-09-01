@@ -51,12 +51,13 @@ class Admin extends Authenticatable implements HasMedia
 
     const LEVEL = [
         'SE_PR', 'SE', 'SE_DE', 'SE_FL', 'SE_TW', 'DTD', 'AV', 'DBAV', 'PRT', 'Basic_rt', 'FL', 'FLB', 'FLP',
-        'VT', 'VTP', 'VTP360', 'HEN', 'INV', 'Floor', 'EXT', 'PANO', 'HI_END'
+        'VT', 'VTP', 'VTP360', 'HEN', 'INV', 'Floor', 'EXT', 'PANO', 'HI_END', 'BN'
     ];
 
     const ESTIMATE = [
         'INV' => 1,
         'SE' => 3,
+        'BN' => 3,
         'SE_DE' => 3,
         'SE_PR' => 5,
         'SE_FL' => 6,
@@ -82,6 +83,7 @@ class Admin extends Authenticatable implements HasMedia
     const ESTIMATE_QA = [
         'INV' => 0.5,
         'SE' => 2,
+        'BN' => 2,
         'SE_DE' => 2,
         'SE_PR' => 3,
         'SE_FL' => 3,
@@ -143,6 +145,7 @@ class Admin extends Authenticatable implements HasMedia
     const COST = [
         'INV' => [2000,400,0],
         'SE' => [3500,700,8000],
+        'BN' => [3500,700,8000],
         'SE_DE' => [3500,700,8000],
         'SE_PR' => [4500,900,10000],
         'SE_FL' => [4500,900,10000],
@@ -170,6 +173,7 @@ class Admin extends Authenticatable implements HasMedia
         'SE_TW' => 5,
         'SE_DE' => 4,
         'SE' => 3,
+        'BN' => 3,
         'SE_PR' => 3,
         'INV' => 2,
         'DTD' => 2,
