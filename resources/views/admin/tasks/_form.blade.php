@@ -64,34 +64,25 @@
                                 >
                                 </x-text-field>
 
-                                <x-text-field
-                                    name="customer"
-                                    :placeholder="__('Mã khách')"
-                                    :label="__('Mã khách')"
-                                    :value="$task->customer"
-                                    required
-                                >
-                                </x-text-field>
-
                                 <div class="form-group row">
                                     <label for="select-taxon" class="col-lg-2 text-lg-right col-form-label">
-                                        <span class="text-danger">*</span> {{ __('Level khách') }}
+                                        <span class="text-danger">*</span> {{ __('Mã khách') }}
                                     </label>
                                     <div class="col-lg-9">
-                                        <select name="level" class="form-control select2" data-width="100%">
+                                        <select name="customer" class="form-control select2" data-width="100%">
                                             <option value=""
-                                                    @if(!@$task->level) selected @endif>
-                                                Chưa chọn level
+                                                    @if(!@$task->customer) selected @endif>
+                                                Chưa chọn khách
                                             </option>
-                                            @foreach(\App\Domain\Admin\Models\Admin::LEVEL as $level)
-                                                <option value="{{ $level }}"
-                                                        @if($level == @$task->level) selected @endif>
-                                                    {{ $level }}
+                                            @foreach($customers as $customer)
+                                                <option value="{{ $customer->name }}"
+                                                        @if($customer->name == @$task->customer) selected @endif>
+                                                    {{ $customer->name }}
                                                 </option>
                                             @endforeach
                                         </select>
                                         <div class="clearfix"></div>
-                                        @error('level')
+                                        @error('customer')
                                         <span class="form-text text-danger">
                                                 {{ $message }}
                                             </span>

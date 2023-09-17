@@ -17,7 +17,6 @@ class TaskRequest extends FormRequest
                 'case' => ['required','string', 'max:255'],
                 'customer' => ['required', 'string', 'max:255'],
                 'countRecord' => ['required', 'numeric'],
-                'level' => ['required'],
             ];
         } else {
             return [
@@ -26,7 +25,6 @@ class TaskRequest extends FormRequest
                 'case' => ['required','string', 'max:255'],
                 'customer' => ['required', 'string', 'max:255'],
                 'countRecord' => ['required', 'numeric'],
-                'level' => ['required'],
             ];
         }
 
@@ -35,7 +33,7 @@ class TaskRequest extends FormRequest
     public function attributes()
     {
         return [
-            'name' => 'Tên xưởng',
+            'name' => 'Tên case',
             'phone' => 'Số điện thoại',
             'address' => 'Địa chỉ',
         ];

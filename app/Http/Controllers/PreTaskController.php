@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\AX;
 use App\DataTables\PreTaskDataTable;
 use App\Domain\Admin\Models\Admin;
 use App\Http\Requests\Admin\TaskBulkDeleteRequest;
@@ -26,7 +27,8 @@ class PreTaskController
     public function create(): View
     {
         $this->authorize('create', Tasks::class);
-        return view('admin.pre_tasks.create');
+        $levels = AX::all();
+        return view('admin.pre_tasks.create', compact('levels'));
     }
 
     public function store(TaskRequest $request)
@@ -42,7 +44,8 @@ class PreTaskController
 
     public function edit(PreTasks $preTask): View
     {
-        return view('admin.pre_tasks.edit', compact('preTask'));
+        $levels = AX::all();
+        return view('admin.pre_tasks.edit', compact('preTask', 'levels'));
     }
 
     public function update(PreTasks $preTask, TaskRequest $request)

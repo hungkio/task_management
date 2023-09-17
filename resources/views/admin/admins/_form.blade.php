@@ -80,15 +80,39 @@
                                     </label>
                                     <div class="col-lg-9">
                                         <select name="level[]" class="form-control select2" data-width="100%" multiple>
-                                            @foreach(\App\Domain\Admin\Models\Admin::LEVEL as $level)
-                                                <option value="{{ $level }}"
-                                                        @if(str_contains($admin->level, $level)) selected @endif>
-                                                    {{ $level }}
+                                            @foreach($levels as $level)
+                                                <option value="{{ $level->name }}"
+                                                        @if(str_contains($admin->level, $level->name)) selected @endif>
+                                                    {{ $level->name }}
                                                 </option>
                                             @endforeach
                                         </select>
                                         <div class="clearfix"></div>
                                         @error('level')
+                                        <span class="form-text text-danger">
+                                                {{ $message }}
+                                            </span>
+                                        @enderror
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="select-taxon" class="col-lg-2 text-lg-right col-form-label">
+                                         {{ __('Là khách hàng (chỉ đối với tài khoản KH)') }}
+                                    </label>
+                                    <div class="col-lg-9">
+                                        <select name="customer" class="form-control select2" data-width="100%">
+                                            <option value="">
+                                            </option>
+                                            @foreach($customers as $customer)
+                                                <option value="{{ $customer->id }}"
+                                                        @if($admin->customer == $customer->id)) selected @endif>
+                                                    {{ $customer->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        <div class="clearfix"></div>
+                                        @error('customer')
                                         <span class="form-text text-danger">
                                                 {{ $message }}
                                             </span>

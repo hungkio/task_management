@@ -75,10 +75,10 @@
                                                     @if(!@$task->level) selected @endif>
                                                 Chưa chọn level
                                             </option>
-                                            @foreach(\App\Domain\Admin\Models\Admin::LEVEL as $level)
-                                                <option value="{{ $level }}"
-                                                        @if($level == @$task->level) selected @endif>
-                                                    {{ $level }}
+                                            @foreach($levels as $level)
+                                                <option value="{{ $level->name }}"
+                                                        @if($level->name == @$task->level) selected @endif>
+                                                    {{ $level->name }}
                                                 </option>
                                             @endforeach
                                         </select>

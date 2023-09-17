@@ -56,7 +56,7 @@
                 <div class="dropdown-menu dropdown-menu-right">
                     <x-form-button :action="route('admin.logout')" class="dropdown-item">
                         <i class="fal fa-sign-out"></i>
-                        {{ __('Đăng xuất') }}
+                        {{ __('Logout') }}
                     </x-form-button>
                 </div>
             </li>

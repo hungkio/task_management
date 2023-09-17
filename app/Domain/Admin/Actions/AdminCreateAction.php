@@ -22,6 +22,8 @@ class AdminCreateAction
             $admin->password = Hash::make($adminData->password);
             $admin->level = $adminData->level;
             $admin->is_ctv = $adminData->is_ctv;
+            $admin->lock_task = $adminData->lock_task;
+            $admin->customer = $adminData->customer;
             $admin->save();
 
             $admin->assignRole($adminData->roles);

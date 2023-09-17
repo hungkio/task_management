@@ -96,6 +96,11 @@ Breadcrumbs::for('admin.pre_tasks.edit', function (BreadcrumbsGenerator $trail, 
     $trail->push(__('Chỉnh sửa'), route('admin.pre_tasks.edit', $preTask));
 });
 
+// Home > Customer Tasks
+Breadcrumbs::for('admin.customer_tasks.index', function (BreadcrumbsGenerator $trail) {
+    $trail->parent('admin.dashboards');
+    $trail->push(__('Case status'), route('admin.customer_tasks.index'), ['icon' => 'fal fa-briefcase']);
+});
 
 /*
 |--------------------------------------------------------------------------
@@ -141,4 +146,44 @@ Breadcrumbs::for('admin.roles.edit', function (BreadcrumbsGenerator $trail, Role
     $trail->parent('admin.roles.index');
     $trail->push($role->display_name, '#');
     $trail->push(__('Chỉnh sửa'), route('admin.roles.edit', $role));
+});
+
+// Home > Customer
+Breadcrumbs::for('admin.customers.index', function (BreadcrumbsGenerator $trail) {
+    $trail->parent('admin.dashboards');
+    $trail->push(__('Khách hàng'), route('admin.customers.index'), ['icon' => 'fal fa-project-diagram']);
+});
+
+// Home > Customer > Create
+
+Breadcrumbs::for('admin.customers.create', function (BreadcrumbsGenerator $trail) {
+    $trail->parent('admin.customers.index');
+    $trail->push(__('Tạo'), route('admin.customers.create'));
+});
+
+// Home > Customer > [role] > Edit
+Breadcrumbs::for('admin.customers.edit', function (BreadcrumbsGenerator $trail, \App\Customers $customer) {
+    $trail->parent('admin.customers.index');
+    $trail->push($customer->name, '#');
+    $trail->push(__('Chỉnh sửa'), route('admin.customers.edit', $customer));
+});
+
+// Home > AX
+Breadcrumbs::for('admin.ax.index', function (BreadcrumbsGenerator $trail) {
+    $trail->parent('admin.dashboards');
+    $trail->push(__('AX'), route('admin.ax.index'), ['icon' => 'fal fa-project-diagram']);
+});
+
+// Home > AX > Create
+
+Breadcrumbs::for('admin.ax.create', function (BreadcrumbsGenerator $trail) {
+    $trail->parent('admin.ax.index');
+    $trail->push(__('Tạo'), route('admin.ax.create'));
+});
+
+// Home > AX > [role] > Edit
+Breadcrumbs::for('admin.ax.edit', function (BreadcrumbsGenerator $trail, \App\AX $ax) {
+    $trail->parent('admin.ax.index');
+    $trail->push($ax->name, '#');
+    $trail->push(__('Chỉnh sửa'), route('admin.ax.edit', $ax));
 });

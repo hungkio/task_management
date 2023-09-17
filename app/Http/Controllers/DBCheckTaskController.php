@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\AX;
 use App\DataTables\DBCheckTaskDataTable;
 use App\Domain\Admin\Models\Admin;
 use App\Tasks;
@@ -46,7 +47,7 @@ class DBCheckTaskController
     public function edit(Tasks $task): View
     {
         $dbcs = Admin::whereIn('email', Admin::DBC_PEOPLE)->get();
-
-        return view('admin.dbcheck_tasks.edit', compact('task', 'dbcs'));
+        $levels = AX::all();
+        return view('admin.dbcheck_tasks.edit', compact('task', 'dbcs', 'levels'));
     }
 }

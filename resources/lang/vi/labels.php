@@ -18,4 +18,7 @@ return [
     'tasks' => 'Case',
     'dashboards' => 'Dashboard',
     'dbchecks' => 'Double check',
+    'customer' => 'Case status',
+    'customers' => 'Khách hàng',
+    'ax' => 'Case level AX',
 ];

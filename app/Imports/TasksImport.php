@@ -2,6 +2,8 @@
 
 namespace App\Imports;
 
+use App\AX;
+use App\Customers;
 use App\Domain\Admin\Models\Admin;
 use App\Tasks;
 use Carbon\Carbon;
@@ -25,10 +27,18 @@ class TasksImport implements ToCollection
                 throw_if($isExist, \Exception::class, 'Tồn tại case trùng lặp!');
 
                 $taskName = $row[2];
-                $customer = $row[3];
                 $level = $row[4];
-                $estimate = Admin::ESTIMATE[$level] ?? null;
-                $priority = @Admin::PRIORITY[$level] ?? 0;
+                $customer = Customers::where('name', $row[3])->first();
+                throw_if(!$customer, \Exception::class, 'Không tồn tại khách hàng!');
+
+                $ax = AX::where('name', $customer->ax)->first();
+                throw_if(!$customer, \Exception::class, 'Không tồn tại AX tương ứng với khách hàng này!');
+
+
+                $estimate = $ax->estimate_editor ?? 0;
+                $estimateQA = $ax->estimate_QA ?? 0;
+                $priority = $ax->priority
+                    ?? 0;
                 $status = 0;
                 if (in_array($row[5], Tasks::STATUS)) {
                     $status = array_search($row[5], Tasks::STATUS);
@@ -63,7 +73,7 @@ class TasksImport implements ToCollection
                     'name' => $caseName,
                     'path' => $casePath,
                     'estimate' => $estimate,
-                    'estimate_QA' => $estimate/2,
+                    'estimate_QA' => $estimateQA,
                     'level' => $level,
                     'status' => $status,
                     'countRecord' => $countRecord,

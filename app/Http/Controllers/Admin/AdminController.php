@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Admin;
 
+use App\AX;
+use App\Customers;
 use App\Http\Requests\Admin\AdminBulkDeleteRequest;
 use App\Http\Requests\Admin\AdminRequest;
 use App\DataTables\AdminDataTable;
@@ -34,8 +36,10 @@ class AdminController
         $this->authorize('create', Admin::class);
 
         $roles = Role::with('translation')->get();
+        $customers = Customers::all();
+        $levels = AX::all();
 
-        return view('admin.admins.create', compact('roles'));
+        return view('admin.admins.create', compact('roles', 'customers', 'levels'));
     }
 
     public function store(AdminRequest $request, AdminCreateAction $action): RedirectResponse
@@ -56,8 +60,9 @@ class AdminController
         $this->authorize('update', $admin);
 
         $roles = Role::with('translation')->get();
-
-        return view('admin.admins.edit', compact('admin', 'roles'));
+        $customers = Customers::all();
+        $levels = AX::all();
+        return view('admin.admins.edit', compact('admin', 'roles', 'customers', 'levels'));
     }
 
     public function update(Admin $admin, AdminRequest $request, AdminUpdateAction $action): RedirectResponse

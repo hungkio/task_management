@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\AX;
+use App\Customers;
 use App\DataTables\TaskDataTable;
 use App\Domain\Admin\Models\Admin;
 use App\Http\Requests\Admin\TaskBulkDeleteRequest;
@@ -40,16 +42,19 @@ class TaskController
         })->get();
 
         $dbcs = Admin::whereIn('email', Admin::DBC_PEOPLE)->get();
-        return view('admin.tasks.create', compact('QAs', 'editors', 'dbcs'));
+        $customers = Customers::all();
+        return view('admin.tasks.create', compact('QAs', 'editors', 'dbcs', 'customers'));
     }
 
     public function store(TaskRequest $request)
     {
         $this->authorize('create', Tasks::class);
         $data = $request->all();
-        $data['estimate'] = Admin::ESTIMATE[$data['level']];
-        $data['estimate_QA'] = Admin::ESTIMATE_QA[$data['level']];
-        $data['priority'] = @Admin::PRIORITY[$data['level']] ?? 0;
+        $customer = Customers::where('name', $data['customer'])->firstOrFail();
+        $ax = AX::where('name', $customer->ax)->firstOrFail();
+        $data['estimate'] = $ax->estimate_editor ?? 0;
+        $data['estimate_QA'] = $ax->estimate_QA ?? 0;
+        $data['priority'] = $ax->priority ?? 0;
 
         if ($data['editor_id']) {
             $data['start_at'] = date("Y-m-d H:i");
@@ -61,7 +66,7 @@ class TaskController
 
         $task = Tasks::create($data);
 
-        flash()->success(__('Case ":model" đã được tạo thành công !', ['model' => $task->title]));
+        flash()->success(__('Case ":model" đã được tạo thành công !', ['model' => $task->name]));
 
         return intended($request, route('admin.tasks.index'));
     }
@@ -78,8 +83,9 @@ class TaskController
         })->get();
 
         $dbcs = Admin::whereIn('email', Admin::DBC_PEOPLE)->get();
+        $customers = Customers::all();
 
-        return view('admin.tasks.edit', compact('task', 'QAs', 'editors', 'dbcs'));
+        return view('admin.tasks.edit', compact('task', 'QAs', 'editors', 'dbcs', 'customers'));
     }
 
     public function update(Tasks $task, TaskRequest $request)
@@ -87,9 +93,12 @@ class TaskController
         $this->authorize('update', $task);
 
         $data = $request->all();
-        $data['estimate'] = Admin::ESTIMATE[$data['level']];
-        $data['estimate_QA'] = Admin::ESTIMATE_QA[$data['level']];
-        $data['priority'] = @Admin::PRIORITY[$data['level']] ?? 0;
+        $customer = Customers::where('name', $data['customer'])->firstOrFail();
+        $ax = AX::where('name', $customer->ax)->firstOrFail();
+
+        $data['estimate'] = $ax->estimate_editor ?? 0;
+        $data['estimate_QA'] = $ax->estimate_QA ?? 0;
+        $data['priority'] = $ax->priority ?? 0;
 
         // restart start time when change editor
         if ($data['editor_id'] && $data['editor_id'] != $task->editor_id) {
@@ -347,14 +356,10 @@ class TaskController
     public function createNewTask($customer, $caseName, $casePath, $countRecord, $taskName)
     {
         $casePath = str_replace('/1.Working/', '', $casePath);
-        // set level
-        $level = null;
-        foreach (Admin::CUSTOMER_LEVEL as $key => $value) {
-            if ($customer == $key) {
-                $level = $value;
-                break;
-            }
-        }
+
+        // customer
+        $customer = Customers::where('name', $customer)->firstOrFail();
+
         $task = PreTasks::where('name', $caseName)->whereDate('created_at', Carbon::today())->orderBy('created_at', 'desc')->first();
         if ($task) {
             $task->update([
@@ -369,7 +374,7 @@ class TaskController
                 'countRecord' => $countRecord,
                 'case' => $taskName,
                 'customer' => $customer,
-                'level' => $level,
+                'level' => $customer->ax,
             ]);
         }
     }

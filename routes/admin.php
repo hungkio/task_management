@@ -25,6 +25,9 @@ use App\Http\Controllers\Admin\UploadTinymceController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\DBCheckTaskController;
+use App\Http\Controllers\CustomerTaskController;
+use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\AXController;
 
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
@@ -130,6 +133,27 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('/roles/{role}/edit', [RoleController::class, 'edit'])->name('roles.edit');
             Route::delete('/roles/{role}', [RoleController::class, 'destroy'])->name('roles.destroy');
             Route::put('/roles/{role}', [RoleController::class, 'update'])->name('roles.update');
+
+            //customer task
+            Route::get('customer_tasks', [CustomerTaskController::class, 'index'])->name('customer_tasks.index');
+
+            // customer
+            Route::post('/customers/bulk-delete', [CustomerController::class, 'bulkDelete'])->name('customers.bulk-delete');
+            Route::get('/customers', [CustomerController::class, 'index'])->name('customers.index');
+            Route::get('/customers/create', [CustomerController::class, 'create'])->name('customers.create');
+            Route::post('/customers', [CustomerController::class, 'store'])->name('customers.store');
+            Route::get('/customers/{customer}/edit', [CustomerController::class, 'edit'])->name('customers.edit');
+            Route::delete('/customers/{customer}', [CustomerController::class, 'destroy'])->name('customers.destroy');
+            Route::put('/customers/{customer}', [CustomerController::class, 'update'])->name('customers.update');
+
+            // ax
+            Route::post('/ax/bulk-delete', [AXController::class, 'bulkDelete'])->name('ax.bulk-delete');
+            Route::get('/ax', [AXController::class, 'index'])->name('ax.index');
+            Route::get('/ax/create', [AXController::class, 'create'])->name('ax.create');
+            Route::post('/ax', [AXController::class, 'store'])->name('ax.store');
+            Route::get('/ax/{ax}/edit', [AXController::class, 'edit'])->name('ax.edit');
+            Route::delete('/ax/{ax}', [AXController::class, 'destroy'])->name('ax.destroy');
+            Route::put('/ax/{ax}', [AXController::class, 'update'])->name('ax.update');
         });
     Route::get('test_auth_dropbox', function () {
 //                $refreshToken = config('dropbox.refreshToken');

@@ -23,6 +23,7 @@ class AdminUpdateAction
             if (! empty($adminData->password)) {
                 $admin->password = Hash::make($adminData->password);
             }
+            $admin->customer = $adminData->customer;
             $admin->save();
             $admin->syncRoles($adminData->roles);
         });

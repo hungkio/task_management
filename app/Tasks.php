@@ -28,6 +28,16 @@ class Tasks extends Model
         self::FINISH => 'Finish',
     ];
 
+    const CUSTOMER_STATUS = [
+        self::WAITING => 'Editing',
+        self::EDITING => 'Editing',
+        self::TESTING => 'Testing',
+        self::DONE => 'Done',
+        self::REJECTED => 'Editing',
+        self::TODO => 'Editing',
+        self::FINISH => 'Done',
+    ];
+
     const EXCELLENT = 1; // Case tốt ko bị reject
     const NOT_EXCELLENT = 0; // Case không tốt, bị reject
 

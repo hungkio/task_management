@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\AX;
 use App\Domain\Admin\Models\Admin;
 use App\Exports\UsersSalary;
 use App\Tasks;
@@ -241,7 +242,10 @@ class ReportController
             } else if($user->is_ctv == 1) {
                 $costRole = 2;
             }
-            $cost = Admin::COST[$ax][$costRole];
+            $AX = AX::where('name', $ax)->firstOrFail()->cost;
+            $COST = $AX ? json_decode($AX ,1): [];
+            $cost = $COST[$costRole];
+
             $salaries[$ax] = [
                 'cost' => $cost*$editor_check_num,
                 'editor_check_num' => $editor_check_num,

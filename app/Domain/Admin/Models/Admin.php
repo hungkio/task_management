@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Domain\Admin\Models;
 
+use App\Customers;
 use App\Domain\Admin\Presenters\AdminPresenter;
 use App\Tasks;
 use Carbon\Carbon;
@@ -28,7 +29,7 @@ class Admin extends Authenticatable implements HasMedia
      * @var array
      */
     protected $fillable = [
-        'first_name', 'last_name', 'email', 'password', 'is_online', 'level', 'is_ctv', 'lock_task'
+        'first_name', 'last_name', 'email', 'password', 'is_online', 'level', 'is_ctv', 'lock_task', 'customer'
     ];
 
     /**
@@ -118,7 +119,8 @@ class Admin extends Authenticatable implements HasMedia
         'BAD_KH' => -100000,
         'BAD_STYLES' => -100000,
         'BAD_SKY,TV' => -100000,
-        'EXCELLENT!' => 100
+        'EXCELLENT!' => 100,
+        'JOB KO ĐẠT' => -100000,
     ];
 
     const CUSTOMER_LEVEL = [
@@ -222,5 +224,10 @@ class Admin extends Authenticatable implements HasMedia
     public function getFullName()
     {
         return $this->first_name . " " . $this->last_name;
+    }
+
+    public function customerName()
+    {
+        return $this->belongsTo(Customers::class, 'customer', 'id');
     }
 }
