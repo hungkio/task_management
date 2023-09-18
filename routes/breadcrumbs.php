@@ -102,6 +102,13 @@ Breadcrumbs::for('admin.customer_tasks.index', function (BreadcrumbsGenerator $t
     $trail->push(__('Case status'), route('admin.customer_tasks.index'), ['icon' => 'fal fa-briefcase']);
 });
 
+// Home > Tasks > [admin] > Edit
+Breadcrumbs::for('admin.customer_tasks.edit', function (BreadcrumbsGenerator $trail, \App\Tasks $task) {
+    $trail->parent('admin.customer_tasks.index');
+    $trail->push($task->case, '#');
+    $trail->push(__('Edit'), route('admin.customer_tasks.edit', $task));
+});
+
 /*
 |--------------------------------------------------------------------------
 | System Breadcrumbs

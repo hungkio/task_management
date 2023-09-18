@@ -129,15 +129,15 @@
                                     <a href="{{ route('admin.reports.customer') }}"
                                        class="nav-link @if(request()->routeIs('admin.reports.customer'))active @endif">{{ __('Báo cáo khách hàng') }}</a>
                                 </li>
-                                <li class="nav-item">
-                                    <a href="{{ route('admin.reports.employee') }}"
-                                       class="nav-link @if(request()->routeIs('admin.reports.employee'))active @endif">{{ __('Báo cáo nhân viên') }}</a>
-                                </li>
+{{--                                <li class="nav-item">--}}
+{{--                                    <a href="{{ route('admin.reports.employee') }}"--}}
+{{--                                       class="nav-link @if(request()->routeIs('admin.reports.employee'))active @endif">{{ __('Báo cáo nhân viên') }}</a>--}}
+{{--                                </li>--}}
                             @endcan
-                            <li class="nav-item">
-                                <a href="{{ route('admin.reports.month') }}"
-                                   class="nav-link @if(request()->routeIs('admin.reports.month'))active @endif">{{ __('Báo cáo Hot & Bad') }}</a>
-                            </li>
+{{--                            <li class="nav-item">--}}
+{{--                                <a href="{{ route('admin.reports.month') }}"--}}
+{{--                                   class="nav-link @if(request()->routeIs('admin.reports.month'))active @endif">{{ __('Báo cáo Hot & Bad') }}</a>--}}
+{{--                            </li>--}}
                             <li class="nav-item">
                                 <a href="{{ route('admin.reports.salary') }}"
                                    class="nav-link @if(request()->routeIs('admin.reports.salary'))active @endif">{{ __('Data Lương sp') }}</a>

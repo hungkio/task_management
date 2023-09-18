@@ -40,7 +40,7 @@
 @endpush
 
 @section('page-content')
-    <form action="{{ route('admin.customers.store') }}" method="POST" data-block>
+    <form action="{{ route('admin.customers.store') }}" method="POST" data-block enctype="multipart/form-data">
         @csrf
         <div class="d-flex align-items-start flex-column flex-md-row">
 
@@ -82,6 +82,16 @@
                                                 {{ $message }}
                                             </span>
                                     @enderror
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="select-taxon" class="col-lg-2 text-lg-right col-form-label">
+                                     Guide styles
+                                </label>
+                                <div class="col-lg-9">
+                                    <input autocomplete="new-password" type="file" name="style[]" id="style"
+                                           accept="image/*" multiple>
                                 </div>
                             </div>
                         </fieldset>

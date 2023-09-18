@@ -55,6 +55,7 @@ class TaskController
         $data['estimate'] = $ax->estimate_editor ?? 0;
         $data['estimate_QA'] = $ax->estimate_QA ?? 0;
         $data['priority'] = $ax->priority ?? 0;
+        $data['level'] = $ax->name;
 
         if ($data['editor_id']) {
             $data['start_at'] = date("Y-m-d H:i");
@@ -99,6 +100,7 @@ class TaskController
         $data['estimate'] = $ax->estimate_editor ?? 0;
         $data['estimate_QA'] = $ax->estimate_QA ?? 0;
         $data['priority'] = $ax->priority ?? 0;
+        $data['level'] = $ax->name;
 
         // restart start time when change editor
         if ($data['editor_id'] && $data['editor_id'] != $task->editor_id) {

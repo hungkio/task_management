@@ -92,6 +92,9 @@
       .modal-content img {
           max-width: 100%;
       }
+    .customer_styles img {
+        max-height: 400px;
+    }
   </style>
 @endpush
 

@@ -33,6 +33,20 @@ class CustomerController
     {
         $this->authorize('create', Tasks::class);
         $data = $request->all();
+        $files = $request->file('style');
+        $styles = [];
+        if($request->hasFile('style'))
+        {
+            foreach ($files as $file) {
+                $path = 'customers/' . $file->getClientOriginalName();
+                $file->storeAs('',$path);
+                $styles[] = $path;
+            }
+        }
+
+        if ($styles) {
+            $data['styles'] = json_encode($styles);
+        }
         $customer = Customers::create($data);
 
         flash()->success(__('Customer ":model" đã được tạo thành công !', ['model' => $customer->name]));
@@ -49,6 +63,20 @@ class CustomerController
     public function update(Customers $customer, CustomerRequest $request)
     {
         $data = $request->all();
+        $files = $request->file('style');
+        $styles = [];
+        if($request->hasFile('style'))
+        {
+            foreach ($files as $file) {
+                $path = 'customers/' . $file->getClientOriginalName();
+                $file->storeAs('',$path);
+                $styles[] = $path;
+            }
+        }
+
+        if ($styles) {
+            $data['styles'] = json_encode($styles);
+        }
         $customer->update($data);
 
         flash()->success(__('Customer ":model" đã được cập nhật !', ['model' => $customer->name]));

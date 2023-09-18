@@ -25,7 +25,7 @@ class PreTaskDataTable extends BaseDatable
             ->editColumn('countRecord', fn (PreTasks $task) => $task->countRecord)
             ->editColumn('name', fn (PreTasks $task) => $task->name)
             ->editColumn('case', fn (PreTasks $task) => $task->case)
-            ->editColumn('path', fn (PreTasks $task) => $task->path)
+//            ->editColumn('path', fn (PreTasks $task) => $task->path)
             ->editColumn('updated_at', fn (PreTasks $task) => formatDate($task->updated_at, 'd/m/Y H:i:s'))
             ->addColumn('action', 'admin.pre_tasks._tableAction')
             ->filterColumn('name', function($query, $keyword) {
@@ -55,7 +55,7 @@ class PreTaskDataTable extends BaseDatable
             Column::make('countRecord')->title(__('Original')),
             Column::make('name')->title(__('Tên nhiệm vụ'))->width('20%'),
             Column::make('case')->title(__('Tên Jobs')),
-            Column::make('path')->title(__('Đường dẫn')),
+//            Column::make('path')->title(__('Đường dẫn')),
             Column::make('updated_at')->title(__('Cập nhật')),
             Column::computed('action')
                 ->title(__('Tác vụ'))
@@ -99,12 +99,12 @@ class PreTaskDataTable extends BaseDatable
                                 $(api.column(colIdx).header()).index()
                             );
                         var title = $(cell).text();
-                        if (colIdx== 0 || colIdx== 2 || colIdx== 3|| colIdx== 6) {
+                        if (colIdx== 0 || colIdx== 2 || colIdx== 3) {
                             $(cell).html('');
                             return;
                         }
 
-                        if (colIdx== 7) {
+                        if (colIdx== 6) {
                             $(cell).html('$inputDate');
                         } else {
                             $(cell).html('$input');

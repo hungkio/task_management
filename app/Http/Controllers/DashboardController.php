@@ -201,6 +201,11 @@ class DashboardController
         $roleName = $user->getRoleNames()[0];
         $editor = $this->getUser($task->editor_id);
         $QA = $this->getUser($task->QA_id);
+        $styles = [];
+        if (@$task->Customer->styles) {
+            $styles = json_decode($task->Customer->styles,1);
+        }
+        $task->styles = $styles;
         return view('admin.dashboards.popup')->with([
             'task' => $task,
             'roleName' => $roleName,

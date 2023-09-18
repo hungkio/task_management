@@ -60,7 +60,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     });
 
     Route::get('clear_cache', function (){
-        \Illuminate\Support\Facades\Artisan::call(' config:cache');
+        \Illuminate\Support\Facades\Artisan::call('config:cache');
         echo 'Configuration cleared and cached';
     });
     // Route Dashboards
@@ -136,6 +136,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
             //customer task
             Route::get('customer_tasks', [CustomerTaskController::class, 'index'])->name('customer_tasks.index');
+            Route::get('customer_tasks/{task}/edit', [CustomerTaskController::class, 'edit'])->name('customer_tasks.edit');
+            Route::put('customer_tasks/{task}', [CustomerTaskController::class, 'update'])->name('customer_tasks.update');
 
             // customer
             Route::post('/customers/bulk-delete', [CustomerController::class, 'bulkDelete'])->name('customers.bulk-delete');

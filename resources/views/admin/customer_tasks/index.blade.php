@@ -20,18 +20,17 @@
                 margin-left: .625rem !important;
             }
         }
-        tbody tr td:nth-child(5) {
+        tbody tr td:nth-child(7) {
             min-width: 300px;
             word-break: break-word;
             white-space: normal;
         }
-        tbody tr td:nth-child(6) {
+        tbody tr td:nth-child(2) {
             min-width: 300px;
             word-break: break-word;
             white-space: normal;
         }
         .done {
-            width: 100px;
             padding: 5px;
             border: 1px solid;
             border-radius: 5px;
@@ -41,7 +40,6 @@
             font-weight: 600;
         }
         .testing {
-            width: 100px;
             padding: 5px;
             border: 1px solid;
             border-radius: 5px;
@@ -51,7 +49,6 @@
             font-weight: 600;
         }
         .editing {
-            width: 100px;
             padding: 5px;
             border: 1px solid;
             border-radius: 5px;
@@ -59,6 +56,14 @@
             background-color: #1890ff;
             color: white;
             font-weight: 600;
+        }
+        .dataTable thead tr:first-child {
+            background: #370f0f;
+            color: white;
+            font-size: 16px;
+        }
+        .dataTable thead tr:first-child th {
+            text-align: center;
         }
     </style>
 @endpush
@@ -73,5 +78,10 @@
 @push('js')
     {{$dataTable->scripts()}}
     <script>
+        $(function () {
+            $('.dataTable').addClass('table-bordered')
+            $('#CustomerTaskDataTable thead ')
+                .append('<tr role="row" class="filters"><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr>');
+        })
     </script>
 @endpush

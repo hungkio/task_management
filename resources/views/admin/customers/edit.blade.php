@@ -11,8 +11,15 @@
     <style>
         @media (max-width: 767.98px) {
             .btn {
-                width: auto!important;
+                width: auto !important;
             }
+        }
+        .img {
+            margin-top: 1em;
+        }
+        .img img {
+            width: 100px;
+            height: 100px;
         }
     </style>
 @endpush
@@ -40,7 +47,8 @@
 @endpush
 
 @section('page-content')
-    <form action="{{ route('admin.customers.update', $customer) }}" method="POST" data-block>
+    <form action="{{ route('admin.customers.update', $customer) }}" method="POST" data-block
+          enctype="multipart/form-data">
         @csrf
         @method('PUT')
         <div class="d-flex align-items-start flex-column flex-md-row">
@@ -72,7 +80,8 @@
                                         <select name="ax" class="form-control select2" data-width="100%">
                                             <option value="">Chưa chọn level AX</option>
                                             @foreach($AX as $level)
-                                                <option value="{{ $level->name }}" @if($customer->ax == $level->name) selected @endif>
+                                                <option value="{{ $level->name }}"
+                                                        @if($customer->ax == $level->name) selected @endif>
                                                     {{ $level->name }}
                                                 </option>
                                             @endforeach
@@ -85,16 +94,40 @@
                                         @enderror
                                     </div>
                                 </div>
+
+                                <div class="form-group row">
+                                    <label for="select-taxon" class="col-lg-2 text-lg-right col-form-label">
+                                        Guide styles
+                                    </label>
+                                    <div class="col-lg-9">
+                                        <input autocomplete="new-password" type="file" name="style[]" id="style"
+                                               accept="image/*" multiple>
+                                        <div class="img">
+                                            @if($customer->styles)
+                                                <?php
+                                                $images = json_decode($customer->styles, 1);
+                                                ?>
+                                                @foreach($images as $img)
+                                                    <img src="{{ asset('storage/' . $img) }}" alt="">
+                                                @endforeach
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
                             </fieldset>
 
                             <div class="d-flex justify-content-center align-items-center action" id="action-form">
-                                <a href="{{ route('admin.customers.index') }}" class="btn btn-light"><i class="fal fa-arrow-left mr-2"></i>{{ __('Trở về') }}</a>
+                                <a href="{{ route('admin.customers.index') }}" class="btn btn-light"><i
+                                        class="fal fa-arrow-left mr-2"></i>{{ __('Trở về') }}</a>
                                 <div class="btn-group ml-3">
-                                    <button class="btn btn-primary btn-block" data-loading><i class="fal fa-check mr-2"></i>{{ __('Lưu') }}</button>
+                                    <button class="btn btn-primary btn-block" data-loading><i
+                                            class="fal fa-check mr-2"></i>{{ __('Lưu') }}</button>
                                     <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown"></button>
                                     <div class="dropdown-menu dropdown-menu-right">
-                                        <a href="javascript:void(0)" class="dropdown-item submit-type" data-redirect="{{ route('admin.customers.index') }}">{{ __('Lưu và thoát') }}</a>
-                                        <a href="javascript:void(0)" class="dropdown-item submit-type" data-redirect="{{ route('admin.customers.create') }}">{{ __('Lưu và tạo mới') }}</a>
+                                        <a href="javascript:void(0)" class="dropdown-item submit-type"
+                                           data-redirect="{{ route('admin.customers.index') }}">{{ __('Lưu và thoát') }}</a>
+                                        <a href="javascript:void(0)" class="dropdown-item submit-type"
+                                           data-redirect="{{ route('admin.customers.create') }}">{{ __('Lưu và tạo mới') }}</a>
                                     </div>
                                 </div>
                             </div>

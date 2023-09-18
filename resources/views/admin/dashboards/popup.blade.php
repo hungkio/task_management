@@ -49,6 +49,14 @@
                 {!! $task->instruction !!}
             </div>
             @endif
+            @if($task->styles)
+                <div class="form-group customer_styles">
+                    <label for="">Customer Styles:</label>
+                    @foreach($task->styles as $img)
+                        <img src="{{ asset('storage/' . $img) }}" alt="">
+                    @endforeach
+                </div>
+            @endif
           <div class="form-group">
             <label for="">Path:</label>
             <input class="form-control" type="text" value="{{$task->path}}" name="path" />
