@@ -54,6 +54,8 @@ class LoginController extends Controller
                 $route = route('admin.dashboards');
             } elseif ($permission->name == 'dbchecks.view') {
                 $route = route('admin.dbcheck_tasks.index');
+            } elseif ($permission->name == 'customer.view') {
+                $route = route('admin.customer_tasks.index');
             }
         }
         return $route;
