@@ -47,6 +47,7 @@ class LoginController extends Controller
     {
         $permissions = Auth::user()->getAllPermissions();
         $route = route('admin.dashboards');
+        session()->remove('url.intended');
         foreach ($permissions as $permission) {
             if ($permission->name == 'tasks.view') {
                 $route = route('admin.tasks.index');
