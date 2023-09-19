@@ -27,6 +27,16 @@
                                 >
                                 </x-text-field>
 
+                                <div class="form-group row">
+                                    <label class="col-lg-2 col-form-label text-lg-right" for="deadline">
+                                        Deadline:
+                                    </label>
+                                    <div class="col-lg-9">
+                                        <input autocomplete="new-password" type="text" name="deadline" id="deadline" class="form-control datepicker" placeholder="Deadline" value="{{ $task->deadline }}">
+                                    </div>
+
+                                </div>
+
                                 <x-text-field
                                     name="path"
                                     :placeholder="__('Đường dẫn dropbox')"

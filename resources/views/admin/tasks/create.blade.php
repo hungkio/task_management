@@ -18,38 +18,20 @@
     ])
 @stop
 @push('css')
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.2/dropzone.css" integrity="sha512-CmjeEOiBCtxpzzfuT2remy8NP++fmHRxR3LnsdQhVXzA3QqRMaJ3heF9zOB+c1lCWSwZkzSOWfTn1CdqgkW3EQ==" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.css">
     <style>
-        #select2{
+        div input[type='checkbox'] {
             position: relative;
-            margin-bottom: 0.7rem;
-        }
-
-        #select2 .invalid-feedback{
-            position: absolute;
-            bottom: -20px;
-        }
-
-        .dropzone .dz-preview .dz-image{
-            width: 140px;
-            height: 86px;
-        }
-
-        .dropzone .dz-preview .dz-error-mark, .dropzone .dz-preview .dz-success-mark, .dropzone-previews .dz-preview .dz-error-mark, .dropzone-previews .dz-preview .dz-success-mark{
-            right: 50px;
-            border: none;
-        }
-
-        .dropzone .dz-preview .dz-success-mark, .dropzone .dz-preview .dz-error-mark{
-            top: 10%;
-            left: 50%;
-            margin-left: -35px;
-            margin-top: -3px;
+            top: 10px;
         }
     </style>
 @endpush
 @push('js')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"></script>
     <script>
+        $('.datepicker').datetimepicker({
+            format:'Y-m-d H:i',
+        });
         $('.form-check-input-styled').uniform();
         $('.select2').select2({
             placeholder: "{{ __('-- Vui lòng chọn --') }}",

@@ -57,10 +57,10 @@
                     @endforeach
                 </div>
             @endif
-          <div class="form-group">
-            <label for="">Path:</label>
-            <input class="form-control" type="text" value="{{$task->path}}" name="path" />
-          </div>
+{{--          <div class="form-group">--}}
+{{--            <label for="">Path:</label>--}}
+{{--            <input class="form-control" type="text" value="{{$task->path}}" name="path" />--}}
+{{--          </div>--}}
           <div class="form-group">
             <label for="">Finish path:</label>
             <input class="form-control" type="text" value="{{$task->finish_path}}" name="finish_path" />

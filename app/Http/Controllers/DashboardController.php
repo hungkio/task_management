@@ -252,7 +252,7 @@ class DashboardController
         }
 
         $task = Tasks::findOrFail($taskId);
-        if ($processStatus == Tasks::TESTING && $task->status == Tasks::EDITING) {
+        if ($processStatus == Tasks::TESTING && ($task->status == Tasks::REJECTED || $task->status == Tasks::EDITING)) {
             $endTime = date("Y-m-d H:i");
             $task->update([
                 'end_at' => $endTime

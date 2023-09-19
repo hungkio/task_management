@@ -43,7 +43,9 @@ class TaskController
 
         $dbcs = Admin::whereIn('email', Admin::DBC_PEOPLE)->get();
         $customers = Customers::all();
-        return view('admin.tasks.create', compact('QAs', 'editors', 'dbcs', 'customers'));
+        $AX = AX::all();
+
+        return view('admin.tasks.create', compact('QAs', 'editors', 'dbcs', 'customers', 'AX'));
     }
 
     public function store(TaskRequest $request)
