@@ -17,7 +17,7 @@
                     <div class="card mb-0">
                         <div class="card-body">
                             <div class="text-center mb-5 mt-3">
-                                <h3 class="mb-0">{{ __('Đăng nhập') }}</h3>
+                                <h3 class="mb-0">{{ __('Login') }}</h3>
                             </div>
 
                             <div class="form-group form-group-feedback form-group-feedback-left">
@@ -33,7 +33,7 @@
                             </div>
 
                             <div class="form-group form-group-feedback form-group-feedback-left">
-                                <input id="password" name="password" type="password" class="form-control @error('password') border-danger @enderror" placeholder="{{ __('Mật khẩu') }}">
+                                <input id="password" name="password" type="password" class="form-control @error('password') border-danger @enderror" placeholder="{{ __('Password') }}">
                                 <div class="form-control-feedback">
                                     <i class="far fa-lock text-muted"></i>
                                 </div>
@@ -44,18 +44,18 @@
                                 @enderror
                             </div>
 
-                            <div class="form-group d-flex align-items-center">
-                                <div class="form-check mb-0">
-                                    <label class="form-check-label">
-                                        <input type="checkbox" name="remember" class="form-input-styled" data-fouc>
-                                        {{ __('Ghi nhớ') }}
-                                    </label>
-                                </div>
-                            </div>
+{{--                            <div class="form-group d-flex align-items-center">--}}
+{{--                                <div class="form-check mb-0">--}}
+{{--                                    <label class="form-check-label">--}}
+{{--                                        <input type="checkbox" name="remember" class="form-input-styled" data-fouc>--}}
+{{--                                        {{ __('Remember me') }}--}}
+{{--                                    </label>--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
 
                             <div class="form-group">
                                 <button class="btn btn-primary btn-block">
-                                    {{ __('Đăng nhập') }}
+                                    {{ __('Login') }}
                                 </button>
                             </div>
                         </div>

@@ -14,6 +14,7 @@
         'QAs' => $QAs,
         'editors' => $editors,
         'dbcs' => $dbcs,
+        'AX' => $AX,
         'method' => 'PUT'
     ])
 @stop

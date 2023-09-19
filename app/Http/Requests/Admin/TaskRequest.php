@@ -17,6 +17,7 @@ class TaskRequest extends FormRequest
                 'case' => ['required','string', 'max:255'],
                 'customer' => ['required', 'string', 'max:255'],
                 'countRecord' => ['required', 'numeric'],
+                'level' => ['required','string', 'max:255'],
             ];
         } else {
             return [
@@ -25,6 +26,7 @@ class TaskRequest extends FormRequest
                 'case' => ['required','string', 'max:255'],
                 'customer' => ['required', 'string', 'max:255'],
                 'countRecord' => ['required', 'numeric'],
+                'level' => ['required','string', 'max:255'],
             ];
         }
 

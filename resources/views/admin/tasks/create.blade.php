@@ -14,6 +14,7 @@
         'QAs' => $QAs,
         'editors' => $editors,
         'dbcs' => $dbcs,
+        'AX' => $AX,
     ])
 @stop
 @push('css')

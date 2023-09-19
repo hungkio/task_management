@@ -50,8 +50,7 @@ class TaskController
     {
         $this->authorize('create', Tasks::class);
         $data = $request->all();
-        $customer = Customers::where('name', $data['customer'])->firstOrFail();
-        $ax = AX::where('name', $customer->ax)->firstOrFail();
+        $ax = AX::where('name', $data['level'])->firstOrFail();
         $data['estimate'] = $ax->estimate_editor ?? 0;
         $data['estimate_QA'] = $ax->estimate_QA ?? 0;
         $data['priority'] = $ax->priority ?? 0;
@@ -85,8 +84,9 @@ class TaskController
 
         $dbcs = Admin::whereIn('email', Admin::DBC_PEOPLE)->get();
         $customers = Customers::all();
+        $AX = AX::all();
 
-        return view('admin.tasks.edit', compact('task', 'QAs', 'editors', 'dbcs', 'customers'));
+        return view('admin.tasks.edit', compact('task', 'QAs', 'editors', 'dbcs', 'customers', 'AX'));
     }
 
     public function update(Tasks $task, TaskRequest $request)
@@ -94,8 +94,7 @@ class TaskController
         $this->authorize('update', $task);
 
         $data = $request->all();
-        $customer = Customers::where('name', $data['customer'])->firstOrFail();
-        $ax = AX::where('name', $customer->ax)->firstOrFail();
+        $ax = AX::where('name', $data['level'])->firstOrFail();
 
         $data['estimate'] = $ax->estimate_editor ?? 0;
         $data['estimate_QA'] = $ax->estimate_QA ?? 0;
@@ -367,7 +366,8 @@ class TaskController
             $task->update([
                 'path' => $casePath,
                 'countRecord' => $countRecord,
-                'customer' => $customer,
+                'customer' => $customer->name,
+                'level' => $customer->ax,
             ]);
         } else {
             PreTasks::create([
@@ -375,7 +375,7 @@ class TaskController
                 'path' => $casePath,
                 'countRecord' => $countRecord,
                 'case' => $taskName,
-                'customer' => $customer,
+                'customer' => $customer->name,
                 'level' => $customer->ax,
             ]);
         }

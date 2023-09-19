@@ -27,19 +27,18 @@ class TasksImport implements ToCollection
                 throw_if($isExist, \Exception::class, 'Tồn tại case trùng lặp!');
 
                 $taskName = $row[2];
-//                $level = $row[4];
+                $level = $row[4];
                 $customer = Customers::where('name', $row[3])->first();
                 throw_if(!$customer, \Exception::class, 'Không tồn tại khách hàng!');
 
-                $ax = AX::where('name', $customer->ax)->first();
-                throw_if(!$customer, \Exception::class, 'Không tồn tại AX tương ứng với khách hàng này!');
-                $level = $customer->ax;
+                $ax = AX::where('name', $level)->first();
+                throw_if(!$ax, \Exception::class, 'Không tồn tại AX này!');
+                $level = $ax->name;
                 $customer = $customer->name;
 
                 $estimate = $ax->estimate_editor ?? 0;
                 $estimateQA = $ax->estimate_QA ?? 0;
-                $priority = $ax->priority
-                    ?? 0;
+                $priority = $ax->priority?? 0;
                 $status = 0;
                 if (in_array($row[5], Tasks::STATUS)) {
                     $status = array_search($row[5], Tasks::STATUS);

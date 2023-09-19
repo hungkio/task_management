@@ -92,6 +92,32 @@
 
                                 <div class="form-group row">
                                     <label for="select-taxon" class="col-lg-2 text-lg-right col-form-label">
+                                        <span class="text-danger">*</span> {{ __('AX') }}
+                                    </label>
+                                    <div class="col-lg-9">
+                                        <select name="level" class="form-control select2" data-width="100%">
+                                            <option value=""
+                                                    @if(!@$task->level) selected @endif>
+                                                Chưa chọn AX
+                                            </option>
+                                            @foreach($AX as $ax)
+                                                <option value="{{ $ax->name }}"
+                                                        @if($ax->name == @$task->level) selected @endif>
+                                                    {{ $ax->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        <div class="clearfix"></div>
+                                        @error('level')
+                                        <span class="form-text text-danger">
+                                                {{ $message }}
+                                            </span>
+                                        @enderror
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="select-taxon" class="col-lg-2 text-lg-right col-form-label">
                                         <span class="text-danger">*</span> {{ __('Trạng thái') }}
                                     </label>
                                     <div class="col-lg-9">

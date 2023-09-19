@@ -31,6 +31,7 @@ class BaseDatable extends DataTable
                         'className' => 'select-checkbox',
                         'targets' => 0
                     ],
+                    'pageLength'=> 50,
                     'drawCallback' => 'function(setting) {
                         $("th.select-checkbox").removeClass("selected");
                         var api = this.api();
