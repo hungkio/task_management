@@ -277,7 +277,8 @@
                         <div class="card-text mb-1">QA checked: {{$task->QA_check_num}}</div>
                       @endif
                     </div>
-                      <div class="countdown" data-deadline="{{ \Illuminate\Support\Carbon::createFromFormat('Y-m-d H:i:s' , $task->start_at)->addMinutes($task->estimate*$task->countRecord)->format('Y-m-d H:i:s') }}"></div>
+                      <div class="countdown"
+                           data-deadline="{{ \Illuminate\Support\Carbon::createFromFormat('Y-m-d H:i:s' , $task->start_at)->addMinutes($task->estimate*($task->countRecord*$task->AX->real_amount ?? 1))->format('Y-m-d H:i:s') }}"></div>
                       <div class="button-box d-flex justify-content-between">
                       <div
                         class="status px-2 rounded in-progress d-inline-block p-1 fw-semibold text-white project-name">
@@ -350,7 +351,7 @@
                         <div class="card-text mb-1">QA checked: {{$task->QA_check_num}}</div>
                       @endif
                     </div>
-                      <div class="countdown" data-deadline="{{ \Illuminate\Support\Carbon::createFromFormat('Y-m-d H:i:s' , $task->start_at)->addMinutes($task->estimate*$task->countRecord)->format('Y-m-d H:i:s') }}"></div>
+                      <div class="countdown" data-deadline="{{ \Illuminate\Support\Carbon::createFromFormat('Y-m-d H:i:s' , $task->start_at)->addMinutes($task->estimate*($task->countRecord*$task->AX->real_amount ?? 1))->format('Y-m-d H:i:s') }}"></div>
                       <div class="button-box d-flex justify-content-between">
                       <div class="status px-2 rounded bug d-inline-block p-1 fw-semibold text-white project-name">
                         Rejected
@@ -435,7 +436,7 @@
                       @endif
                     </div>
                       @if($task->QA_start)
-                        <div class="countdown" data-deadline="{{ \Illuminate\Support\Carbon::createFromFormat('Y-m-d H:i' , $task->QA_start)->addMinutes($task->estimate_QA*$task->countRecord)->format('Y-m-d H:i:s') }}"></div>
+                        <div class="countdown" data-deadline="{{ \Illuminate\Support\Carbon::createFromFormat('Y-m-d H:i' , $task->QA_start)->addMinutes($task->estimate_QA*($task->countRecord*$task->AX->real_amount ?? 1))->format('Y-m-d H:i:s') }}"></div>
                       @endif
                       <div class="button-box d-flex justify-content-between">
                       <div

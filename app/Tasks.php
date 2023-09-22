@@ -59,4 +59,8 @@ class Tasks extends Model
     public function Customer() {
         return $this->belongsTo(Customers::class, 'customer', 'name');
     }
+
+    public function AX() {
+        return $this->belongsTo(AX::class, 'level', 'name');
+    }
 }

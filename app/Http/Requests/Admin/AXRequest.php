@@ -16,6 +16,7 @@ class AXRequest extends FormRequest
                 'priority' => ['required','numeric'],
                 'estimate_editor' => ['required', 'numeric'],
                 'estimate_QA' => ['required', 'numeric'],
+                'real_amount' => ['numeric'],
             ];
         } else {
             return [
@@ -23,6 +24,7 @@ class AXRequest extends FormRequest
                 'priority' => ['required','numeric'],
                 'estimate_editor' => ['required', 'numeric'],
                 'estimate_QA' => ['required', 'numeric'],
+                'real_amount' => ['numeric'],
             ];
         }
 
@@ -32,6 +34,7 @@ class AXRequest extends FormRequest
     {
         return [
             'name' => 'Tên AX',
+            'real_amount' => 'Tỷ lệ done input'
         ];
     }
 }
