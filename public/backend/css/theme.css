@@ -379,6 +379,8 @@ a.text-primary:focus, a.text-primary:hover{
 
 .text-danger{
     color: #f44336;
+    background-color: #FFE0E0;
+    padding: 7px;
 }
 
 .text-warning{
@@ -726,7 +728,7 @@ a.text-primary:focus, a.text-primary:hover{
     }
 }
 .page-content {
-    margin-top: 3.7em;
+    /* margin-top: 3.7em; */
 }
 .navbar {
     position: fixed;

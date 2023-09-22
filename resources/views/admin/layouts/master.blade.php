@@ -10,7 +10,13 @@
     <script src="{{ asset('/backend/global_assets/js/plugins/ui/sticky.min.js') }}"></script>
     <script src="{{ asset('/backend/vendor/datatables/buttons.server-side.js') }}"></script>
 @endpush
-
+@push('css')
+  <style>
+    .mt-52{
+        margin-top: 3.7em;
+    }
+  </style>
+@endpush
 @section('navbar')
     <!-- Main navbar -->
     @include('admin.layouts._mainNav')
@@ -20,7 +26,7 @@
 @section('content')
 
     <!-- Page content -->
-    <div class="page-content">
+    <div class="page-content mt-52">
 
         <!-- Main sidebar -->
         @include('admin.layouts._menu')
