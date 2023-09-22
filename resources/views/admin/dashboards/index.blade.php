@@ -95,6 +95,23 @@
     .customer_styles img {
         max-height: 400px;
     }
+    div.deadline {
+        position: relative;
+    }
+      span.deadline {
+          position: absolute;
+          padding: 5px;
+          border: 1px solid;
+          border-radius: 20px;
+          background: #4caf50;
+          font-weight: 600;
+          color: white;
+          top: -18px;
+          right: -19px;
+      }
+      span.late {
+          background: #f44336;
+      }
   </style>
 @endpush
 
@@ -139,7 +156,21 @@
                       data-editor-check-num="{{ $task->editor_check_num }}"
                       data-finish-path="{{ $task->finish_path }}">
                   <div class="card-body px-3 py-3">
-                    <div class="card-text mb-1">{{$task->name}}</div>
+                    <div class="card-text mb-1 deadline">
+                        {{$task->name}}
+                        @if($task->deadline)
+                            <?php
+                            $isLate = false;
+                            $hour = date_create_from_format('Y-m-d H:i', $task->deadline)->format('H');
+                            $now = date('Y-m-d H:i');
+
+                            if ($now > $task->deadline) {
+                                $isLate = true;
+                            }
+                            ?>
+                            <span class="deadline @if($isLate) late @endif">{{ $hour }}h</span>
+                        @endif
+                    </div>
                     @if (@$editor)
                       <div class="card-text mb-1">
                         <span>Editor: {{$editor->email}}</span>
@@ -200,7 +231,21 @@
                       data-finish-path="{{ $task->finish_path }}"
                       qa-id="{{ $task->QA_id }}">
                   <div class="card-body px-3 py-3">
-                    <div class="card-text mb-1">{{$task->name}}</div>
+                    <div class="card-text mb-1 deadline">
+                        {{$task->name}}
+                        @if($task->deadline)
+                            <?php
+                            $isLate = false;
+                            $hour = date_create_from_format('Y-m-d H:i', $task->deadline)->format('H');
+                            $now = date('Y-m-d H:i');
+
+                            if ($now > $task->deadline) {
+                                $isLate = true;
+                            }
+                            ?>
+                            <span class="deadline @if($isLate) late @endif">{{ $hour }}h</span>
+                        @endif
+                    </div>
                     @if (@$editor)
                       <div class="card-text mb-1">
                         <span>Editor: {{$editor->email}}</span>
@@ -258,7 +303,21 @@
                       data-finish-path="{{ $task->finish_path }}"
                       qa-id="{{ $task->QA_id }}">
                   <div class="card-body px-3 py-3">
-                    <div class="card-text mb-1">{{$task->name}}</div>
+                    <div class="card-text mb-1 deadline">
+                        {{$task->name}}
+                        @if($task->deadline)
+                            <?php
+                            $isLate = false;
+                            $hour = date_create_from_format('Y-m-d H:i', $task->deadline)->format('H');
+                            $now = date('Y-m-d H:i');
+
+                            if ($now > $task->deadline) {
+                                $isLate = true;
+                            }
+                            ?>
+                            <span class="deadline @if($isLate) late @endif">{{ $hour }}h</span>
+                        @endif
+                    </div>
                     @if (@$editor)
                       <div class="card-text mb-1">
                         <span>Editor: {{$editor->email}}</span>
@@ -327,7 +386,21 @@
                       data-finish-path="{{ $task->finish_path }}"
                       qa-id="{{ $task->QA_id }}">
                   <div class="card-body px-3 py-3">
-                    <div class="card-text mb-1">{{$task->name}}</div>
+                    <div class="card-text mb-1 deadline">
+                        {{$task->name}}
+                        @if($task->deadline)
+                            <?php
+                            $isLate = false;
+                            $hour = date_create_from_format('Y-m-d H:i', $task->deadline)->format('H');
+                            $now = date('Y-m-d H:i');
+
+                            if ($now > $task->deadline) {
+                                $isLate = true;
+                            }
+                            ?>
+                            <span class="deadline @if($isLate) late @endif">{{ $hour }}h</span>
+                        @endif
+                    </div>
                     @if (@$editor)
                       <div class="card-text mb-1">
                         <span>Editor: {{$editor->email}}</span>
@@ -402,7 +475,19 @@
                       data-finish-path="{{ $task->finish_path }}"
                       qa-id="{{ $task->QA_id }}">
                   <div class="card-body px-3 py-3">
-                    <div class="card-text mb-1">{{$task->name}}</div>
+                    <div class="card-text mb-1 deadline">
+                        {{$task->name}}
+                        @if($task->deadline)
+                            <?php
+                            $isLate = false;
+                            $hour = date_create_from_format('Y-m-d H:i', $task->deadline)->format('H');
+                            if (strtotime($task->QA_end) > strtotime($task->deadline)) {
+                                $isLate = true;
+                            }
+                            ?>
+                            <span class="deadline @if($isLate) late @endif">{{ $hour }}h</span>
+                        @endif
+                    </div>
                     @if (@$editor)
                       <div class="card-text mb-1">
                         <span>Editor: {{$editor->email}}</span>
@@ -466,7 +551,20 @@
                       data-finish-path="{{ $task->finish_path }}"
                       qa-id="{{ $task->QA_id }}">
                   <div class="card-body px-3 py-3">
-                    <div class="card-text mb-1">{{$task->name}}</div>
+                    <div class="card-text mb-1 deadline">
+                        {{$task->name}}
+                        @if($task->deadline)
+                            <?php
+                            $isLate = false;
+                            $hour = date_create_from_format('Y-m-d H:i', $task->deadline)->format('H');
+                            if (strtotime($task->QA_end) > strtotime($task->deadline)) {
+                                $isLate = true;
+                            }
+                            ?>
+                            <span class="deadline @if($isLate) late @endif">{{ $hour }}h</span>
+                        @endif
+
+                    </div>
                     @if (@$editor)
                       <div class="card-text mb-1">
                         <span>Editor: {{$editor->email}}</span>

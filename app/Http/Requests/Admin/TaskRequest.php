@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Requests\Admin;
 
+use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
 
 class TaskRequest extends FormRequest
@@ -17,6 +18,12 @@ class TaskRequest extends FormRequest
                 'case' => ['required','string', 'max:255'],
                 'customer' => ['required', 'string', 'max:255'],
                 'countRecord' => ['required', 'numeric'],
+                'level' => ['required','string', 'max:255'],
+                'deadline' => [function ($attribute, $value, $fail) {
+                    if ($value && !Carbon::createFromFormat('Y-m-d H:i', $value)) {
+                        return false;
+                    }
+                }]
             ];
         } else {
             return [
@@ -25,6 +32,12 @@ class TaskRequest extends FormRequest
                 'case' => ['required','string', 'max:255'],
                 'customer' => ['required', 'string', 'max:255'],
                 'countRecord' => ['required', 'numeric'],
+                'level' => ['required','string', 'max:255'],
+                'deadline' => [function ($attribute, $value, $fail) {
+                    if ($value && !Carbon::createFromFormat('Y-m-d H:i', $value)) {
+                        return false;
+                    }
+                }]
             ];
         }
 

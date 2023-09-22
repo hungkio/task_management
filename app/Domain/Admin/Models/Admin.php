@@ -108,7 +108,7 @@ class Admin extends Authenticatable implements HasMedia
     ];
 
     const BAD = [
-        'BAD_QUY TRÌNH','BAD_MÀU SẮC', 'BAD_ÁNH SÁNG','BAD_THÁI ĐỘ','BAD_KH','BAD_STYLES','BAD_SKY,TV','EXCELLENT!','JOB KO ĐẠT'
+        'BAD_QUY TRÌNH','BAD_MÀU SẮC', 'BAD_ÁNH SÁNG','BAD_THÁI ĐỘ','BAD_KH','BAD_STYLES','BAD_SKY,TV','JOB KO ĐẠT'
     ];
 
     const BAD_FEE = [
@@ -119,7 +119,6 @@ class Admin extends Authenticatable implements HasMedia
         'BAD_KH' => -100000,
         'BAD_STYLES' => -100000,
         'BAD_SKY,TV' => -100000,
-        'EXCELLENT!' => 100,
         'JOB KO ĐẠT' => -100000,
     ];
 

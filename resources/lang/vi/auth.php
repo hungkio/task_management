@@ -12,6 +12,7 @@ return [
     |
     */
 
-    'failed'   => 'Tài khoản hoặc mật khẩu không chính xác. Vui lòng nhập lại!',
-    'throttle' => 'Vượt quá số lần đăng nhập cho phép. Vui lòng thử lại sau :seconds giây.',
+    'failed' => 'These credentials do not match our records.',
+    'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
+
 ];

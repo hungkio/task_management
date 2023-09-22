@@ -95,7 +95,7 @@ return [
     'password'             => 'Mật khẩu không đúng.',
     'present'              => 'Trường :attribute phải được cung cấp.',
     'regex'                => 'Trường :attribute có định dạng không hợp lệ.',
-    'required'             => 'Trường :attribute không được bỏ trống.',
+    'required'             => 'The :attribute field is required.',
     'required_if'          => 'Trường :attribute không được bỏ trống khi trường :other là :value.',
     'required_unless'      => 'Trường :attribute không được bỏ trống trừ khi :other là :values.',
     'required_with'        => 'Trường :attribute không được bỏ trống khi một trong :values có giá trị.',
@@ -147,11 +147,11 @@ return [
 
     'attributes' => [
         'name'                  => 'tên',
-        'username'              => 'tên đăng nhập',
-        'email'                 => 'email',
+//        'username'              => 'tên đăng nhập',
+        'email'                 => 'username',
         'first_name'            => 'họ',
         'last_name'             => 'tên',
-        'password'              => 'mật khẩu',
+//        'password'              => 'mật khẩu',
         'password_confirmation' => 'xác nhận mật khẩu',
         'city'                  => 'thành phố',
         'country'               => 'quốc gia',
