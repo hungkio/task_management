@@ -14,7 +14,7 @@ class TaskRequest extends FormRequest
         if ($this->method() == "POST") {
             return [
                 'name' => ['unique:tasks','required', 'string', 'max:255'],
-                'path' => ['required', 'string', 'max:255'],
+//                'path' => ['required', 'string', 'max:255'],
                 'case' => ['required','string', 'max:255'],
                 'customer' => ['required', 'string', 'max:255'],
                 'countRecord' => ['required', 'numeric'],
@@ -28,7 +28,7 @@ class TaskRequest extends FormRequest
         } else {
             return [
                 'name' => ['required', 'string', 'max:255'],
-                'path' => ['required', 'string', 'max:255'],
+//                'path' => ['required', 'string', 'max:255'],
                 'case' => ['required','string', 'max:255'],
                 'customer' => ['required', 'string', 'max:255'],
                 'countRecord' => ['required', 'numeric'],

@@ -175,11 +175,19 @@ class DashboardController
                 }
             }
         }
+
         if ($QA) {
             if ($task->status == Tasks::EDITING) {
                 $endTime = date("Y-m-d H:i");
+                $spend_time = Carbon::createFromFormat('Y-m-d H:i:s', $task->start_at)->addMinutes($task->estimate*$task->countRecord)->diffInSeconds($endTime);
+                $is_late = true;
+                if (Carbon::createFromFormat('Y-m-d H:i:s', $task->start_at)->addMinutes($task->estimate*$task->countRecord)->gt($endTime)) {
+                    $is_late = false;
+                }
+                $spend_time = $is_late ? '-' . gmdate('H:i:s', $spend_time) : gmdate('H:i:s', $spend_time);
                 $task->update([
-                    'end_at' => $endTime
+                    'end_at' => $endTime,
+                    'editor_spend' => $spend_time
                 ]);
             }
             $task->update([
@@ -254,8 +262,15 @@ class DashboardController
         $task = Tasks::findOrFail($taskId);
         if ($processStatus == Tasks::TESTING && ($task->status == Tasks::REJECTED || $task->status == Tasks::EDITING)) {
             $endTime = date("Y-m-d H:i");
+            $spend_time = Carbon::createFromFormat('Y-m-d H:i:s', $task->start_at)->addMinutes($task->estimate*$task->countRecord)->diffInSeconds($endTime);
+            $is_late = true;
+            if (Carbon::createFromFormat('Y-m-d H:i:s', $task->start_at)->addMinutes($task->estimate*$task->countRecord)->gt($endTime)) {
+                $is_late = false;
+            }
+            $spend_time = $is_late ? '-' . gmdate('H:i:s', $spend_time) : gmdate('H:i:s', $spend_time);
             $task->update([
-                'end_at' => $endTime
+                'end_at' => $endTime,
+                'editor_spend' => $spend_time,
             ]);
         }
         $task->status = $processStatus;
@@ -265,8 +280,15 @@ class DashboardController
 
         if ($processStatus == Tasks::DONE) {
             $endTime = date("Y-m-d H:i");
+            $spend_time = Carbon::createFromFormat('Y-m-d H:i:s', $task->start_at)->addMinutes($task->estimate_QA*$task->countRecord)->diffInSeconds($endTime);
+            $is_late = true;
+            if (Carbon::createFromFormat('Y-m-d H:i:s', $task->start_at)->addMinutes($task->estimate_QA*$task->countRecord)->gt($endTime)) {
+                $is_late = false;
+            }
+            $spend_time = $is_late ? '-' . gmdate('H:i:s', $spend_time) : gmdate('H:i:s', $spend_time);
             $task->update([
-                'QA_end' => $endTime
+                'QA_end' => $endTime,
+                'QA_spend' => $spend_time,
             ]);
         }
         if (isset($confirm)) {

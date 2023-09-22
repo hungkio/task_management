@@ -34,6 +34,15 @@ class TasksImport implements ToCollection
                 $ax = AX::where('name', $level)->first();
                 throw_if(!$ax, \Exception::class, 'Không tồn tại AX này!');
                 $level = $ax->name;
+
+                $deadline = '';
+                if ($customer->deadline) {
+                    $time = date_create_from_format('H', str_replace('h', '', $customer->deadline));
+                    if ($time) {
+                        $deadline = $time->format('Y-m-d H:i');
+                    }
+                }
+
                 $customer = $customer->name;
 
                 $estimate = $ax->estimate_editor ?? 0;
@@ -85,6 +94,7 @@ class TasksImport implements ToCollection
                     'start_at' => $start_at,
                     'QA_start' => $QA_start,
                     'instruction' => $instruction,
+                    'deadline' => $deadline,
                 ]);
             }
         }, 1);

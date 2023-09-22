@@ -112,6 +112,20 @@
       span.late {
           background: #f44336;
       }
+    .countdown {
+        width: 100px;
+        margin-bottom: 10px;
+    }
+      .countdown span {
+          padding: 5px;
+          background: #279f1f;
+          border-radius: 8px;
+          color: white;
+          font-weight: 600;
+      }
+    .countdown span.expired {
+        background: red;
+    }
   </style>
 @endpush
 
@@ -263,7 +277,8 @@
                         <div class="card-text mb-1">QA checked: {{$task->QA_check_num}}</div>
                       @endif
                     </div>
-                    <div class="button-box d-flex justify-content-between">
+                      <div class="countdown" data-deadline="{{ \Illuminate\Support\Carbon::createFromFormat('Y-m-d H:i:s' , $task->start_at)->addMinutes($task->estimate*$task->countRecord)->format('Y-m-d H:i:s') }}"></div>
+                      <div class="button-box d-flex justify-content-between">
                       <div
                         class="status px-2 rounded in-progress d-inline-block p-1 fw-semibold text-white project-name">
                         In progress
@@ -335,7 +350,8 @@
                         <div class="card-text mb-1">QA checked: {{$task->QA_check_num}}</div>
                       @endif
                     </div>
-                    <div class="button-box d-flex justify-content-between">
+                      <div class="countdown" data-deadline="{{ \Illuminate\Support\Carbon::createFromFormat('Y-m-d H:i:s' , $task->start_at)->addMinutes($task->estimate*$task->countRecord)->format('Y-m-d H:i:s') }}"></div>
+                      <div class="button-box d-flex justify-content-between">
                       <div class="status px-2 rounded bug d-inline-block p-1 fw-semibold text-white project-name">
                         Rejected
                       </div>
@@ -418,7 +434,10 @@
                         <div class="card-text mb-1">QA checked: {{$task->QA_check_num}}</div>
                       @endif
                     </div>
-                    <div class="button-box d-flex justify-content-between">
+                      @if($task->QA_start)
+                        <div class="countdown" data-deadline="{{ \Illuminate\Support\Carbon::createFromFormat('Y-m-d H:i' , $task->QA_start)->addMinutes($task->estimate_QA*$task->countRecord)->format('Y-m-d H:i:s') }}"></div>
+                      @endif
+                      <div class="button-box d-flex justify-content-between">
                       <div
                         class="status px-2 rounded {{$task->QA_check_num ? 'bug' : 'testing'}} d-inline-block p-1 fw-semibold text-white project-name">
                         @if ($task->QA_check_num)
@@ -622,7 +641,36 @@
 @push('js')
   <script>
     $(document).ready(function () {
-      const user_role = '{{ auth()->user()->getRoleNames()[0] }}';
+        const user_role = '{{ auth()->user()->getRoleNames()[0] }}';
+
+        $('.countdown').each(function (key, val) {
+            if ($(val).data('deadline')) {
+                var end = new Date($(val).data('deadline'));
+
+                var _second = 1000;
+                var _minute = _second * 60;
+                var _hour = _minute * 60;
+                var _day = _hour * 24;
+                var timer;
+
+                function showRemaining() {
+                    var now = new Date();
+                    var distance = end - now;
+                    let html = '<span class="';
+                    if (distance < 0) {
+                        html+= 'expired';
+                    }
+                    var days = Math.floor(distance / _day);
+                    var hours = Math.floor((distance % _day) / _hour);
+                    var minutes = Math.abs(Math.floor((distance % _hour) / _minute));
+                    var seconds = Math.abs(Math.floor((distance % _minute) / _second));
+
+                    html += '">' + hours + ':' + minutes + ':' + seconds + '</span>';
+                    $(val).html(html)
+                }
+                timer = setInterval(showRemaining, 1000);
+            }
+        })
 
       function taskCounter() {
         let inProgress = 'in-progress';
