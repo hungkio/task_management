@@ -117,12 +117,11 @@
 
 @section('page-content')
 <div id="popupContainer"></div>
-
 <section class="dashboard-case">
-  <div class="d-flex mb-4 p-2 bg-white shadow-sm">
+  <div class="d-flex flex-column mb-4 p-2 bg-white shadow-sm">
     <form method="GET" action="{{route('admin.dashboards')}}">
       @csrf
-      <label class="ml-2" for="filter-by-user">Filter:</label>
+      <label for="filter-by-user">Filter:</label>
       <input type="text" name="filter-by-user" placeholder="username or customer" value="{{$input_filter}}">
       <button class="outline-0 border shadow-sm" type="submit">Submit</button>
     </form>
@@ -982,7 +981,7 @@
       // when click on task, show popup
       $(document).on('click', '.dashboard-case .card', function () {
         var popupUrl = $(this).data('url');
-
+        console.log(popupUrl);
         $.ajax({
           type: 'Get',
           url: popupUrl,
@@ -1011,6 +1010,11 @@
           }
         })
       }
+
+      $(document).on('click', '#greetings', function() {
+        $('#greetings-popup').modal('show');
+        console.log('hehe');
+      })
     })
   </script>
 @endpush

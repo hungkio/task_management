@@ -73,6 +73,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('/assign-qa/{id}', [DashboardController::class, 'assignQA'])->name('assign-qa');
             Route::get('/popup/{id}', [DashboardController::class, 'showPopup'])->name('popup');
             Route::post('/popup/{id}', [DashboardController::class, 'savePopup'])->name('popup.save');
+            Route::post('/save-greeting', [DashboardController::class, 'saveGreeting'])->name('save.greeting');
+
             Route::post('/update-status', [DashboardController::class, 'updateStatus'])->name('update-status');
             Route::get('/check-online/{id}', [DashboardController::class, 'checkOnline'])->name('check-online');
 
@@ -156,6 +158,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('/ax/{ax}/edit', [AXController::class, 'edit'])->name('ax.edit');
             Route::delete('/ax/{ax}', [AXController::class, 'destroy'])->name('ax.destroy');
             Route::put('/ax/{ax}', [AXController::class, 'update'])->name('ax.update');
+
+
         });
     Route::get('test_auth_dropbox', function () {
 //                $refreshToken = config('dropbox.refreshToken');
