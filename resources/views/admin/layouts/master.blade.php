@@ -46,6 +46,9 @@
 
                 @include('admin.layouts._alert')
 
+                @include('admin.dashboards.greetings-popup')
+                @include('admin.components.greeting')
+                
                 @yield('page-content')
 
             </div>

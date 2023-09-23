@@ -9,7 +9,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use App\Tasks;
-
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Cache;
 class DashboardController
 {
     use AuthorizesRequests;
@@ -97,6 +98,14 @@ class DashboardController
         $tasks_finished = $this->repository->getTodayTasks(Tasks::FINISH, $conditionFinish);
         $tasks_waiting = $this->repository->getTasks(Tasks::WAITING, $conditionWait);
 
+        $filePath = public_path('greetings/greeting.json');
+        if (File::exists($filePath)) {
+            $greeting = json_decode(File::get($filePath), true);
+            Cache::forever('greeting', $greeting);
+        }else{
+            $greeting = [];
+            Cache::forever('greeting', $greeting);
+        }
         return view('admin.dashboards.index')->with([
             'tasks_waiting' => $tasks_waiting,
             'tasks_editing' => $tasks_editing,
@@ -303,5 +312,30 @@ class DashboardController
     public function checkOnline($id)
     {
         return $this->getUser($id)->is_online;
+    }
+
+    public function saveGreeting(Request $request) {
+        // Lưu nội dung mới vào biến
+        $greeting_text = $request->input('greeting');
+        $text_color = $request->input('text_color');
+        $greeting_data = [
+            'greeting_text' => $greeting_text,
+            'text_color' => $text_color
+        ];
+
+        // Đường dẫn tới tệp JSON
+        $filePath = public_path('greetings/greeting.json');
+
+        $directoryPath = public_path('greetings');
+        if (!File::exists($directoryPath)) {
+            File::makeDirectory($directoryPath, 0777, true, true);
+        }
+        // Ghi nội dung mới vào tệp JSON
+        File::put($filePath, json_encode($greeting_data, JSON_PRETTY_PRINT));
+
+        $greeting = json_decode(File::get($filePath), true);
+        Cache::forever('greeting', $greeting);
+
+        return back();
     }
 }

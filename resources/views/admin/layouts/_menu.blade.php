@@ -174,6 +174,11 @@
                             @endcan
                         </ul>
                     </li>
+                    <li>
+                        <a id="greetings" href="#" class="nav-link" data-toggle="modal" data-target="#greetingsPopup">
+                            <i class="fa fa-bullhorn"></i> <span>{{ __('Greetings') }}</span>
+                        </a>
+                    </li>
                 @endcan
             </ul>
         </div>
