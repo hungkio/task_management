@@ -94,7 +94,15 @@
                                         @enderror
                                     </div>
                                 </div>
-
+                                <div class="collapse show" id="deadline">
+                                    <x-text-field
+                                        name="deadline"
+                                        :placeholder="__('17h')"
+                                        :label="__('Deadline')"
+                                        :value="$customer->deadline"
+                                    >
+                                    </x-text-field>
+                                </div>
                                 <div class="form-group row">
                                     <label for="select-taxon" class="col-lg-2 text-lg-right col-form-label">
                                         Guide styles

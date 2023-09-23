@@ -118,7 +118,18 @@
                                     required
                                 >
                                 </x-text-field>
-                            </div>                            <div class="d-flex justify-content-center align-items-center action" id="action-form">
+                            </div>
+                            <div class="collapse show" >
+                                <x-text-field
+                                    name="real_amount"
+                                    :label="__('Tỷ lệ done input')"
+                                    :value="$ax->real_amount"
+                                    :placeholder="0.25"
+                                    type="text"
+                                >
+                                </x-text-field>
+                            </div>
+                            <div class="d-flex justify-content-center align-items-center action" id="action-form">
                                 <a href="{{ route('admin.ax.index') }}" class="btn btn-light"><i class="fal fa-arrow-left mr-2"></i>{{ __('Trở về') }}</a>
                                 <div class="btn-group ml-3">
                                     <button class="btn btn-primary btn-block" data-loading><i class="fal fa-check mr-2"></i>{{ __('Lưu') }}</button>

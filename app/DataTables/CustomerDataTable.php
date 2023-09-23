@@ -36,6 +36,7 @@ class CustomerDataTable extends BaseDatable
             Column::make('id')->title(__('STT'))->data('DT_RowIndex')->searchable(false),
             Column::make('name')->title(__('Tên khách hàng')),
             Column::make('ax')->title(__('Level')),
+            Column::make('deadline')->title(__('Deadline')),
             Column::computed('action')
                 ->title(__('Tác vụ'))
                 ->exportable(false)

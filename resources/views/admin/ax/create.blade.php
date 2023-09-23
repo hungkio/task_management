@@ -115,6 +115,15 @@
                                 >
                                 </x-text-field>
                             </div>
+                            <div class="collapse show" >
+                                <x-text-field
+                                    name="real_amount"
+                                    :label="__('Tỷ lệ done input')"
+                                    :placeholder="0.25"
+                                    type="number"
+                                >
+                                </x-text-field>
+                            </div>
                         </fieldset>
 
                     </x-card>

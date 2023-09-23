@@ -37,14 +37,14 @@
 
                                 </div>
 
-                                <x-text-field
-                                    name="path"
-                                    :placeholder="__('Đường dẫn dropbox')"
-                                    :label="__('Đường dẫn dropbox')"
-                                    :value="$task->path"
-                                    required
-                                >
-                                </x-text-field>
+{{--                                <x-text-field--}}
+{{--                                    name="path"--}}
+{{--                                    :placeholder="__('Đường dẫn dropbox')"--}}
+{{--                                    :label="__('Đường dẫn dropbox')"--}}
+{{--                                    :value="$task->path"--}}
+{{--                                    required--}}
+{{--                                >--}}
+{{--                                </x-text-field>--}}
 
                                 <x-textarea-field
                                     name="instruction"
