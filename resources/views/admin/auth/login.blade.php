@@ -10,9 +10,8 @@
         background-position: center center;
     }
     .login-form{
-        max-width: 600px;
-        width: 100%;
-        height: 80%;
+        min-width: 600px;
+        aspect-ratio: 600/550;
     }
     .login-form .card{
         background: linear-gradient(to bottom, rgba(103,28,12, 0.8) 7%, rgba(189,77,41,0.6) 30%, rgba(247,139,74,0.4) 80%);
@@ -92,10 +91,10 @@
                 <form class="login-form" action="{{ route('admin.login') }}" method="POST" id="login-form" data-block>
                     @csrf
                     <div class="card mb-0 h-100">
+                        <div class="logo">
+                            <img src="{{ asset(('images/logo-login.png')) }}" alt="">
+                        </div>
                         <div class="card-body h-100">
-                            <div class="logo">
-                                <img src="{{ asset(('images/logo-login.png')) }}" alt="">
-                            </div>
                             <div class="text-center mb-5 mt-3">
                                 <h3 class="mb-0 login-text">{{ __('Login') }}</h3>
                             </div>
