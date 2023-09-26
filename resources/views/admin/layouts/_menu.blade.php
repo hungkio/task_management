@@ -49,15 +49,12 @@
 
                 <!-- Main -->
                 <li class="nav-item-header">
-                    <div class="text-uppercase font-size-xs line-height-xs">
+                    <div class="text-uppercase font-size-xs line-height-xs d-flex justify-content-between">
                         {{ __('Menu') }}
-                        <a href="{{ route('admin.dashboards') }}"
-                           class="navbar-nav-link sidebar-control sidebar-main-toggle d-none d-md-block menu-nav">
+                        <span id="toggle-button">
                             <i class="fal fa-bars"></i>
-                        </a>
+                        </span>
                     </div>
-                    <i class="fal fa-bars navbar-nav-link sidebar-control sidebar-main-toggle"
-                       title="{{ __('Menu') }}"></i>
                 </li>
 
                 @can('customer.view')

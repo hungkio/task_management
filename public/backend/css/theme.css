@@ -379,7 +379,6 @@ a.text-primary:focus, a.text-primary:hover{
 
 .text-danger{
     color: #f44336;
-    background-color: #FFE0E0;
     padding: 7px;
 }
 
@@ -513,7 +512,9 @@ a.text-primary:focus, a.text-primary:hover{
     left: 50%;
     cursor: pointer;
 }
-
+.sidebar{
+    transition: all 0.5s;
+}
 .sidebar-component.sidebar-light{
     border: none;
 }
@@ -541,7 +542,15 @@ a.text-primary:focus, a.text-primary:hover{
 .dt-buttons-full .dt-buttons>.btn{
     margin-left: -1px;
 }
-
+.menu-puller{
+    padding: 10px;
+    padding-left: 7px;
+    display: flex;
+    position: fixed;
+    top: 50%;
+    z-index: 100;
+    background-color: #0c213a;
+}
 @media (min-width: 768px){
     .sidebar-xs .sidebar-main .nav-sidebar>.nav-item>.nav-link>i {
         width: auto !important;
@@ -575,6 +584,9 @@ a.text-primary:focus, a.text-primary:hover{
         margin-bottom: .5rem;
         box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
         border: none;
+    }
+    #toggle-button i{
+        display: none;
     }
 }
 

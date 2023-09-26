@@ -148,6 +148,15 @@ $(document).on('click', '.js-delete', function () {
     })
 })
 
+$(document).on('click', '#toggle-button', function() {
+    $('.sidebar').removeClass('sidebar-expand-md');
+    $('.menu-puller').removeClass('d-none');
+})
+$(document).on('click', '.menu-puller', function () {
+    $('.sidebar').addClass('sidebar-expand-md');
+    $('.menu-puller').addClass('d-none');
+})
+
 function readURL(input, preview) {
     if (input.files && input.files[0]) {
         var reader = new FileReader();

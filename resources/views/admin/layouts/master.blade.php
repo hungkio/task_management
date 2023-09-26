@@ -29,6 +29,7 @@
     <div class="page-content mt-52">
 
         <!-- Main sidebar -->
+        @include('admin.layouts._menu-puller')
         @include('admin.layouts._menu')
         <!-- /main sidebar -->
 
