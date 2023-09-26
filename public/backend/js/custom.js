@@ -149,11 +149,11 @@ $(document).on('click', '.js-delete', function () {
 })
 
 $(document).on('click', '#toggle-button', function() {
-    $('.sidebar').removeClass('sidebar-expand-md');
+    $('.sidebar').addClass('w-0');
     $('.menu-puller').removeClass('d-none');
 })
 $(document).on('click', '.menu-puller', function () {
-    $('.sidebar').addClass('sidebar-expand-md');
+    $('.sidebar').removeClass('w-0');
     $('.menu-puller').addClass('d-none');
 })
 
