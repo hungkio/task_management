@@ -8,7 +8,7 @@
 
     <div class="navbar-collapse collapse" id="navbar-footer">
         <span class="navbar-text">
-            &copy; 2020 - {{ date('Y', strtotime(now())) }} - {{ __('Được phát triển và duy trì bởi') }} <a href="https://lapo.vn" target="_blank" style="color: #1989fa !important;">LAPO.VN</a>
+{{--            &copy; 2020 - {{ date('Y', strtotime(now())) }} - {{ __('Được phát triển và duy trì bởi') }} <a href="https://lapo.vn" target="_blank" style="color: #1989fa !important;">LAPO.VN</a>--}}
         </span>
     </div>
 </div>
