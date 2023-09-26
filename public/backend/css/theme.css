@@ -512,13 +512,19 @@ a.text-primary:focus, a.text-primary:hover{
     left: 50%;
     cursor: pointer;
 }
+#toggle-button{
+    padding: 0 10px;
+}
 .sidebar{
-    transition: all 0.5s;
+    overflow: hidden;
+    transition: all 0.5s !important;
 }
 .sidebar-component.sidebar-light{
     border: none;
 }
-
+.w-0{
+    width: 0;
+}
 .form-control:hover{
     -webkit-transition: border-color .2s cubic-bezier(.645,.045,.355,1);
     transition: border-color .2s cubic-bezier(.645,.045,.355,1);
@@ -550,6 +556,10 @@ a.text-primary:focus, a.text-primary:hover{
     top: 50%;
     z-index: 100;
     background-color: #0c213a;
+    cursor: pointer;
+}
+.sidebar li{
+    white-space: nowrap;
 }
 @media (min-width: 768px){
     .sidebar-xs .sidebar-main .nav-sidebar>.nav-item>.nav-link>i {
