@@ -29,7 +29,7 @@ class DBCheckTaskDataTable extends BaseDatable
             ->editColumn('instruction', fn(Tasks $task) => $task->instruction)
             ->editColumn('dbcheck', fn(Tasks $task) => $task->checker->id == 1 ? "" : ($task->checker->email ?? ''))
             ->editColumn('dbcheck_num', fn(Tasks $task) => $task->dbcheck_num)
-            ->editColumn('updated_at', fn(Tasks $task) => formatDate($task->updated_at, 'd/m/Y H:i:s'))
+            ->editColumn('updated_at', fn(Tasks $task) => formatDate($task->updated_at, 'd/m/y H:i'))
             ->addColumn('action', fn(Tasks $task) => view('admin.dbcheck_tasks._tableAction', compact('task')))
             ->filterColumn('name', function ($query, $keyword) {
                 $query->where('name', 'like', "%$keyword%");

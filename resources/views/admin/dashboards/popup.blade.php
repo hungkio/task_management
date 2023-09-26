@@ -117,6 +117,28 @@
               @endforeach
             </select>
           </div>
+
+            @if(auth()->user()->getRoleNames()[0] !== 'editor')
+                <div class="form-group">
+                    <label for="select-taxon" class="text-lg-right col-form-label">
+                        {{ __('Excellent') }}
+                    </label>
+                    <select name="excellent" class="form-control" data-width="100%">
+                        <option value="{{ \App\Tasks::EXCELLENT }}"
+                                @if(\App\Tasks::EXCELLENT == @$task->excellent) selected @endif>
+                            {{ 'EXCELLENT' }}
+                        </option>
+                        <option value="{{ \App\Tasks::NOT_EXCELLENT }}"
+                                @if(\App\Tasks::NOT_EXCELLENT == @$task->excellent) selected @endif>
+                            {{ 'NOT EXCELLENT' }}
+                        </option>
+                    </select>
+                    <div class="clearfix"></div>
+                    @error('excellent')
+                    <span class="form-text text-danger">{{ $message }}</span>
+                    @enderror
+                </div>
+            @endif
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

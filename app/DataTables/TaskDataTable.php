@@ -30,8 +30,8 @@ class TaskDataTable extends BaseDatable
             ->editColumn('status', fn(Tasks $task) => Tasks::STATUS[$task->status])
             ->editColumn('editor_id', fn(Tasks $task) => $task->editor->email ?? '')
             ->editColumn('QA_id', fn(Tasks $task) => $task->QA->email ?? '')
-            ->editColumn('created_at', fn(Tasks $task) => formatDate($task->created_at, 'd/m/Y H:i:s'))
-            ->editColumn('start_at', fn(Tasks $task) => $task->start_at ? formatDate($task->start_at, 'd/m/Y H:i:s') : "")
+            ->editColumn('created_at', fn(Tasks $task) => formatDate($task->created_at, 'd/m/y H:i'))
+            ->editColumn('start_at', fn(Tasks $task) => $task->start_at ? formatDate($task->start_at, 'd/m/y H:i') : "")
             ->addColumn('action', fn(Tasks $task) => view('admin.tasks._tableAction', compact('task')))
             ->filterColumn('name', function ($query, $keyword) {
                 $query->where('name', 'like', "%$keyword%");

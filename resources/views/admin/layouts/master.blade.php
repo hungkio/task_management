@@ -47,9 +47,10 @@
 
                 @include('admin.layouts._alert')
 
-                @include('admin.dashboards.greetings-popup')
-                @include('admin.components.greeting')
-                
+                @if(!auth()->user()->customer)
+                    @include('admin.dashboards.greetings-popup')
+                    @include('admin.components.greeting')
+                @endif
                 @yield('page-content')
 
             </div>

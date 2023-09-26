@@ -96,9 +96,9 @@
             <th class="border bg-blue text-center">
                 <div class="relative"><span class="colHeader">Num</span></div>
             </th>
-            <th class="border bg-blue text-center">
-                <div class="relative"><span class="colHeader">Tên nhiệm vụ</span></div>
-            </th>
+{{--            <th class="border bg-blue text-center">--}}
+{{--                <div class="relative"><span class="colHeader">Tên nhiệm vụ</span></div>--}}
+{{--            </th>--}}
             <th class="border bg-blue text-center">
                 <div class="relative"><span class="colHeader">Tên job</span></div>
             </th>
@@ -142,7 +142,7 @@
                     <td class="border text-center">{{ $task->customer }}</td>
                     <td class="border text-center">{{ $task->level }}</td>
                     <td class="border text-center">{{ $task->countRecord }}</td>
-                    <td class="border text-center">{{ $task->name }}</td>
+{{--                    <td class="border text-center">{{ $task->name }}</td>--}}
                     <td class="border text-center">{{ $task->case }}</td>
                     <td class="border text-center">{{ $task->editor->email ?? '' }}</td>
                     <td class="border text-center">{{ $task->QA->email ?? '' }}</td>
