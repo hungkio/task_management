@@ -17,6 +17,9 @@
         background: linear-gradient(to bottom, rgba(103,28,12, 0.8) 7%, rgba(189,77,41,0.6) 30%, rgba(247,139,74,0.4) 80%);
         border: solid 2px #8e6efa;
     }
+    .login-form .form-group{
+        margin-bottom: 36px;
+    }
     .logo{
         max-width: 150px;
         width: 100%;
@@ -76,6 +79,14 @@
     .btn-login:focus{
         outline: none;
     }
+    .login-form .text-danger{
+        background-color: #FFE0E0;
+        position: absolute;
+        width: 100%;
+        bottom: -32px;
+        margin-top: 0;
+        border-radius: 0 0 6px 6px;
+    }
   </style>
 @endpush
 @section('content')
@@ -95,7 +106,7 @@
                             <img src="{{ asset(('images/logo-login.png')) }}" alt="">
                         </div>
                         <div class="card-body h-100">
-                            <div class="text-center mb-5 mt-3">
+                            <div class="text-center mb-3 mt-3">
                                 <h3 class="mb-0 login-text">{{ __('Login') }}</h3>
                             </div>
 
