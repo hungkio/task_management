@@ -96,7 +96,7 @@
           <div class="form-group">
             <div class="row">
               <div class="col d-flex">
-                <span class="mr-2 d-inline-block" for="redo">Redo:</span>
+                <span class="mr-2 d-inline-block" for="redo">Redo {{ $task->redo ? " ($task->redo) " : '' }}:</span>
                 <input class="" style="width: 20px" type="checkbox" id="redo" name="redo">
               </div>
             </div>

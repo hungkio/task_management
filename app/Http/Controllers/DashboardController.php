@@ -223,6 +223,20 @@ class DashboardController
             $styles = json_decode($task->Customer->styles,1);
         }
         $task->styles = $styles;
+
+        if ($task->redo) {
+            $blacklist = json_decode($task->redo);
+            $users = Admin::whereIn('id', $blacklist)->get('email');
+            $users_arr = [];
+            foreach ($users as $user) {
+                $users_arr[] = $user->email;
+            }
+
+            if ($users_arr) {
+                $task->redo = implode(', ', $users_arr);
+            }
+        }
+
         return view('admin.dashboards.popup')->with([
             'task' => $task,
             'roleName' => $roleName,
