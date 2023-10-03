@@ -103,7 +103,8 @@
           </div>
           <div class="form-group">
             <label for="">QA Note:</label>
-            <input class="form-control" type="text" value="{{$task->QA_note}}" name="QA_note" />
+              <textarea class="form-control" name="QA_note"  rows="5">{!! $task->QA_note !!}</textarea>
+{{--              <input class="form-control" type="text" value="{{$task->QA_note}}" name="QA_note" />--}}
           </div>
           <div class="form-group">
             <label for="">Bad:</label>

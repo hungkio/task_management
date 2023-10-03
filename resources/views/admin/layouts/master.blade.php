@@ -47,7 +47,7 @@
 
                 @include('admin.layouts._alert')
 
-                @if(!auth()->user()->customer)
+                @if(!request()->routeIs('admin.customer_tasks*'))
                     @include('admin.dashboards.greetings-popup')
                     @include('admin.components.greeting')
                 @endif

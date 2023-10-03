@@ -151,13 +151,14 @@
                                 >
                                 </x-text-field>
 
-                                <x-text-field
-                                    name="QA_note"
-                                    :placeholder="__('QA ghi chú')"
-                                    :label="__('QA ghi chú')"
-                                    :value="$task->QA_note"
-                                >
-                                </x-text-field>
+                                <div class="form-group row">
+                                    <label class="col-lg-2 col-form-label text-lg-right" for="QA_note">
+                                        QA ghi chú:
+                                    </label>
+                                    <div class="col-lg-9">
+                                        <textarea class="form-control" name="QA_note" id="QA_note" rows="5">{!! $task->QA_note !!}</textarea>
+                                    </div>
+                                </div>
 
                                 <x-text-field
                                     name="instruction"
