@@ -1030,7 +1030,6 @@
       // when click on task, show popup
       $(document).on('click', '.dashboard-case .card', function () {
         var popupUrl = $(this).data('url');
-        console.log(popupUrl);
         $.ajax({
           type: 'Get',
           url: popupUrl,

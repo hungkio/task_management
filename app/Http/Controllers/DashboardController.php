@@ -257,8 +257,8 @@ class DashboardController
                 $black_list = [$task->editor_id];
             }
             $task->update([
-                'editor_id' => null,
-                'status' => Tasks::WAITING,
+//                'editor_id' => null,
+//                'status' => Tasks::WAITING,
                 'redo' => json_encode($black_list)
             ]);
             unset($inputData['redo']);
