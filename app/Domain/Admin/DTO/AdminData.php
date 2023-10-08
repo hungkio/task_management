@@ -34,7 +34,7 @@ class AdminData extends DataTransferObject
             'level' => implode(',', $request->input('level')),
             'is_ctv' => ($request->input('is_ctv') == 'on') ? 1 : 0,
             'lock_task' => $request->input('lock_task'),
-            'customer' => $request->input('customer'),
+            'customer' => $request->input('customer') ?? '',
         ]);
     }
 }

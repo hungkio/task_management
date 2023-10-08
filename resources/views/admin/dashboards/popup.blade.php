@@ -96,14 +96,15 @@
           <div class="form-group">
             <div class="row">
               <div class="col d-flex">
-                <span class="mr-2 d-inline-block" for="redo">Redo:</span>
+                <span class="mr-2 d-inline-block" for="redo">Redo {{ $task->redo ? " ($task->redo) " : '' }}:</span>
                 <input class="" style="width: 20px" type="checkbox" id="redo" name="redo">
               </div>
             </div>
           </div>
           <div class="form-group">
             <label for="">QA Note:</label>
-            <input class="form-control" type="text" value="{{$task->QA_note}}" name="QA_note" />
+              <textarea class="form-control" name="QA_note"  rows="5">{!! $task->QA_note !!}</textarea>
+{{--              <input class="form-control" type="text" value="{{$task->QA_note}}" name="QA_note" />--}}
           </div>
           <div class="form-group">
             <label for="">Bad:</label>
@@ -117,6 +118,28 @@
               @endforeach
             </select>
           </div>
+
+            @if(auth()->user()->getRoleNames()[0] !== 'editor')
+                <div class="form-group">
+                    <label for="select-taxon" class="text-lg-right col-form-label">
+                        {{ __('Excellent') }}
+                    </label>
+                    <select name="excellent" class="form-control" data-width="100%">
+                        <option value="{{ \App\Tasks::EXCELLENT }}"
+                                @if(\App\Tasks::EXCELLENT == @$task->excellent) selected @endif>
+                            {{ 'EXCELLENT' }}
+                        </option>
+                        <option value="{{ \App\Tasks::NOT_EXCELLENT }}"
+                                @if(\App\Tasks::NOT_EXCELLENT == @$task->excellent) selected @endif>
+                            {{ 'NOT EXCELLENT' }}
+                        </option>
+                    </select>
+                    <div class="clearfix"></div>
+                    @error('excellent')
+                    <span class="form-text text-danger">{{ $message }}</span>
+                    @enderror
+                </div>
+            @endif
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
