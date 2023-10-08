@@ -7,7 +7,7 @@
       opacity: 0;
     }
   }
-.greeting h3{
+.greeting h2{
     animation: blinker 1.5s linear infinite;
     text-align: center;
 }
@@ -16,4 +16,45 @@
     text-transform: uppercase;
     font-size: 20px;
     line-height: 100%;
+}
+.project-name{
+    font-family: 'britannic';
+    background-color: none;
+    text-transform: uppercase;
+}
+.project-name.in-progress{
+    color: #000;
+}
+.project-name.todo{
+    color: #2b17dd;
+}
+.project-name.testing{
+    color: #2b17dd;
+}
+.project-name.bug,
+.project-name.instruction{
+    color: #d52c22;
+}
+.project-name.excellent,
+.project-name.bad{
+    color: #b713bf;
+    background-color: #000;
+}
+button.done-task{
+    background-color: unset;
+    color: #2b17dd;
+    font-family: 'britannic';
+    text-transform: uppercase;
+}
+.time-box{
+    display: flex;
+    flex-direction: column;
+}
+.countdown{
+    font-weight: bold;
+}
+span.deadline{
+    font-weight: bold;
+    color: #c3cc46;
+    background: #000;
 }
