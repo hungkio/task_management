@@ -27,19 +27,26 @@
     .in-progress,
     .to-do,
     .start-task {
-      background-color: #1890ff;
+      background-color: #3f2e02;
+      position: relative;
+      justify-content: center;
     }
     .testing {
-      background-color: #ebc334;
+      background-color: #3f2e02;
+      position: relative;
+      justify-content: center;
     }
 
     .bug {
-      background-color: #BB0000;
+      background-color: #3f2e02;
+      justify-content: center;
     }
 
     .done,
     .no-bug {
-      background-color: #458B00;
+      background-color: #3f2e02;
+      position: relative;
+      justify-content: center;
     }
 
     .content-wrapper {
@@ -67,6 +74,22 @@
     }
     .counter{
       color: white;
+      position: absolute;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+    }
+    .in-progress .counter{
+      background: #1890ff;
+    }
+    .testing .counter{
+      background: #ebc334;
+    }
+    .done .counter{
+      background: #458B00;
     }
     .counter:empty{
       display: none;
@@ -145,8 +168,8 @@
       <div class="dashboard d-flex justify-content-between">
         <!-- To do tasks -->
         <div class="task-column w-100 shadow-sm bg-white">
-          <div class="in-progress p-2 text-white d-flex justify-content-between">
-            <span>
+          <div class="in-progress p-2 text-white d-flex">
+            <span class="column-heading">
               In Progress
             </span>
             <span id="in-progress-counter" class="counter"></span>
@@ -379,8 +402,8 @@
         </div>
         <!-- Testing tasks -->
         <div class="task-column w-100 shadow-sm bg-white">
-          <div class="testing p-2 text-white d-flex justify-content-between">
-            <span>
+          <div class="testing p-2 text-white d-flex">
+            <span class="column-heading">
               Testing
             </span>
             <span id="testing-counter" class="counter"></span>
@@ -471,8 +494,8 @@
         </div>
         <!-- tasks completed -->
         <div class="task-column w-100 shadow-sm bg-white">
-          <div class="done p-2 text-white d-flex justify-content-between">
-            <span>
+          <div class="done p-2 text-white d-flex">
+            <span class="column-heading">
               Done
             </span>
             <span id="done-counter" class="counter"></span>
