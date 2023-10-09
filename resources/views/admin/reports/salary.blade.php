@@ -79,7 +79,15 @@
     {{--Full--}}
     <button class="dt-button buttons-collection buttons-export btn btn-primary  mt-3"
             onclick="exportMultipleTable(['full'], 'ReportAllCase');"
-            type="button" aria-haspopup="true"><span><i class="fal fa-download mr-2"></i>Xuất</span>
+            type="button" aria-haspopup="true"><span><i class="fal fa-download mr-2"></i>Xuất Data sản phẩm </span>
+    </button>
+    <button class="dt-button buttons-collection buttons-export btn btn-primary  mt-3"
+            onclick="exportMultipleTable(['full1'], 'ReportAllCase1');"
+            type="button" aria-haspopup="true"><span><i class="fal fa-download mr-2"></i>Xuất Data Hiệu xuất </span>
+    </button>
+    <button class="dt-button buttons-collection buttons-export btn btn-primary  mt-3"
+            onclick="exportMultipleTable(['full2'], 'ReportAllCase2');"
+            type="button" aria-haspopup="true"><span><i class="fal fa-download mr-2"></i> Xuất Data Note Quality  </span>
     </button>
     <table class="full w-100" style="display: table;" id="full">
         <thead>
@@ -96,9 +104,6 @@
             <th class="border bg-blue text-center">
                 <div class="relative"><span class="colHeader">Num</span></div>
             </th>
-{{--            <th class="border bg-blue text-center">--}}
-{{--                <div class="relative"><span class="colHeader">Tên nhiệm vụ</span></div>--}}
-{{--            </th>--}}
             <th class="border bg-blue text-center">
                 <div class="relative"><span class="colHeader">Tên job</span></div>
             </th>
@@ -112,25 +117,10 @@
                 <div class="relative"><span class="colHeader">Kết quả QA</span></div>
             </th>
             <th class="border bg-blue text-center">
-                <div class="relative"><span class="colHeader">QA ghi chú</span></div>
-            </th>
-            <th class="border bg-blue text-center">
-                <div class="relative"><span class="colHeader">Bad</span></div>
-            </th>
-            <th class="border bg-blue text-center">
                 <div class="relative"><span class="colHeader">Tổng số phút ghi nhận</span></div>
             </th>
             <th class="border bg-blue text-center">
                 <div class="relative"><span class="colHeader">Phút/ 1 ảnh</span></div>
-            </th>
-            <th class="border bg-blue text-center">
-                <div class="relative"><span class="colHeader">Excellent</span></div>
-            </th>
-            <th class="border bg-blue text-center">
-                <div class="relative"><span class="colHeader">Editor Time</span></div>
-            </th>
-            <th class="border bg-blue text-center">
-                <div class="relative"><span class="colHeader">QA Time</span></div>
             </th>
         </tr>
         </thead>
@@ -142,12 +132,89 @@
                     <td class="border text-center">{{ $task->customer }}</td>
                     <td class="border text-center">{{ $task->level }}</td>
                     <td class="border text-center">{{ $task->countRecord }}</td>
-{{--                    <td class="border text-center">{{ $task->name }}</td>--}}
                     <td class="border text-center">{{ $task->case }}</td>
                     <td class="border text-center">{{ $task->editor->email ?? '' }}</td>
                     <td class="border text-center">{{ $task->QA->email ?? '' }}</td>
                     <td class="border text-center">{{ $task->QA_check_num }}</td>
-                    <td class="border text-center">{{ $task->QA_note }}</td>
+                    <td class="border text-center">{{ $task->timespent }}</td>
+                    <td class="border text-center">{{ $task->average }}</td>
+
+                </tr>
+            @endforeach
+        @endif
+        </tbody>
+    </table>
+
+
+    <button class="dt-button buttons-collection buttons-export btn btn-primary  mt-3"
+            onclick="exportMultipleTable(['full1'], 'ReportAllCase1');"
+            type="button" aria-haspopup="true"><span><i class="fal fa-download mr-2"></i>Xuất Data Hiệu xuất </span>
+    </button>
+    <table class="full1 w-100" style="display: table;" id="full1">
+        <thead>
+        <tr class="border">
+            <th class="border bg-blue text-center">
+                <div class="relative"><span class="colHeader">N/T</span></div>
+            </th>
+            <th class="border bg-blue text-center">
+                <div class="relative"><span class="colHeader">Tên KH</span></div>
+            </th>
+            <th class="border bg-blue text-center">
+                <div class="relative"><span class="colHeader">AX</span></div>
+            </th>
+            <th class="border bg-blue text-center">
+                <div class="relative"><span class="colHeader">Num</span></div>
+            </th>
+            <th class="border bg-blue text-center">
+                <div class="relative"><span class="colHeader">Tên job</span></div>
+            </th>
+            <th class="border bg-blue text-center">
+                <div class="relative"><span class="colHeader">Người thực hiện</span></div>
+            </th>
+            <th class="border bg-blue text-center">
+                <div class="relative"><span class="colHeader">Người kiểm tra</span></div>
+            </th>
+            <th class="border bg-blue text-center">
+                <div class="relative"><span class="colHeader">Kết quả QA</span></div>
+            </th>
+            <th class="border bg-blue text-center">
+                <div class="relative"><span class="colHeader">Bad</span></div>
+            </th>
+            <th class="border bg-blue text-center">
+                <div class="relative"><span class="colHeader">Redo</span></div>
+            </th>
+            <th class="border bg-blue text-center">
+                <div class="relative"><span class="colHeader">Excellent</span></div>
+            </th>
+            <th class="border bg-blue text-center">
+                <div class="relative"><span class="colHeader">Editor Start</span></div>
+            </th>
+            <th class="border bg-blue text-center">
+                <div class="relative"><span class="colHeader">Editor End</span></div>
+            </th>
+            <th class="border bg-blue text-center">
+                <div class="relative"><span class="colHeader">QA Start</span></div>
+            </th>
+            <th class="border bg-blue text-center">
+                <div class="relative"><span class="colHeader">QA End</span></div>
+            </th>
+            <th class="border bg-blue text-center">
+                <div class="relative"><span class="colHeader">Tổng số phút ghi nhận</span></div>
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        @if(!empty($tasks))
+            @foreach($tasks as $key => $task)
+                <tr>
+                    <td class="border text-center">{{ formatDate($task->created_at) }}</td>
+                    <td class="border text-center">{{ $task->customer }}</td>
+                    <td class="border text-center">{{ $task->level }}</td>
+                    <td class="border text-center">{{ $task->countRecord }}</td>
+                    <td class="border text-center">{{ $task->case }}</td>
+                    <td class="border text-center">{{ $task->editor->email ?? '' }}</td>
+                    <td class="border text-center">{{ $task->QA->email ?? '' }}</td>
+                    <td class="border text-center">{{ $task->QA_check_num }}</td>
                     <td class="border text-center">
                         @if($task->redo_note)
                             @foreach(\App\Domain\Admin\Models\Admin::BAD as $bad)
@@ -155,12 +222,72 @@
                             @endforeach
                         @endif
                     </td>
-                    <td class="border text-center">{{ $task->timespent }}</td>
-                    <td class="border text-center">{{ $task->average }}</td>
+                    <td class="border text-center">{{ $task->redo }}</td>
                     <td class="border text-center">{{ $task->excellent ? "Excellent" : "" }}</td>
-                    <td class="border text-center">{{ $task->editor_spend }}</td>
-                    <td class="border text-center">{{ $task->QA_spend }}</td>
+                    <td class="border text-center">{{ $task->start_at? formatDate($task->start_at, 'd/m/Y H:i'): '' }}</td>
+                    <td class="border text-center">{{ $task->end_at ? formatDate($task->end_at, 'd/m/Y H:i') : '' }}</td>
+                    <td class="border text-center">{{ $task->QA_start ? formatTime($task->QA_start, 'Y-m-d H:i') : '' }}</td>
+                    <td class="border text-center">{{ $task->QA_end ? formatTime($task->QA_end, 'Y-m-d H:i') : '' }}</td>
+                    <td class="border text-center">{{ $task->timespent }}</td>
 
+
+                    {{--                    <td class="border text-center">{{ $task->QA_spend }}</td>--}}
+
+                </tr>
+            @endforeach
+        @endif
+        </tbody>
+    </table>
+
+    <button class="dt-button buttons-collection buttons-export btn btn-primary  mt-3"
+            onclick="exportMultipleTable(['full2'], 'ReportAllCase2');"
+            type="button" aria-haspopup="true"><span><i class="fal fa-download mr-2"></i> Xuất Data Note Quality  </span>
+    </button>
+    <table class="full2 w-100" style="display: table;" id="full2">
+        <thead>
+        <tr class="border">
+            <th class="border bg-blue text-center">
+                <div class="relative"><span class="colHeader">N/T</span></div>
+            </th>
+            <th class="border bg-blue text-center">
+                <div class="relative"><span class="colHeader">Tên KH</span></div>
+            </th>
+            <th class="border bg-blue text-center">
+                <div class="relative"><span class="colHeader">AX</span></div>
+            </th>
+            <th class="border bg-blue text-center">
+                <div class="relative"><span class="colHeader">Num</span></div>
+            </th>
+            <th class="border bg-blue text-center">
+                <div class="relative"><span class="colHeader">Tên job</span></div>
+            </th>
+            <th class="border bg-blue text-center">
+                <div class="relative"><span class="colHeader">Người thực hiện</span></div>
+            </th>
+            <th class="border bg-blue text-center">
+                <div class="relative"><span class="colHeader">Người kiểm tra</span></div>
+            </th>
+            <th class="border bg-blue text-center">
+                <div class="relative"><span class="colHeader">Kết quả QA</span></div>
+            </th>
+            <th class="border bg-blue text-center">
+                <div class="relative"><span class="colHeader">QA note</span></div>
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        @if(!empty($tasks))
+            @foreach($tasks as $key => $task)
+                <tr>
+                    <td class="border text-center">{{ formatDate($task->created_at) }}</td>
+                    <td class="border text-center">{{ $task->customer }}</td>
+                    <td class="border text-center">{{ $task->level }}</td>
+                    <td class="border text-center">{{ $task->countRecord }}</td>
+                    <td class="border text-center">{{ $task->case }}</td>
+                    <td class="border text-center">{{ $task->editor->email ?? '' }}</td>
+                    <td class="border text-center">{{ $task->QA->email ?? '' }}</td>
+                    <td class="border text-center">{{ $task->QA_check_num }}</td>
+                    <td class="border text-center">{{ $task->QA_note }}</td>
                 </tr>
             @endforeach
         @endif
