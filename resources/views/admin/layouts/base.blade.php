@@ -19,6 +19,7 @@
     <link href="{{ asset('/backend/css/components.min.css') }}" rel="stylesheet" type="text/css">
     <link href="{{ asset('/backend/css/colors.min.css') }}" rel="stylesheet" type="text/css">
     <link href="{{ asset('/backend/css/theme.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ asset('/backend/css/custom.css') }}" rel="stylesheet" type="text/css">
     <link href="{{ asset('/backend/fontawesome/css/all.css') }}" rel="stylesheet" type="text/css">
     <!-- /global stylesheets -->
     @stack('css')

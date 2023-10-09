@@ -24,22 +24,24 @@
       animation: all 0.5s;
     }
 
-    .in-progress,
-    .to-do,
-    .start-task {
-      background-color: #1890ff;
+    .task-column > .in-progress,
+    .task-column > .to-do,
+    .task-column > .start-task {
+      background-color: #3f2e02;
+      position: relative;
+      justify-content: center;
     }
-    .testing {
-      background-color: #ebc334;
+    .task-column > .testing {
+      background-color: #3f2e02;
+      position: relative;
+      justify-content: center;
     }
 
-    .bug {
-      background-color: #BB0000;
-    }
-
-    .done,
-    .no-bug {
-      background-color: #458B00;
+    .task-column > .done,
+    .task-column > .no-bug {
+      background-color: #3f2e02;
+      position: relative;
+      justify-content: center;
     }
 
     .content-wrapper {
@@ -67,6 +69,22 @@
     }
     .counter{
       color: white;
+      position: absolute;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+    }
+    .in-progress .counter{
+      background: #1890ff;
+    }
+    .testing .counter{
+      background: #ebc334;
+    }
+    .done .counter{
+      background: #458B00;
     }
     .counter:empty{
       display: none;
@@ -98,31 +116,6 @@
     div.deadline {
         position: relative;
     }
-      span.deadline {
-          position: absolute;
-          padding: 5px;
-          border: 1px solid;
-          border-radius: 20px;
-          background: #4caf50;
-          font-weight: 600;
-          color: white;
-          top: -18px;
-          right: -19px;
-      }
-      span.late {
-          background: #f44336;
-      }
-    .countdown {
-        width: 100px;
-        margin-bottom: 10px;
-    }
-      .countdown span {
-          padding: 5px;
-          background: #279f1f;
-          border-radius: 8px;
-          color: white;
-          font-weight: 600;
-      }
     .countdown span.expired {
         background: red;
     }
@@ -145,8 +138,8 @@
       <div class="dashboard d-flex justify-content-between">
         <!-- To do tasks -->
         <div class="task-column w-100 shadow-sm bg-white">
-          <div class="in-progress p-2 text-white d-flex justify-content-between">
-            <span>
+          <div class="in-progress p-2 text-white d-flex">
+            <span class="column-heading">
               In Progress
             </span>
             <span id="in-progress-counter" class="counter"></span>
@@ -171,18 +164,6 @@
                   <div class="card-body px-3 py-3">
                     <div class="card-text mb-1 deadline">
                         {{$task->name}}
-                        @if($task->deadline)
-                            <?php
-                            $isLate = false;
-                            $hour = date_create_from_format('Y-m-d H:i', $task->deadline)->format('H');
-                            $now = date('Y-m-d H:i');
-
-                            if ($now > $task->deadline) {
-                                $isLate = true;
-                            }
-                            ?>
-                            <span class="deadline @if($isLate) late @endif">{{ $hour }}h</span>
-                        @endif
                     </div>
                     @if (@$editor)
                       <div class="card-text mb-1">
@@ -204,23 +185,35 @@
                     </div>
                     <div class="button-box d-flex justify-content-between">
                       <div
-                        class="status px-2 rounded to-do d-inline-block p-1 fw-semibold text-white project-name">
+                        class="status to-do d-inline-block project-name">
                         To do
                       </div>
                       @if ($task->instruction)
-                        <div class="px-2 rounded btn-warning d-inline-block p-1 fw-semibold text-white project-name">
+                        <div class="d-inline-block project-name instruction">
                           Instruction
                         </div>
                       @endif
                         @if ($task->redo)
-                            <div class="px-2 rounded btn-danger d-inline-block p-1 fw-semibold text-white project-name">
+                            <div class="btn-danger d-inline-block project-name">
                                 Redo
                             </div>
                         @endif
                         @if ($task->redo_note)
-                            <div class="px-2 rounded btn-purple d-inline-block p-1 fw-semibold text-white project-name">
+                            <div class="d-inline-block project-name bad">
                                 Bad
                             </div>
+                        @endif
+                        @if($task->deadline)
+                            <?php
+                            $isLate = false;
+                            $hour = date_create_from_format('Y-m-d H:i', $task->deadline)->format('H');
+                            $now = date('Y-m-d H:i');
+
+                            if ($now > $task->deadline) {
+                                $isLate = true;
+                            }
+                            ?>
+                            <span class="deadline @if($isLate) late @endif">{{ $hour }}h</span>
                         @endif
                       <button
                         class="start-task px-2 text-white border-0 rounded outline-0 d-inline-block">Start
@@ -245,19 +238,7 @@
                       qa-id="{{ $task->QA_id }}">
                   <div class="card-body px-3 py-3">
                     <div class="card-text mb-1 deadline">
-                        {{$task->name}}
-                        @if($task->deadline)
-                            <?php
-                            $isLate = false;
-                            $hour = date_create_from_format('Y-m-d H:i', $task->deadline)->format('H');
-                            $now = date('Y-m-d H:i');
-
-                            if ($now > $task->deadline) {
-                                $isLate = true;
-                            }
-                            ?>
-                            <span class="deadline @if($isLate) late @endif">{{ $hour }}h</span>
-                        @endif
+                      {{$task->name}}
                     </div>
                     @if (@$editor)
                       <div class="card-text mb-1">
@@ -276,29 +257,45 @@
                         <div class="card-text mb-1">QA checked: {{$task->QA_check_num}}</div>
                       @endif
                     </div>
-                      <div class="countdown"
-                           data-deadline="{{ \Illuminate\Support\Carbon::createFromFormat('Y-m-d H:i:s' , $task->start_at)->addMinutes($task->estimate*($task->countRecord*$task->AX->real_amount ?? 1))->format('Y-m-d H:i:s') }}"></div>
-                      <div class="button-box d-flex justify-content-between">
+                      
+                    <div class="button-box d-flex justify-content-between">
                       <div
-                        class="status px-2 rounded in-progress d-inline-block p-1 fw-semibold text-white project-name">
+                        class="status in-progress d-inline-block project-name">
                         In progress
                       </div>
                       @if ($task->instruction)
                         <div
-                          class=" px-2 rounded btn-warning d-inline-block p-1 fw-semibold text-white project-name">
+                          class="d-inline-block project-name instruction">
                           Instruction
                         </div>
                       @endif
-                        @if ($task->redo)
-                            <div class="px-2 rounded btn-danger d-inline-block p-1 fw-semibold text-white project-name">
-                                Redo
-                            </div>
+                      @if ($task->redo)
+                          <div class="d-inline-block project-name">
+                              Redo
+                          </div>
+                      @endif
+                      @if ($task->redo_note)
+                          <div class="d-inline-block project-name bad">
+                              Bad
+                          </div>
+                      @endif
+                      <div class="time-box">
+                        <div class="countdown"
+                            data-deadline="{{ \Illuminate\Support\Carbon::createFromFormat('Y-m-d H:i:s' , $task->start_at)->addMinutes($task->estimate*($task->countRecord*$task->AX->real_amount ?? 1))->format('Y-m-d H:i:s') }}">
+                        </div>
+                        @if($task->deadline)
+                              <?php
+                              $isLate = false;
+                              $hour = date_create_from_format('Y-m-d H:i', $task->deadline)->format('H');
+                              $now = date('Y-m-d H:i');
+  
+                              if ($now > $task->deadline) {
+                                  $isLate = true;
+                              }
+                              ?>
+                            <span class="deadline @if($isLate) late @endif">{{ $hour }}h</span>
                         @endif
-                        @if ($task->redo_note)
-                            <div class="px-2 rounded btn-purple d-inline-block p-1 fw-semibold text-white project-name">
-                                Bad
-                            </div>
-                        @endif
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -320,18 +317,6 @@
                   <div class="card-body px-3 py-3">
                     <div class="card-text mb-1 deadline">
                         {{$task->name}}
-                        @if($task->deadline)
-                            <?php
-                            $isLate = false;
-                            $hour = date_create_from_format('Y-m-d H:i', $task->deadline)->format('H');
-                            $now = date('Y-m-d H:i');
-
-                            if ($now > $task->deadline) {
-                                $isLate = true;
-                            }
-                            ?>
-                            <span class="deadline @if($isLate) late @endif">{{ $hour }}h</span>
-                        @endif
                     </div>
                     @if (@$editor)
                       <div class="card-text mb-1">
@@ -350,26 +335,40 @@
                         <div class="card-text mb-1">QA checked: {{$task->QA_check_num}}</div>
                       @endif
                     </div>
-                      <div class="countdown" data-deadline="{{ \Illuminate\Support\Carbon::createFromFormat('Y-m-d H:i:s' , $task->start_at)->addMinutes($task->estimate*($task->countRecord*$task->AX->real_amount ?? 1))->format('Y-m-d H:i:s') }}"></div>
-                      <div class="button-box d-flex justify-content-between">
-                      <div class="status px-2 rounded bug d-inline-block p-1 fw-semibold text-white project-name">
+                    <div class="button-box d-flex justify-content-between">
+                      <div class="status bug d-inline-block project-name">
                         Rejected
                       </div>
                       @if ($task->instruction)
-                        <div class=" px-2 rounded btn-warning d-inline-block p-1 fw-semibold text-white project-name">
+                        <div class="d-inline-block project-name instruction">
                           Instruction
                         </div>
                       @endif
-                        @if ($task->redo)
-                            <div class="px-2 rounded btn-danger d-inline-block p-1 fw-semibold text-white project-name">
-                                Redo
-                            </div>
+                      @if ($task->redo)
+                          <div class="d-inline-block project-name">
+                              Redo
+                          </div>
+                      @endif
+                      @if ($task->redo_note)
+                          <div class="d-inline-block project-name bad">
+                              Bad
+                          </div>
+                      @endif
+                      <div class="time-box">
+                        <div class="countdown" data-deadline="{{ \Illuminate\Support\Carbon::createFromFormat('Y-m-d H:i:s' , $task->start_at)->addMinutes($task->estimate*($task->countRecord*$task->AX->real_amount ?? 1))->format('Y-m-d H:i:s') }}"></div>
+                        @if($task->deadline)
+                            <?php
+                            $isLate = false;
+                            $hour = date_create_from_format('Y-m-d H:i', $task->deadline)->format('H');
+                            $now = date('Y-m-d H:i');
+  
+                            if ($now > $task->deadline) {
+                                $isLate = true;
+                            }
+                            ?>
+                            <span class="deadline @if($isLate) late @endif">{{ $hour }}h</span>
                         @endif
-                        @if ($task->redo_note)
-                            <div class="px-2 rounded btn-purple d-inline-block p-1 fw-semibold text-white project-name">
-                                Bad
-                            </div>
-                        @endif
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -379,8 +378,8 @@
         </div>
         <!-- Testing tasks -->
         <div class="task-column w-100 shadow-sm bg-white">
-          <div class="testing p-2 text-white d-flex justify-content-between">
-            <span>
+          <div class="testing p-2 text-white d-flex">
+            <span class="column-heading">
               Testing
             </span>
             <span id="testing-counter" class="counter"></span>
@@ -404,18 +403,6 @@
                   <div class="card-body px-3 py-3">
                     <div class="card-text mb-1 deadline">
                         {{$task->name}}
-                        @if($task->deadline)
-                            <?php
-                            $isLate = false;
-                            $hour = date_create_from_format('Y-m-d H:i', $task->deadline)->format('H');
-                            $now = date('Y-m-d H:i');
-
-                            if ($now > $task->deadline) {
-                                $isLate = true;
-                            }
-                            ?>
-                            <span class="deadline @if($isLate) late @endif">{{ $hour }}h</span>
-                        @endif
                     </div>
                     @if (@$editor)
                       <div class="card-text mb-1">
@@ -434,12 +421,10 @@
                         <div class="card-text mb-1">QA checked: {{$task->QA_check_num}}</div>
                       @endif
                     </div>
-                      @if($task->QA_start)
-                        <div class="countdown" data-deadline="{{ \Illuminate\Support\Carbon::createFromFormat('Y-m-d H:i' , $task->QA_start)->addMinutes($task->estimate_QA*($task->countRecord*$task->AX->real_amount ?? 1))->format('Y-m-d H:i:s') }}"></div>
-                      @endif
-                      <div class="button-box d-flex justify-content-between">
+                      
+                    <div class="button-box d-flex justify-content-between">
                       <div
-                        class="status px-2 rounded {{$task->QA_check_num ? 'bug' : 'testing'}} d-inline-block p-1 fw-semibold text-white project-name">
+                        class="status {{$task->QA_check_num ? 'bug' : 'testing'}} d-inline-block project-name">
                         @if ($task->QA_check_num)
                           Reject resolve
                         @else
@@ -447,20 +432,38 @@
                         @endif
                       </div>
                       @if ($task->instruction)
-                        <div class=" px-2 rounded btn-warning d-inline-block p-1 fw-semibold text-white project-name">
+                        <div class="d-inline-block project-name instruction">
                           Instruction
                         </div>
                       @endif
-                        @if ($task->redo)
-                            <div class="px-2 rounded btn-danger d-inline-block p-1 fw-semibold text-white project-name">
-                                Redo
-                            </div>
+                      @if ($task->redo)
+                          <div class="d-inline-block project-name">
+                              Redo
+                          </div>
+                      @endif
+                      @if ($task->redo_note)
+                          <div class="d-inline-block project-name bad">
+                              Bad
+                          </div>
+                      @endif
+                      <div class="time-box">
+
+                        @if($task->QA_start)
+                        <div class="countdown" data-deadline="{{ \Illuminate\Support\Carbon::createFromFormat('Y-m-d H:i' , $task->QA_start)->addMinutes($task->estimate_QA*($task->countRecord*$task->AX->real_amount ?? 1))->format('Y-m-d H:i:s') }}"></div>
                         @endif
-                        @if ($task->redo_note)
-                            <div class="px-2 rounded btn-purple d-inline-block p-1 fw-semibold text-white project-name">
-                                Bad
-                            </div>
+                        @if($task->deadline)
+                          <?php
+                          $isLate = false;
+                          $hour = date_create_from_format('Y-m-d H:i', $task->deadline)->format('H');
+                          $now = date('Y-m-d H:i');
+  
+                          if ($now > $task->deadline) {
+                              $isLate = true;
+                          }
+                          ?>
+                          <span class="deadline @if($isLate) late @endif">{{ $hour }}h</span>
                         @endif
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -471,8 +474,8 @@
         </div>
         <!-- tasks completed -->
         <div class="task-column w-100 shadow-sm bg-white">
-          <div class="done p-2 text-white d-flex justify-content-between">
-            <span>
+          <div class="done p-2 text-white d-flex">
+            <span class="column-heading">
               Done
             </span>
             <span id="done-counter" class="counter"></span>
@@ -496,16 +499,6 @@
                   <div class="card-body px-3 py-3">
                     <div class="card-text mb-1 deadline">
                         {{$task->name}}
-                        @if($task->deadline)
-                            <?php
-                            $isLate = false;
-                            $hour = date_create_from_format('Y-m-d H:i', $task->deadline)->format('H');
-                            if (strtotime($task->QA_end) > strtotime($task->deadline)) {
-                                $isLate = true;
-                            }
-                            ?>
-                            <span class="deadline @if($isLate) late @endif">{{ $hour }}h</span>
-                        @endif
                     </div>
                     @if (@$editor)
                       <div class="card-text mb-1">
@@ -525,32 +518,42 @@
                       @endif
                     </div>
                     <div class="button-box d-flex justify-content-between">
-                      <div class="status px-2 no-bug rounded d-inline-block p-1 fw-semibold text-white project-name">
+                      <div class="status px-2 no-bug rounded d-inline-block project-name">
                         No bug left
                       </div>
-                        @if ($task->instruction)
-                            <div class="px-2 rounded btn-warning d-inline-block p-1 fw-semibold text-white project-name">
-                                Instruction
-                            </div>
-                        @endif
-                        @if ($task->redo)
-                            <div class="px-2 rounded btn-danger d-inline-block p-1 fw-semibold text-white project-name">
-                                Redo
-                            </div>
-                        @endif
-                        @if ($task->redo_note)
-                            <div class="px-2 rounded btn-danger d-inline-block p-1 fw-semibold text-white project-name">
-                                Bad
-                            </div>
-                        @endif
-                        @if ($task->excellent)
-                            <div class="px-2 rounded btn-purple d-inline-block p-1 fw-semibold text-white project-name">
-                                Excellent
-                            </div>
-                        @endif
-                      <button class="done-task px-2 text-white border-0 rounded outline-0 d-inline-block done">
+                      @if ($task->instruction)
+                          <div class="d-inline-block project-name instruction">
+                              Instruction
+                          </div>
+                      @endif
+                      @if ($task->redo)
+                          <div class="d-inline-block project-name">
+                              Redo
+                          </div>
+                      @endif
+                      @if ($task->redo_note)
+                          <div class="d-inline-block project-name bad">
+                              Bad
+                          </div>
+                      @endif
+                      @if ($task->excellent)
+                          <div class="d-inline-block project-name excellent">
+                              Excellent
+                          </div>
+                      @endif
+                      <button class="done-task border-0 outline-0 d-inline-block done">
                         Finish
                       </button>
+                      @if($task->deadline)
+                          <?php
+                          $isLate = false;
+                          $hour = date_create_from_format('Y-m-d H:i', $task->deadline)->format('H');
+                          if (strtotime($task->QA_end) > strtotime($task->deadline)) {
+                              $isLate = true;
+                          }
+                          ?>
+                          <span class="deadline @if($isLate) late @endif">{{ $hour }}h</span>
+                      @endif
                     </div>
                   </div>
                 </div>
@@ -572,17 +575,6 @@
                   <div class="card-body px-3 py-3">
                     <div class="card-text mb-1 deadline">
                         {{$task->name}}
-                        @if($task->deadline)
-                            <?php
-                            $isLate = false;
-                            $hour = date_create_from_format('Y-m-d H:i', $task->deadline)->format('H');
-                            if (strtotime($task->QA_end) > strtotime($task->deadline)) {
-                                $isLate = true;
-                            }
-                            ?>
-                            <span class="deadline @if($isLate) late @endif">{{ $hour }}h</span>
-                        @endif
-
                     </div>
                     @if (@$editor)
                       <div class="card-text mb-1">
@@ -603,28 +595,38 @@
                     </div>
                     <div class="button-box d-flex justify-content-between">
                         @if ($task->instruction)
-                            <div class="px-2 rounded btn-warning d-inline-block p-1 fw-semibold text-white project-name">
+                            <div class="d-inline-block project-name instruction">
                                 Instruction
                             </div>
                         @endif
                             @if ($task->redo)
-                                <div class="px-2 rounded btn-danger d-inline-block p-1 fw-semibold text-white project-name">
+                                <div class="d-inline-block project-name">
                                     Redo
                                 </div>
                             @endif
                             @if ($task->redo_note)
-                                <div class="px-2 rounded btn-danger d-inline-block p-1 fw-semibold text-white project-name">
+                                <div class="d-inline-block project-name bad">
                                     Bad
                                 </div>
                             @endif
                             @if ($task->excellent)
-                                <div class="px-2 rounded btn-purple d-inline-block p-1 fw-semibold text-white project-name">
+                                <div class="d-inline-block project-name excellent">
                                     Excellent
                                 </div>
                             @endif
-                      <div class="status px-2 rounded done d-inline-block p-1 fw-semibold text-white project-name">
+                      <div class="status px-2 rounded done d-inline-block project-name">
                         Finished
                       </div>
+                      @if($task->deadline)
+                            <?php
+                            $isLate = false;
+                            $hour = date_create_from_format('Y-m-d H:i', $task->deadline)->format('H');
+                            if (strtotime($task->QA_end) > strtotime($task->deadline)) {
+                                $isLate = true;
+                            }
+                            ?>
+                            <span class="deadline @if($isLate) late @endif">{{ $hour }}h</span>
+                        @endif
                     </div>
                   </div>
                 </div>
@@ -717,7 +719,7 @@
               "</div>" +
               "<div class='qa-details'></div>" +
               "<div class='d-flex justify-content-between'>" +
-              "<div class='status px-2 rounded to-do d-inline-block p-1 fw-semibold text-white project-name'>" +
+              "<div class='status px-2 rounded to-do d-inline-block project-name'>" +
               "To do" +
               "</div>" +
               "<button class='start-task px-2 text-white border-0 rounded outline-0 d-inline-block'>Start</button>" +
