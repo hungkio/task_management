@@ -300,7 +300,7 @@ class ReportController
         $customers_list = Tasks::whereDate(DB::raw('DATE(created_at)'), date('Y-m-d', strtotime($date)))->distinct()->pluck('customer');
         $data = [];
         foreach ($customers_list as $customer) {
-            $tasks_amount = Tasks::whereDate(DB::raw('DATE(created_at)'), date('Y-m-d', strtotime($date)))->where('customer',$customer)->get()->unique('case')->count();
+            $tasks_amount = Tasks::whereDate(DB::raw('DATE(created_at)'), date('Y-m-d', strtotime($date)))->where('customer',$customer)->get()->count();
             $duplicateCounts = Tasks::whereDate(DB::raw('DATE(created_at)'), date('Y-m-d', strtotime($date)))->where('customer',$customer)->groupBy('case')
             ->select('case', DB::raw('count(*) as count'))
             ->having('count', '>', 1)
