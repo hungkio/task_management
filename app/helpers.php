@@ -57,6 +57,17 @@ if (!function_exists('formatDate')) {
     }
 }
 
+if (!function_exists('formatTime')) {
+    function formatTime($date, $format): string
+    {
+        if (!$date instanceof Carbon) {
+            $date = Carbon::createFromFormat($format, $date);
+        }
+
+        return $date->format('d/m/Y H:i') ?? '';
+    }
+}
+
 if (!function_exists('intended')) {
     function intended($request, string $defaultUrl)
     {

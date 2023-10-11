@@ -166,6 +166,20 @@ class ReportController
             }
             $task->timespent = $time_spent;
             $task->average = $task->editor_check_num ? gmdate("H:i:s", round($time_spent/$task->editor_check_num, 2)) : 0;
+
+            //redo handle
+            if ($task->redo) {
+                $blacklist = json_decode($task->redo);
+                $users = Admin::whereIn('id', $blacklist)->get('email');
+                $users_arr = [];
+                foreach ($users as $user) {
+                    $users_arr[] = $user->email;
+                }
+
+                if ($users_arr) {
+                    $task->redo = implode(', ', $users_arr);
+                }
+            }
         }
 
         // năng lực
@@ -286,7 +300,7 @@ class ReportController
         $customers_list = Tasks::whereDate(DB::raw('DATE(created_at)'), date('Y-m-d', strtotime($date)))->distinct()->pluck('customer');
         $data = [];
         foreach ($customers_list as $customer) {
-            $tasks_amount = Tasks::whereDate(DB::raw('DATE(created_at)'), date('Y-m-d', strtotime($date)))->where('customer',$customer)->get()->unique('case')->count();
+            $tasks_amount = Tasks::whereDate(DB::raw('DATE(created_at)'), date('Y-m-d', strtotime($date)))->where('customer',$customer)->get()->count();
             $duplicateCounts = Tasks::whereDate(DB::raw('DATE(created_at)'), date('Y-m-d', strtotime($date)))->where('customer',$customer)->groupBy('case')
             ->select('case', DB::raw('count(*) as count'))
             ->having('count', '>', 1)
