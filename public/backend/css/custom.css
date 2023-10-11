@@ -23,10 +23,10 @@
     text-transform: uppercase;
 }
 .project-name.in-progress{
-    color: #000;
+    color: #2b17dd;
 }
 .project-name.todo{
-    color: #2b17dd;
+    color: #000;
 }
 .project-name.testing{
     color: #2b17dd;
@@ -55,6 +55,6 @@ button.done-task{
 }
 span.deadline{
     font-weight: bold;
-    color: #c3cc46;
-    background: #000;
+    color: #fff;
+    background: #3f2e02;
 }
