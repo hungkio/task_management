@@ -205,7 +205,7 @@
                                 $isLate = true;
                             }
                             ?>
-                            <span class="deadline @if($isLate) late @endif">{{ $hour }}h</span>
+                            <span class="deadline @if($isLate) late @endif">{{ "$hour:00" }} {{ ($hour > 12 )? "PM":"AM" }}</span>
                         @endif
                       <button
                         class="start-task px-2 text-white border-0 rounded outline-0 d-inline-block">Start
@@ -249,7 +249,7 @@
                         <div class="card-text mb-1">QA checked: {{$task->QA_check_num}}</div>
                       @endif
                     </div>
-                      
+
                     <div class="button-box d-flex justify-content-between">
                       <div
                         class="status in-progress d-inline-block project-name">
@@ -280,12 +280,12 @@
                               $isLate = false;
                               $hour = date_create_from_format('Y-m-d H:i', $task->deadline)->format('H');
                               $now = date('Y-m-d H:i');
-  
+
                               if ($now > $task->deadline) {
                                   $isLate = true;
                               }
                               ?>
-                            <span class="deadline @if($isLate) late @endif">{{ $hour }}h</span>
+                            <span class="deadline @if($isLate) late @endif">{{ "$hour:00" }} {{ ($hour > 12 )? "PM":"AM" }}</span>
                         @endif
                       </div>
                     </div>
@@ -353,12 +353,12 @@
                             $isLate = false;
                             $hour = date_create_from_format('Y-m-d H:i', $task->deadline)->format('H');
                             $now = date('Y-m-d H:i');
-  
+
                             if ($now > $task->deadline) {
                                 $isLate = true;
                             }
                             ?>
-                            <span class="deadline @if($isLate) late @endif">{{ $hour }}h</span>
+                            <span class="deadline @if($isLate) late @endif">{{ "$hour:00" }} {{ ($hour > 12 )? "PM":"AM" }}</span>
                         @endif
                       </div>
                     </div>
@@ -413,7 +413,7 @@
                         <div class="card-text mb-1">QA checked: {{$task->QA_check_num}}</div>
                       @endif
                     </div>
-                      
+
                     <div class="button-box d-flex justify-content-between">
                       <div
                         class="status {{$task->QA_check_num ? 'bug' : 'testing'}} d-inline-block project-name">
@@ -448,12 +448,12 @@
                           $isLate = false;
                           $hour = date_create_from_format('Y-m-d H:i', $task->deadline)->format('H');
                           $now = date('Y-m-d H:i');
-  
+
                           if ($now > $task->deadline) {
                               $isLate = true;
                           }
                           ?>
-                          <span class="deadline @if($isLate) late @endif">{{ $hour }}h</span>
+                          <span class="deadline @if($isLate) late @endif">{{ "$hour:00" }} {{ ($hour > 12 )? "PM":"AM" }}</span>
                         @endif
                       </div>
                     </div>
@@ -544,7 +544,7 @@
                               $isLate = true;
                           }
                           ?>
-                          <span class="deadline @if($isLate) late @endif">{{ $hour }}h</span>
+                          <span class="deadline @if($isLate) late @endif">{{ "$hour:00" }} {{ ($hour > 12 )? "PM":"AM" }}</span>
                       @endif
                     </div>
                   </div>
@@ -617,7 +617,7 @@
                                 $isLate = true;
                             }
                             ?>
-                            <span class="deadline @if($isLate) late @endif">{{ $hour }}h</span>
+                            <span class="deadline @if($isLate) late @endif">{{ "$hour:00" }} {{ ($hour > 12 )? "PM":"AM" }}</span>
                         @endif
                     </div>
                   </div>
