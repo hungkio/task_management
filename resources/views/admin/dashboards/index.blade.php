@@ -76,15 +76,7 @@
       display: flex;
       align-items: center;
       padding: 0 20px;
-    }
-    .in-progress .counter{
-      background: #1890ff;
-    }
-    .testing .counter{
-      background: #ebc334;
-    }
-    .done .counter{
-      background: #458B00;
+      font-size: 18px;
     }
     .counter:empty{
       display: none;
