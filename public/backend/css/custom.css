@@ -42,12 +42,17 @@
 .project-name.bad{
     color: #d52c22;
 }
-button.done-task,
-button.start-task{
+button.done-task{
     background-color: unset;
     color: #2b17dd;
     font-family: 'britannic';
     text-transform: uppercase;
+}
+button.start-task{
+    text-transform: uppercase;
+    font-family: 'britannic';
+    background: #2b17dd;
+    color: #fff;
 }
 .time-box{
     display: flex;
