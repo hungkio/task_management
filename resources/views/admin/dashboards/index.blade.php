@@ -195,6 +195,9 @@
                                 Bad
                             </div>
                         @endif
+                        <button
+                          class="start-task px-2 text-white border-0 rounded outline-0 d-inline-block">Start
+                        </button>
                         @if($task->deadline)
                             <?php
                             $isLate = false;
@@ -207,9 +210,6 @@
                             ?>
                             <span class="deadline @if($isLate) late @endif">{{ "$hour:00" }} {{ ($hour > 12 )? "PM":"AM" }}</span>
                         @endif
-                      <button
-                        class="start-task px-2 text-white border-0 rounded outline-0 d-inline-block">Start
-                      </button>
                     </div>
                   </div>
                 </div>
