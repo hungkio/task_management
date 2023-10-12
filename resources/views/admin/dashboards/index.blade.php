@@ -109,7 +109,7 @@
         position: relative;
     }
     .countdown span.expired {
-        background: red;
+        color: red;
     }
   </style>
 @endpush
