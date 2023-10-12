@@ -42,7 +42,8 @@
 .project-name.bad{
     color: #d52c22;
 }
-button.done-task{
+button.done-task,
+button.start-task{
     background-color: unset;
     color: #2b17dd;
     font-family: 'britannic';
