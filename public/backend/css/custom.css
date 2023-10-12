@@ -35,10 +35,12 @@
 .project-name.instruction{
     color: #d52c22;
 }
-.project-name.excellent,
+.project-name.excellent{
+    color: #fff;
+    background-color: orange;
+}
 .project-name.bad{
-    color: #b713bf;
-    background-color: #000;
+    color: #d52c22;
 }
 button.done-task{
     background-color: unset;
@@ -57,4 +59,8 @@ span.deadline{
     font-weight: bold;
     color: #fff;
     background: #3f2e02;
+}
+.button-box{
+    align-items: flex-start;
+    font-size: 16px;
 }
