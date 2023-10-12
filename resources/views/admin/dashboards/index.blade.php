@@ -196,7 +196,7 @@
                             </div>
                         @endif
                         <button
-                          class="start-task px-2 text-white border-0 rounded outline-0 d-inline-block">Start
+                          class="start-task border-0">Start
                         </button>
                         @if($task->deadline)
                             <?php
