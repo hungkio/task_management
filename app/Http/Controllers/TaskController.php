@@ -363,6 +363,7 @@ class TaskController
         // customer
         $customer = Customers::where('name', $customer)->firstOrFail();
 
+        $caseName = str_replace(['/', '///'], ['|', '|'], $caseName);
         $task = PreTasks::where('name', $caseName)->whereDate('created_at', Carbon::today())->orderBy('created_at', 'desc')->first();
         if ($task) {
             $task->update([
