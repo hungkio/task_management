@@ -78,6 +78,8 @@ class TasksImport implements ToCollection
                     $data['QA_start'] = date("Y-m-d H:i");
                 }
 
+                $caseName = str_replace(['/', '///'], ['|', '|'], $caseName);
+
                 Tasks::create([
                     'name' => $caseName,
                     'path' => $casePath,
