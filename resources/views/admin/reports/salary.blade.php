@@ -78,15 +78,15 @@
     <iframe id="txtArea1" style="display:none"></iframe>
     {{--Full--}}
     <button class="dt-button buttons-collection buttons-export btn btn-primary  mt-3"
-            onclick="exportMultipleTable(['full'], 'ReportAllCase');"
+            onclick="exportMultipleTable(['full'], 'Report_Data_Case');"
             type="button" aria-haspopup="true"><span><i class="fal fa-download mr-2"></i>Xuất Data sản phẩm </span>
     </button>
     <button class="dt-button buttons-collection buttons-export btn btn-primary  mt-3"
-            onclick="exportMultipleTable(['full1'], 'ReportAllCase1');"
+            onclick="exportMultipleTable(['full1'], 'Report_Performance');"
             type="button" aria-haspopup="true"><span><i class="fal fa-download mr-2"></i>Xuất Data Hiệu xuất </span>
     </button>
     <button class="dt-button buttons-collection buttons-export btn btn-primary  mt-3"
-            onclick="exportMultipleTable(['full2'], 'ReportAllCase2');"
+            onclick="exportMultipleTable(['full2'], 'Report_Quality');"
             type="button" aria-haspopup="true"><span><i class="fal fa-download mr-2"></i> Xuất Data Note Quality  </span>
     </button>
     <table class="full w-100" style="display: table;" id="full">
