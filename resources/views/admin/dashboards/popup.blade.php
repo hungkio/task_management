@@ -11,6 +11,18 @@
           </button>
         </div>
         <div class="modal-body">
+            <div class="form-group">
+                <div class="row">
+                    <div class="col">
+                        <label for="">Count input:</label>
+                        <input class="form-control" type="text" value="{{$task->countRecord}}" disabled/>
+                    </div>
+                    <div class="col">
+                        <label for="">Tên job:</label>
+                        <input class="form-control" type="text" value="{{ $task->case }}" name="case" disabled/>
+                    </div>
+                </div>
+            </div>
           <div class="form-group">
             <div class="row">
               <div class="col">
@@ -65,9 +77,9 @@
             <label for="">Finish path:</label>
             <input class="form-control" type="text" value="{{$task->finish_path}}" name="finish_path" />
           </div>
+
           <div class="form-group">
-            <label for="">Count Record:</label>
-            <input class="form-control" type="text" value="{{$task->countRecord}}" disabled/>
+
           </div>
           <div class="form-group">
             <div class="row">

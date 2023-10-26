@@ -272,6 +272,11 @@ class TaskController
                 "",
                 "$currentMonthNumber $currentDay",
             ],
+            '12A. HTM' => [
+                'Originals',
+                "",
+                "$currentMonthNumber $currentDay",
+            ],
 
         ];
 

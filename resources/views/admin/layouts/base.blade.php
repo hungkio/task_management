@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="content-type" content="application/vnd.ms-excel; charset=UTF-8">
     <title>
         @yield('title')
     </title>
@@ -81,7 +82,8 @@
             sa = txtArea1.document.execCommand("SaveAs", true, "Say Thanks to Sumit.xls");
             return (sa)
         } else {
-            var result = 'data:application/vnd.ms-excel,' + encodeURIComponent(html);
+            var BOM = "\uFEFF";
+            var result = 'data:application/vnd.ms-excel,' + encodeURIComponent(BOM + html);
             var link = document.createElement("a");
             document.body.appendChild(link);
             link.download = reportName + ".xls"; //You need to change file_name here.

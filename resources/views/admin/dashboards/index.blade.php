@@ -155,7 +155,7 @@
                       data-finish-path="{{ $task->finish_path }}">
                   <div class="card-body px-3 py-3">
                     <div class="card-text mb-1 deadline">
-                        {{$task->name}}
+                        {{$task->name}}  <b>({{ $task->countRecord }})</b>
                     </div>
                     @if (@$editor)
                       <div class="card-text mb-1">
@@ -230,7 +230,7 @@
                       qa-id="{{ $task->QA_id }}">
                   <div class="card-body px-3 py-3">
                     <div class="card-text mb-1 deadline">
-                      {{$task->name}}
+                      {{$task->name}}  <b>({{ $task->countRecord }})</b>
                     </div>
                     @if (@$editor)
                       <div class="card-text mb-1">
@@ -308,7 +308,7 @@
                       qa-id="{{ $task->QA_id }}">
                   <div class="card-body px-3 py-3">
                     <div class="card-text mb-1 deadline">
-                        {{$task->name}}
+                        {{$task->name}}  <b>({{ $task->countRecord }})</b>
                     </div>
                     @if (@$editor)
                       <div class="card-text mb-1">
@@ -394,7 +394,7 @@
                       qa-id="{{ $task->QA_id }}">
                   <div class="card-body px-3 py-3">
                     <div class="card-text mb-1 deadline">
-                        {{$task->name}}
+                        {{$task->name}}  <b>({{ $task->countRecord }})</b>
                     </div>
                     @if (@$editor)
                       <div class="card-text mb-1">
@@ -490,7 +490,7 @@
                       qa-id="{{ $task->QA_id }}">
                   <div class="card-body px-3 py-3">
                     <div class="card-text mb-1 deadline">
-                        {{$task->name}}
+                        {{$task->name}}  <b>({{ $task->countRecord }})</b>
                     </div>
                     @if (@$editor)
                       <div class="card-text mb-1">
@@ -566,7 +566,7 @@
                       qa-id="{{ $task->QA_id }}">
                   <div class="card-body px-3 py-3">
                     <div class="card-text mb-1 deadline">
-                        {{$task->name}}
+                        {{$task->name}}  <b>({{ $task->countRecord }})</b>
                     </div>
                     @if (@$editor)
                       <div class="card-text mb-1">
