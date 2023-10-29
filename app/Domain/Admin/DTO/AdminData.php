@@ -19,6 +19,7 @@ class AdminData extends DataTransferObject
 
     public string $roles;
     public string $level;
+    public string $customer_for_work;
     public int $is_ctv;
     public string $lock_task;
     public string $customer;
@@ -32,6 +33,7 @@ class AdminData extends DataTransferObject
             'password' => $request->input('password'),
             'roles' => $request->input('roles'),
             'level' => implode(',', $request->input('level')),
+            'customer_for_work' => implode(',', $request->input('customer_for_work')),
             'is_ctv' => ($request->input('is_ctv') == 'on') ? 1 : 0,
             'lock_task' => $request->input('lock_task'),
             'customer' => $request->input('customer') ?? '',

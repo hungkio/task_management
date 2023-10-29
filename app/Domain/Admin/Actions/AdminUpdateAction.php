@@ -18,6 +18,7 @@ class AdminUpdateAction
             $admin->last_name = $adminData->last_name;
             $admin->email = $adminData->email;
             $admin->level = $adminData->level;
+            $admin->customer_for_work = $adminData->customer_for_work;
             $admin->is_ctv = $adminData->is_ctv;
             $admin->lock_task = $adminData->lock_task;
             if (! empty($adminData->password)) {

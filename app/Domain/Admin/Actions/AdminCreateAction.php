@@ -21,6 +21,7 @@ class AdminCreateAction
             $admin->email = $adminData->email;
             $admin->password = Hash::make($adminData->password);
             $admin->level = $adminData->level;
+            $admin->customer_for_work = $adminData->customer_for_work;
             $admin->is_ctv = $adminData->is_ctv;
             $admin->lock_task = $adminData->lock_task;
             $admin->customer = $adminData->customer;

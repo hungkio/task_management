@@ -135,8 +135,13 @@ class DashboardController
 //        if (time() >= $from && time() <= $to) { // in working time
         if ($user->lock_task == 0 && $roleName == 'editor' && $tasks_ready->isEmpty() && $tasks_rejected->isEmpty()) {
             $user_level = $user->level ? explode(',', $user->level) : [];
+            $user_customer_for_work = $user->customer_for_work ? explode(',', $user->customer_for_work) : [];
             foreach ($tasks_editing as $key => $value) {
                 if (!in_array($value->level, $user_level)) {
+                    $tasks_editing->forget($key);
+                    continue;
+                }
+                if (!in_array($value->customer, $user_customer_for_work)) {
                     $tasks_editing->forget($key);
                     continue;
                 }
@@ -177,7 +182,8 @@ class DashboardController
             foreach ($QAs as $qa) {
                 if ($qa->level) {
                     $levels = explode(',', $qa->level);
-                    if (in_array($task->level, $levels)) {
+                    $customer_for_works = explode(',', $qa->customer_for_work);
+                    if (in_array($task->level, $levels) && in_array($task->customer, $customer_for_works)) {
                         $QA = $qa;
                         break;
                     }

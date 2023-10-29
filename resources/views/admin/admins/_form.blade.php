@@ -98,6 +98,28 @@
 
                                 <div class="form-group row">
                                     <label for="select-taxon" class="col-lg-2 text-lg-right col-form-label">
+                                        <span class="text-danger">*</span> {{ __('Khách hàng') }}
+                                    </label>
+                                    <div class="col-lg-9">
+                                        <select name="customer_for_work[]" class="form-control select2" data-width="100%" multiple>
+                                            @foreach($customers as $customer)
+                                                <option value="{{ $customer->name }}"
+                                                        @if(str_contains($admin->customer_for_work, $customer->name)) selected @endif>
+                                                    {{ $customer->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        <div class="clearfix"></div>
+                                        @error('customer_for_work')
+                                        <span class="form-text text-danger">
+                                                {{ $message }}
+                                            </span>
+                                        @enderror
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="select-taxon" class="col-lg-2 text-lg-right col-form-label">
                                          {{ __('Là khách hàng (chỉ đối với tài khoản KH)') }}
                                     </label>
                                     <div class="col-lg-9">
