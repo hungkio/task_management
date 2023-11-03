@@ -170,9 +170,9 @@ class ReportController
             //redo handle
             if ($task->redo) {
                 $blacklist = json_decode($task->redo);
-                $users = Admin::whereIn('id', $blacklist)->get('email');
+                $users_bl = Admin::whereIn('id', $blacklist)->get('email');
                 $users_arr = [];
-                foreach ($users as $user) {
+                foreach ($users_bl as $user) {
                     $users_arr[] = $user->email;
                 }
 

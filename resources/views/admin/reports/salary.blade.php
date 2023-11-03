@@ -83,7 +83,7 @@
     </button>
     <button class="dt-button buttons-collection buttons-export btn btn-primary  mt-3"
             onclick="exportMultipleTable(['full1'], 'Report_Performance');"
-            type="button" aria-haspopup="true"><span><i class="fal fa-download mr-2"></i>Xuất Data Hiệu xuất </span>
+            type="button" aria-haspopup="true"><span><i class="fal fa-download mr-2"></i>Xuất Data Hiệu suất </span>
     </button>
     <button class="dt-button buttons-collection buttons-export btn btn-primary  mt-3"
             onclick="exportMultipleTable(['full2'], 'Report_Quality');"
@@ -148,7 +148,7 @@
 
     <button class="dt-button buttons-collection buttons-export btn btn-primary  mt-3"
             onclick="exportMultipleTable(['full1'], 'ReportAllCase1');"
-            type="button" aria-haspopup="true"><span><i class="fal fa-download mr-2"></i>Xuất Data Hiệu xuất </span>
+            type="button" aria-haspopup="true"><span><i class="fal fa-download mr-2"></i>Xuất Data Hiệu suất </span>
     </button>
     <table class="full1 w-100" style="display: table;" id="full1">
         <thead>
@@ -201,6 +201,12 @@
             <th class="border bg-blue text-center">
                 <div class="relative"><span class="colHeader">Tổng số phút ghi nhận</span></div>
             </th>
+            <th class="border bg-blue text-center">
+                <div class="relative"><span class="colHeader">Time Editor</span></div>
+            </th>
+            <th class="border bg-blue text-center">
+                <div class="relative"><span class="colHeader">Time QA</span></div>
+            </th>
         </tr>
         </thead>
         <tbody>
@@ -229,6 +235,8 @@
                     <td class="border text-center">{{ $task->QA_start ? formatTime($task->QA_start, 'Y-m-d H:i') : '' }}</td>
                     <td class="border text-center">{{ $task->QA_end ? formatTime($task->QA_end, 'Y-m-d H:i') : '' }}</td>
                     <td class="border text-center">{{ $task->timespent }}</td>
+                    <td class="border text-center">{{ $task->editor_spend }}</td>
+                    <td class="border text-center">{{ $task->QA_spend }}</td>
 
 
                     {{--                    <td class="border text-center">{{ $task->QA_spend }}</td>--}}
