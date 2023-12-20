@@ -137,9 +137,11 @@ class TaskController
             $subQuery->where(config('permission.table_names.roles') . '.name', 'editor');
         })->get();
 
+        $customers = Customers::all();
+        $AX = AX::all();
         $dbcs = Admin::whereIn('email', Admin::DBC_PEOPLE)->get();
 
-        return view('admin.tasks.clone', compact('task', 'QAs', 'editors', 'dbcs'));
+        return view('admin.tasks.clone', compact('task', 'QAs', 'editors', 'dbcs', 'customers', 'AX'));
     }
 
     public function destroy(Tasks $task)
@@ -277,6 +279,11 @@ class TaskController
                 "",
                 "$currentMonthNumber $currentDay",
             ],
+            '24. JF' => [
+                'Originals',
+                "",
+                "$currentMonthNumber $currentDay",
+            ],
 
         ];
 
@@ -332,7 +339,7 @@ class TaskController
                                     if ($customer == '02. DCL' || $customer == '09. CL') { //change case tách thành tên thư mục bên trong
                                         $taskName_rename = $recordName;
                                     }
-                                    $this->createNewTask($customer, $caseName, $childPath, $countRecord, $taskName_rename);
+                                    $this->createNewTask($customer, $caseName, $childPath, $countRecord, $taskName_rename . '|' . $childName);
                                 }
                             } else {
                                 $countRecord = count($record_entries);
@@ -344,13 +351,13 @@ class TaskController
                                     $taskName_rename = $recordName;
                                 }
 
-                                $this->createNewTask($customer, $caseName, $recordPath, $countRecord, $taskName_rename);
+                                $this->createNewTask($customer, $caseName, $recordPath, $countRecord, $taskName_rename . '|'. $recordName);
                             }
                         }
                     } else {
                         $caseName = "$customer/$date/$taskName";
                         $countRecord = count($taskRecord);
-                        $this->createNewTask($customer, $caseName, $taskPath, $countRecord, $taskName);
+                        $this->createNewTask($customer, $caseName, $taskPath, $countRecord, $taskName . '|'. $recordName);
                     }
 
                 }
