@@ -339,7 +339,7 @@ class TaskController
                                     if ($customer == '02. DCL' || $customer == '09. CL') { //change case tách thành tên thư mục bên trong
                                         $taskName_rename = $recordName;
                                     }
-                                    $this->createNewTask($customer, $caseName, $childPath, $countRecord, $taskName_rename . '|' . $childName);
+                                    $this->createNewTask($customer, $caseName, $childPath, $countRecord, $taskName_rename);
                                 }
                             } else {
                                 $countRecord = count($record_entries);
@@ -351,13 +351,17 @@ class TaskController
                                     $taskName_rename = $recordName;
                                 }
 
-                                $this->createNewTask($customer, $caseName, $recordPath, $countRecord, $taskName_rename . '|'. $recordName);
+                                if ($customer == '01. Tonika') {
+                                    $taskName_rename = $taskName_rename . '|'. $recordName;
+                                }
+
+                                $this->createNewTask($customer, $caseName, $recordPath, $countRecord, $taskName_rename);
                             }
                         }
                     } else {
                         $caseName = "$customer/$date/$taskName";
                         $countRecord = count($taskRecord);
-                        $this->createNewTask($customer, $caseName, $taskPath, $countRecord, $taskName . '|'. $recordName);
+                        $this->createNewTask($customer, $caseName, $taskPath, $countRecord, $taskName);
                     }
 
                 }
