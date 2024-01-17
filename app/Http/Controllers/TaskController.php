@@ -351,7 +351,7 @@ class TaskController
                                     $taskName_rename = $recordName;
                                 }
 
-                                if ($customer == '01. Tonika' || $customer == '09. CL' || $customer == '08. AL') {
+                                if ($customer == '01. Tonika' || $customer == '09. CL' || $customer == '08. AL'|| $customer == '06. JD' && ($taskName_rename != $recordName)) {
                                     $taskName_rename = $taskName_rename . '|'. $recordName;
                                 }
 
