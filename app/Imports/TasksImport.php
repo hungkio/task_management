@@ -32,7 +32,7 @@ class TasksImport implements ToCollection
                 throw_if(!$customer, \Exception::class, 'Không tồn tại khách hàng!');
 
                 $ax = AX::where('name', $level)->first();
-                throw_if(!$ax, \Exception::class, 'Không tồn tại AX này!');
+                throw_if(!$ax, \Exception::class, "Không tồn tại AX này: $level!");
                 $level = $ax->name;
 
                 $deadline = '';
@@ -66,7 +66,7 @@ class TasksImport implements ToCollection
                 })->where("email", $QAName)->first();
                 $countRecord = $row[8];
                 $casePath = $row[9];
-                $instruction = $row[11];
+                $instruction = @$row[11];
 
                 $start_at = null;
                 if ($editor) {

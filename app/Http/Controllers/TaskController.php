@@ -282,7 +282,7 @@ class TaskController
             '24. JF' => [
                 'Originals',
                 "",
-                "$currentMonthNumber $currentDay",
+                "",
             ],
 
         ];
