@@ -331,6 +331,7 @@ class TaskController
                                         continue;
                                     }
                                     $child_folder = $client->listFolder($entry['path_display'])['entries'];
+
                                     $childName = $entry['name'];
                                     $childPath = $entry['path_display'];
                                     $caseName = "$customer/$date/$taskName/$recordName/$childName";
@@ -339,7 +340,9 @@ class TaskController
                                     if ($customer == '02. DCL' || $customer == '09. CL') { //change case tách thành tên thư mục bên trong
                                         $taskName_rename = $recordName;
                                     }
-                                    $this->createNewTask($customer, $caseName, $childPath, $countRecord, $taskName_rename);
+
+                                    $share_link = $this->getShareLink($client, $childPath);
+                                    $this->createNewTask($customer, $caseName, $childPath, $countRecord, $taskName_rename, $share_link);
                                 }
                             } else {
                                 $countRecord = count($record_entries);
@@ -355,13 +358,15 @@ class TaskController
                                     $taskName_rename = $taskName_rename . '|'. $recordName;
                                 }
 
-                                $this->createNewTask($customer, $caseName, $recordPath, $countRecord, $taskName_rename);
+                                $share_link = $this->getShareLink($client, $recordPath);
+                                $this->createNewTask($customer, $caseName, $recordPath, $countRecord, $taskName_rename, $share_link);
                             }
                         }
                     } else {
                         $caseName = "$customer/$date/$taskName";
                         $countRecord = count($taskRecord);
-                        $this->createNewTask($customer, $caseName, $taskPath, $countRecord, $taskName);
+                        $share_link = $this->getShareLink($client, $taskPath);
+                        $this->createNewTask($customer, $caseName, $taskPath, $countRecord, $taskName, $share_link);
                     }
 
                 }
@@ -372,7 +377,7 @@ class TaskController
         }
     }
 
-    public function createNewTask($customer, $caseName, $casePath, $countRecord, $taskName)
+    public function createNewTask($customer, $caseName, $casePath, $countRecord, $taskName, $share_link = '')
     {
         $casePath = str_replace('/1.Working/', '', $casePath);
 
@@ -387,6 +392,7 @@ class TaskController
                 'countRecord' => $countRecord,
                 'customer' => $customer->name,
                 'level' => $customer->ax,
+                'share_link' => $share_link
             ]);
         } else {
             PreTasks::create([
@@ -396,8 +402,22 @@ class TaskController
                 'case' => $taskName,
                 'customer' => $customer->name,
                 'level' => $customer->ax,
+                'share_link' => $share_link
             ]);
         }
+    }
+
+    public function getShareLink($client, $childPath)
+    {
+        $share = $client->listSharedLinks($childPath);
+        $search = array_search(strtolower($childPath), array_column($share, 'path_lower'));
+        if ($search != null) {
+            $share_link = $share[$search]['url'] ?? '';
+        } else {
+            $share_link = @$client->createSharedLinkWithSettings($childPath)['url'];
+        }
+
+        return $share_link;
     }
 
     public function import(Request $request)

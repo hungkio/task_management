@@ -27,6 +27,7 @@ class PreTaskDataTable extends BaseDatable
             ->editColumn('case', fn (PreTasks $task) => $task->case)
 //            ->editColumn('path', fn (PreTasks $task) => $task->path)
             ->editColumn('updated_at', fn (PreTasks $task) => formatDate($task->updated_at, 'd/m/Y H:i:s'))
+            ->editColumn('share_link', fn (PreTasks $task) => $task->share_link)
             ->addColumn('action', 'admin.pre_tasks._tableAction')
             ->filterColumn('name', function($query, $keyword) {
                 $query->where('name', 'like', "%$keyword%");
@@ -57,6 +58,7 @@ class PreTaskDataTable extends BaseDatable
             Column::make('case')->title(__('Tên Jobs')),
 //            Column::make('path')->title(__('Đường dẫn')),
             Column::make('updated_at')->title(__('Cập nhật')),
+            Column::make('share_link')->title(__('Link share')),
             Column::computed('action')
                 ->title(__('Tác vụ'))
                 ->exportable(false)
@@ -99,7 +101,7 @@ class PreTaskDataTable extends BaseDatable
                                 $(api.column(colIdx).header()).index()
                             );
                         var title = $(cell).text();
-                        if (colIdx== 0 || colIdx== 2 || colIdx== 3) {
+                        if (colIdx== 0 || colIdx== 2 || colIdx== 3 || colIdx== 7) {
                             $(cell).html('');
                             return;
                         }

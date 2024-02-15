@@ -27,6 +27,14 @@
                                 >
                                 </x-text-field>
 
+                                <x-text-field
+                                    name="share_link"
+                                    :placeholder="__('Link share')"
+                                    :label="__('Link share')"
+                                    :value="$task->share_link"
+                                >
+                                </x-text-field>
+
                                 <div class="form-group row">
                                     <label class="col-lg-2 col-form-label text-lg-right" for="deadline">
                                         Deadline:

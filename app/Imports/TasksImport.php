@@ -21,6 +21,7 @@ class TasksImport implements ToCollection
         DB::transaction(function () use ($rows) {
             foreach ($rows as $row)
             {
+                dd($row);
                 $caseName = $row[1];
                 // check exist
                 $isExist = Tasks::where('name', $caseName)->first();
@@ -67,6 +68,7 @@ class TasksImport implements ToCollection
                 $countRecord = $row[8];
                 $casePath = $row[9];
                 $instruction = @$row[11];
+                $share_link = @$row[12];
 
                 $start_at = null;
                 if ($editor) {
@@ -96,6 +98,7 @@ class TasksImport implements ToCollection
                     'start_at' => $start_at,
                     'QA_start' => $QA_start,
                     'instruction' => $instruction,
+                    'share_link' => $share_link,
                     'deadline' => $deadline,
                 ]);
             }

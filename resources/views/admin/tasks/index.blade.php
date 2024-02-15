@@ -30,6 +30,11 @@
             word-break: break-word;
             white-space: normal;
         }
+        tbody tr td:nth-child(12) {
+            min-width: 300px;
+            word-break: break-word;
+            white-space: normal;
+        }
     </style>
 @endpush
 

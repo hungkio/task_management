@@ -32,6 +32,7 @@ class TaskDataTable extends BaseDatable
             ->editColumn('QA_id', fn(Tasks $task) => $task->QA->email ?? '')
             ->editColumn('created_at', fn(Tasks $task) => formatDate($task->created_at, 'd/m/y H:i'))
             ->editColumn('start_at', fn(Tasks $task) => $task->start_at ? formatDate($task->start_at, 'd/m/y H:i') : "")
+            ->editColumn('share_link', fn(Tasks $task) => $task->share_link ?? '')
             ->addColumn('action', fn(Tasks $task) => view('admin.tasks._tableAction', compact('task')))
             ->filterColumn('name', function ($query, $keyword) {
                 $query->where('name', 'like', "%$keyword%");
@@ -75,6 +76,7 @@ class TaskDataTable extends BaseDatable
             Column::make('QA_id')->title(__('QA')),
             Column::make('created_at')->title(__('Thời gian tạo')),
             Column::make('start_at')->title(__('Thời gian bắt đầu')),
+            Column::make('share_link')->title(__('Link share')),
             Column::computed('action')
                 ->title(__('Tác vụ'))
                 ->exportable(false)

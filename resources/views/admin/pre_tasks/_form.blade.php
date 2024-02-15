@@ -65,6 +65,14 @@
                                 >
                                 </x-text-field>
 
+                                <x-text-field
+                                    name="share_link"
+                                    :placeholder="__('Link Share')"
+                                    :label="__('Link Share')"
+                                    :value="$task->share_link"
+                                >
+                                </x-text-field>
+
                                 <div class="form-group row">
                                     <label for="select-taxon" class="col-lg-2 text-lg-right col-form-label">
                                         <span class="text-danger">*</span> {{ __('Level khách') }}
